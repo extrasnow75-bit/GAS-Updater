@@ -1,0 +1,688 @@
+<title>GAS Updater Mockups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+  /* Matches the Canvas Extractor Tools desktop app: light only, Boise State blue #0033a0,
+     slate-50 page, white cards with rounded-2xl and 2px borders, font-black headings. */
+  :root { --bsu: #0033a0; --page: #e2e8f0; --ink: #111827; color-scheme: light; }
+  body { background: var(--page); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+         padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 40px; }
+  .ico { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+  .screen[hidden] { display: none !important; }
+  .tab[aria-selected="true"] { background: var(--bsu); color: #fff; border-color: var(--bsu); }
+  @media (prefers-reduced-motion: reduce) { .animate-spin { animation: none; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-chevr" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-folder" viewBox="0 0 24 24"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8"/></symbol>
+  <symbol id="i-sheet" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></symbol>
+  <symbol id="i-slides" viewBox="0 0 24 24"><path d="M2 3h20M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3m4 18 5-5 5 5"/></symbol>
+  <symbol id="i-form" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4M3 7l2 2 4-4M13 6h8M13 12h8M13 18h8"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-spin" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></symbol>
+  <symbol id="i-branch" viewBox="0 0 24 24"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>
+  <symbol id="i-xc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14M12 5v14"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+  <symbol id="g" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" stroke="none"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" stroke="none"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" stroke="none"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" stroke="none"/></symbol>
+  <!-- App icon: same blue rounded square as Canvas Quiz Creator, white upload arrow over "GAS". -->
+  <symbol id="appicon" viewBox="0 0 1024 1024">
+    <rect width="1024" height="1024" rx="230" fill="#0033a0"/>
+    <g fill="none" stroke="#fff" stroke-width="48" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M512 430V178M398 290l114-114 114 114"/>
+      <path d="M290 360v60a40 40 0 0 0 40 40h364a40 40 0 0 0 40-40v-60"/>
+    </g>
+    <text x="512" y="790" text-anchor="middle" fill="#fff" font-family="Arial Black, Arial, Helvetica, sans-serif" font-weight="900" font-size="290" letter-spacing="6">GAS</text>
+  </symbol>
+</svg>
+
+<div class="max-w-[820px] mx-auto">
+  <!-- Mockup chrome: not part of the app -->
+  <div class="flex items-start gap-4 mb-4 flex-wrap">
+    <svg class="w-16 h-16 flex-shrink-0 rounded-[15px] shadow" role="img" aria-label="GAS Updater app icon"><use href="#appicon"/></svg>
+    <div class="min-w-0 flex-1">
+      <h1 class="text-xl font-black m-0">GAS Updater: mockups</h1>
+      <p class="text-[13px] text-gray-700 m-0 mt-1">The Drive picker is on screen 3; every “Choose from Drive” button also opens it. Example data throughout. Buttons in the window are for looking at, except the tabs below, tick boxes, “Show technical details”, and the Initial setup header. Built from the Canvas Extractor Tools layout, styles and wording rules.</p>
+    </div>
+  </div>
+
+  <div role="tablist" aria-label="Screens" class="flex flex-wrap gap-1.5 mb-3">
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="true" data-s="s1">1 · First run</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s2">2 · Main screen</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s3">3 · Choose from Drive</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s4">4 · Check results</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s5">5 · Confirm update</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s6">6 · Update results</button>
+  </div>
+
+  <!-- ============ APP WINDOW ============ -->
+  <div class="rounded-xl overflow-hidden shadow-xl border border-gray-400 bg-slate-50">
+    <header class="flex items-center justify-between px-4 bg-[#0033a0] text-white" style="height:36px">
+      <span class="flex items-center gap-2"><svg class="w-4 h-4 rounded-[4px]"><use href="#appicon"/></svg><span class="text-sm font-black tracking-wide">GAS Updater</span></span>
+      <span class="text-white/80 text-sm tracking-[0.4em]" aria-hidden="true">— ▢ ✕</span>
+    </header>
+    <nav class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1.5 px-4 min-h-11 py-1.5 bg-white border-b border-gray-200">
+      <span class="text-xs text-gray-600">Push the latest Apps Script from GitHub into your Google documents</span>
+      <div class="flex items-center gap-3 flex-wrap">
+        <!-- NEW: account menu (two saved Google accounts) -->
+        <span class="acct-menu flex items-center gap-1.5 text-xs font-bold text-gray-700 border border-gray-500 rounded-lg pl-1 pr-2 py-1">
+          <span class="w-5 h-5 rounded-full bg-[#0033a0] text-white text-[9px] font-black flex items-center justify-center">GS</span>
+          <span class="acct-name">gregsnow@boisestate.edu</span>
+          <svg class="ico w-3.5 h-3.5"><use href="#i-chev"/></svg>
+        </span>
+        <span class="flex items-center text-xs font-bold text-gray-600 border border-gray-500 rounded-lg overflow-hidden"><span class="px-2 py-1 border-r border-gray-300">−</span><span class="px-2 py-1 tabular-nums">100%</span><span class="px-2 py-1 border-l border-gray-300">+</span></span>
+        <span class="flex items-center gap-1.5 text-xs font-bold text-gray-600 border border-gray-500 rounded-lg px-3 py-1.5"><svg class="ico w-3.5 h-3.5"><use href="#i-help"/></svg> Help Center &amp; More</span>
+      </div>
+    </nav>
+
+    <main class="relative">
+      <div class="max-w-2xl mx-auto pt-4 px-4 sm:px-6">
+        <!-- ===== Initial setup (shared by all screens) ===== -->
+        <div class="rounded-2xl overflow-hidden shadow-sm">
+          <h2 class="m-0">
+            <button id="setupToggle" aria-expanded="true" aria-controls="setupPanel" class="w-full bg-[#0033a0] hover:bg-[#002d8f] text-white px-4 py-3.5 flex items-center gap-3 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-inset">
+              <svg class="ico w-[18px] h-[18px]"><use href="#i-sliders"/></svg>
+              <span class="font-black text-[15px]">Initial setup</span>
+              <span class="ml-auto flex items-center gap-3">
+                <span class="flex items-center gap-1.5" aria-hidden="true">
+                  <span class="dot w-2 h-2 rounded-full bg-green-400"></span>
+                  <span class="dot w-2 h-2 rounded-full bg-green-400"></span>
+                  <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
+                  <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
+                  <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
+                </span>
+                <span id="setupStatus" class="text-[11px] font-bold">3 items incomplete</span>
+                <svg id="setupChev" class="ico w-[18px] h-[18px] rotate-180"><use href="#i-chev"/></svg>
+              </span>
+            </button>
+          </h2>
+          <div id="setupPanel" class="bg-white border border-gray-200 border-t-0 rounded-b-2xl p-3.5 space-y-3">
+
+            <!-- Google accounts (NEW: up to two) -->
+            <div class="rounded-2xl border-2 p-4 border-green-200 shadow-[0_0_0_3px_rgba(240,253,244,1)]">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="w-[17px] h-[17px]"><use href="#g"/></svg>
+                <h3 class="font-black text-[15px] m-0">Google accounts <span class="text-red-700">*</span></h3>
+              </div>
+              <p class="text-[13px] text-gray-600 mb-2.5">This lets the app read and update the scripts in your Google documents. You can save two accounts, for example your Boise State account and a personal one.</p>
+              <div class="space-y-2.5">
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-[#0033a0] text-white flex items-center justify-center font-black text-xs">GS</div>
+                  <div class="flex-1 min-w-0"><p class="font-black text-sm truncate m-0">Greg Snow <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-blue-100 text-[#0a2a6b] align-middle">In use</span></p><p class="text-xs text-gray-600 truncate m-0">gregsnow@boisestate.edu</p></div>
+                  <span class="text-xs font-bold text-gray-700 border border-gray-200 rounded-lg px-2.5 py-1.5">Sign out</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-full bg-gray-600 text-white flex items-center justify-center font-black text-xs">EX</div>
+                  <div class="flex-1 min-w-0"><p class="font-black text-sm truncate m-0">extrasnow75</p><p class="text-xs text-gray-600 truncate m-0">extrasnow75@gmail.com</p></div>
+                  <span class="text-xs font-bold text-blue-600 underline">Use this account</span>
+                  <span class="text-xs font-bold text-gray-700 border border-gray-200 rounded-lg px-2.5 py-1.5">Sign out</span>
+                </div>
+              </div>
+              <p class="mt-2.5 text-[12.5px] text-green-800 m-0">Both accounts are signed in. Documents you add are opened with the account in use.</p>
+            </div>
+
+            <!-- GitHub token -->
+            <div class="rounded-2xl border-2 p-4 border-gray-200">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="ico w-4 h-4 text-red-600"><use href="#i-key"/></svg>
+                <h3 class="font-black text-[15px] m-0">GitHub token</h3>
+              </div>
+              <p class="text-[13px] text-gray-600 mb-2.5">Only needed for private script sources, such as blueprint-tools-script-private. The main source is public and needs no token.</p>
+              <p class="text-[13px] text-gray-600 mb-2.5">Paste a read-only GitHub token here. It's stored encrypted on this computer only.</p>
+              <div class="relative mb-2.5">
+                <input type="password" aria-label="GitHub token" placeholder="Paste your GitHub token" class="w-full border-2 border-gray-500 rounded-xl px-3.5 py-2.5 pr-10 text-sm font-mono focus:outline-none focus:border-[#0033a0] focus:ring-2 focus:ring-blue-200">
+                <svg class="ico w-4 h-4 text-gray-600 absolute right-3 top-1/2 -translate-y-1/2"><use href="#i-eye"/></svg>
+              </div>
+              <span class="block w-full py-2.5 rounded-xl text-sm font-black text-center bg-gray-200 text-gray-700">Save token</span>
+              <span class="block w-full mt-2 text-center text-[12.5px] font-bold text-blue-600 underline">How do I get a GitHub token?</span>
+            </div>
+
+            <!-- Google files -->
+            <div class="rounded-2xl border-2 p-4 border-amber-300">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-link"/></svg>
+                <h3 class="font-black text-[15px] m-0">Google files <span class="text-red-700">*</span></h3>
+              </div>
+              <p class="text-[13px] text-gray-600 mb-3">Where the app finds projects, keeps backups and writes its log. Choose each one from Drive, or paste its address.</p>
+              <div class="space-y-3">
+                <div>
+                  <label class="text-[13px] font-bold block mb-1">Multi-semester list (Google Sheet)</label>
+                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-sheet"/></svg>Choose from Drive</button>
+                  <div class="flex gap-2"><input value="https://docs.google.com/spreadsheets/d/1aB…/edit" aria-label="Multi-semester list" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-green-300 bg-green-50 text-green-800 font-black text-sm flex items-center gap-1.5"><svg class="ico w-3.5 h-3.5"><use href="#i-check"/></svg>Found</span></div>
+                  <p class="mt-1.5 flex items-center gap-2 text-sm font-black text-green-700 m-0"><svg class="ico w-4 h-4 text-green-600"><use href="#i-ok"/></svg>Multi-Semester List · tab “Projects”</p>
+                </div>
+                <div>
+                  <label class="text-[13px] font-bold block mb-1">Backup folder (Google Drive folder)</label>
+                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-folder"/></svg>Choose from Drive</button>
+                  <div class="flex gap-2"><input placeholder="or paste: https://drive.google.com/drive/folders/…" aria-label="Backup folder" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
+                </div>
+                <div>
+                  <label class="text-[13px] font-bold block mb-1">Log (Google Sheet)</label>
+                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-sheet"/></svg>Choose from Drive</button>
+                  <div class="flex gap-2"><input placeholder="or paste: https://docs.google.com/spreadsheets/d/…" aria-label="Log sheet" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
+                  <p class="text-xs text-gray-600 mt-1.5 m-0">Leave empty and the app makes a new “GAS Updater log” sheet in the backup folder.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Templates -->
+            <div class="rounded-2xl border-2 p-4 border-amber-300">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-doc"/></svg>
+                <h3 class="font-black text-[15px] m-0">Templates <span class="text-red-700">*</span></h3>
+              </div>
+              <p class="text-[13px] text-gray-600 mb-3">The templates new projects are copied from. Keeping their scripts up to date means new projects start with the latest version.</p>
+              <div class="space-y-3">
+                <div>
+                  <label class="text-[13px] font-bold block mb-1">Blueprint template (Google Doc)</label>
+                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-doc"/></svg>Choose from Drive</button>
+                  <div class="flex gap-2"><input value="https://docs.google.com/document/d/1KKlxnDc…/edit" aria-label="Blueprint template" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-green-300 bg-green-50 text-green-800 font-black text-sm flex items-center gap-1.5"><svg class="ico w-3.5 h-3.5"><use href="#i-check"/></svg>Found</span></div>
+                  <p class="mt-1.5 flex items-center gap-2 text-sm font-black text-green-700 m-0"><svg class="ico w-4 h-4 text-green-600"><use href="#i-ok"/></svg>Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)</p>
+                </div>
+                <div>
+                  <label class="text-[13px] font-bold block mb-1">Quiz questions template (Google Doc)</label>
+                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-doc"/></svg>Choose from Drive</button>
+                  <div class="flex gap-2"><input placeholder="or paste: https://docs.google.com/document/d/…" aria-label="Quiz questions template" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Script sources -->
+            <div class="rounded-2xl border-2 p-4 border-gray-200">
+              <div class="flex items-center gap-2 mb-2">
+                <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
+                <h3 class="font-black text-[15px] m-0">Script sources</h3>
+              </div>
+              <p class="text-[13px] text-gray-600 mb-2.5">The GitHub repositories the app can copy scripts from. Each source is for one kind of document.</p>
+              <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px]">
+                <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Main <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script · main</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Public</span></div>
+                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><span class="flex-1 min-w-0"><b class="block">Experimental <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script-private · main</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900">Needs token</span></div>
+                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100 bg-gray-50"><span class="flex-1 min-w-0"><b class="block">Quiz script <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900 align-middle">Quizzes</span></b><small class="text-xs text-gray-600">Not set up yet. Until it is, quizzes are skipped.</small></span></div>
+              </div>
+              <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add a source</span>
+            </div>
+
+            <div class="flex items-start gap-1.5 text-[11px] text-gray-600 px-1">
+              <svg class="ico w-[13px] h-[13px] mt-0.5"><use href="#i-shield"/></svg>
+              <span>Sign-ins and tokens are stored encrypted in your computer's keychain, never written to disk in plain text. The app only changes the scripts in documents you tick, and backs each one up first.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Screen 1: first run ===== -->
+      <section id="s1" class="screen max-w-2xl mx-auto py-6 px-4 sm:px-6">
+        <p class="text-[13px] text-gray-700 text-center m-0">The documents list appears once Initial setup is complete.</p>
+      </section>
+
+      <!-- ===== Screens 2–6 share the working area ===== -->
+      <section id="work" class="screen max-w-2xl mx-auto py-6 px-4 sm:px-6 space-y-3.5" hidden>
+
+        <!-- Script source -->
+        <div class="rounded-2xl border-2 p-4 border-green-200 shadow-[0_0_0_3px_rgba(240,253,244,1)] bg-white">
+          <div class="flex items-center gap-2 mb-1">
+            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
+            <h2 class="font-black text-[15px] m-0">Script source</h2>
+            <svg class="ico w-[17px] h-[17px] text-green-500 ml-auto"><use href="#i-ok"/></svg>
+          </div>
+          <p class="text-[13px] text-gray-600 mb-2.5">Where the new scripts come from. Each kind of document has its own source, so a blueprint script never goes into a quiz.</p>
+          <label class="text-[13px] font-bold block mb-1" for="srcBp">For blueprints</label>
+          <select id="srcBp" class="w-full border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white">
+            <option>Main · blueprint-tools-script (main)</option>
+            <option>Experimental · blueprint-tools-script-private (main)</option>
+          </select>
+          <label class="text-[13px] font-bold block mb-1 mt-3" for="srcQz">For quizzes</label>
+          <select id="srcQz" class="w-full border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white text-gray-600">
+            <option>None yet: quizzes are skipped</option>
+          </select>
+          <p class="mt-2.5 flex items-center gap-2 text-sm font-black text-green-700 m-0"><svg class="ico w-4 h-4 text-green-600"><use href="#i-ok"/></svg>13 files, last changed 25 Sep 2026</p>
+        </div>
+
+        <!-- Add documents -->
+        <div class="add-card rounded-2xl border-2 p-4 border-gray-200 bg-white">
+          <div class="flex items-center gap-2 mb-1">
+            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-doc"/></svg>
+            <h2 class="font-black text-[15px] m-0">Add documents</h2>
+          </div>
+          <p class="text-[13px] text-gray-600 mb-2.5">Add documents in any of these ways. They all go into the one list below, without duplicates.</p>
+          <label class="text-[13px] font-bold block mb-1" for="cycle">By design cycle</label>
+          <div class="flex gap-2">
+            <select id="cycle" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white"><option>Spring 2027 (14 projects)</option><option>Summer 2027</option><option>Fall 2027</option></select>
+            <span class="flex-shrink-0 px-4 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm flex items-center">Add</span>
+          </div>
+          <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add the blueprint and quiz questions templates</span>
+          <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or<span class="flex-1 border-t border-gray-200"></span></div>
+          <button type="button" onclick="show('s3')" class="w-full flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2.5"><svg class="ico w-4 h-4"><use href="#i-folder"/></svg>Choose from Drive</button>
+          <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or paste document addresses<span class="flex-1 border-t border-gray-200"></span></div>
+          <div class="flex gap-2 items-stretch">
+            <textarea rows="2" aria-label="Document addresses" placeholder="One address per line: https://docs.google.com/document/d/…" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm resize-none"></textarea>
+            <span class="flex-shrink-0 px-4 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Add</span>
+          </div>
+        </div>
+
+        <h2 class="text-[12px] text-gray-700 uppercase tracking-wide font-black px-1 pt-1 m-0">Documents</h2>
+
+        <!-- Status line (same component as Extractor Tools' Google status line) -->
+        <div class="status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900">
+          <span class="w-2 h-2 rounded-full bg-green-600"></span>
+          <span class="flex-1 status-text">6 documents added. Tick the ones to check or update.</span>
+        </div>
+
+        <!-- Documents list -->
+        <div class="rounded-xl border-2 border-gray-200 overflow-hidden bg-white">
+          <div class="flex flex-wrap items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200">
+            <label class="flex items-center gap-2 text-[13px] font-bold cursor-pointer">
+              <input id="selAll" type="checkbox" class="w-3.5 h-3.5 accent-[#0033a0]"> Select all
+            </label>
+            <span id="selCount" class="ml-auto text-[11px] text-gray-600 tabular-nums">0 of 6 selected</span>
+          </div>
+          <div id="rows"></div>
+        </div>
+
+        <!-- Actions -->
+        <div class="rounded-2xl border-2 p-4 border-gray-200 bg-white space-y-3">
+          <label class="flex items-start gap-2 text-[13px] cursor-pointer">
+            <input type="checkbox" checked class="w-3.5 h-3.5 mt-0.5 accent-[#0033a0]">
+            <span><b>Practice run</b> <span class="text-gray-600">(on by default): does every step, including the backup check, but changes no scripts.</span></span>
+          </label>
+          <div class="text-[13px]"><b>Compare with</b> <span class="text-gray-600">(Check looks at every ticked source at once)</span>
+            <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Main (public)</label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Experimental (private)</label>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="act-check flex-1 min-w-[10rem] text-center py-2.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm">Check selected</span>
+            <span class="act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-gray-200 text-gray-700">Update selected</span>
+          </div>
+          <p class="act-hint text-xs text-gray-600 m-0">Run Check first. Update becomes available for documents that are out of date.</p>
+        </div>
+
+        <!-- Run summary + Update Timeline: copied from the Rubric Creator app's Analyze & Deploy (AnalyzeDeploySection.tsx) -->
+        <div id="runArea" class="space-y-4">
+          <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
+            <div id="runHead"></div>
+            <div class="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden"><div id="runBar" class="h-full rounded-full" style="width:100%"></div></div>
+            <div class="flex items-center justify-between mt-2 text-xs text-gray-600"><span id="runTime"></span></div>
+            <div id="runWrong"></div>
+            <div id="runExport" class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
+              <span class="flex-1 min-w-[10rem] inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm">Copy results</span>
+              <span class="flex-1 min-w-[10rem] inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#0033a0] text-white font-black text-sm"><svg class="ico w-4 h-4"><use href="#i-sheet"/></svg>Export to Google Sheet</span>
+              <p class="w-full text-xs text-gray-600 m-0">Export adds a tab named “Update 2026-11-25 14.14” to your log sheet. Copy results pastes as a table into any Sheet or Doc.</p>
+            </div>
+          </div>
+          <div class="rounded-2xl overflow-hidden border border-gray-700 shadow-lg">
+            <div class="bg-[#1a1a2e] px-4 py-2 flex items-center justify-between">
+              <span class="text-xs font-black text-gray-300 uppercase tracking-widest">Update Timeline</span>
+              <div class="flex items-center gap-3"><span class="text-xs font-bold text-gray-300">Copy Logs</span><span class="text-xs font-bold text-gray-300">Clear</span></div>
+            </div>
+            <div id="timeline" class="bg-[#0d0d1a] p-4 h-72 overflow-y-auto font-mono text-xs space-y-1"></div>
+          </div>
+          <div id="exportPreview" class="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-4">
+            <p class="text-[11px] font-black uppercase tracking-wider text-gray-600 m-0">Mockup only: what the exported sheet contains</p>
+            <p class="text-[13px] text-gray-700 m-0 mt-1 mb-2.5">One row per file per blueprint (52 rows for this run). The first rows:</p>
+            <div class="overflow-x-auto rounded-lg border border-gray-300"><table class="text-[11.5px] border-collapse min-w-[900px]"><thead id="expHead"></thead><tbody id="expBody"></tbody></table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Dialog layer for screens 3 and 5 ===== -->
+      <div id="dlgPick" class="dlg absolute inset-0 bg-gray-900/40 flex items-start justify-center p-3 sm:p-6 overflow-auto" hidden>
+        <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="flex items-center gap-2 px-4 py-3 bg-[#0033a0] text-white">
+            <svg class="ico w-4 h-4"><use href="#i-folder"/></svg><h2 class="font-black text-[15px] m-0">Choose from Drive</h2>
+            <span class="ml-auto text-xs font-bold flex items-center gap-1.5"><span class="w-4 h-4 rounded-full bg-white text-[#0033a0] text-[8px] font-black flex items-center justify-center">GS</span>gregsnow@boisestate.edu</span>
+            <svg class="ico w-4 h-4"><use href="#i-x"/></svg>
+          </div>
+          <div class="p-3 space-y-2.5">
+            <div class="flex flex-wrap gap-2">
+              <span class="flex text-xs font-black rounded-lg overflow-hidden border-2 border-gray-300"><span class="px-2.5 py-1.5 bg-[#0033a0] text-white">My Drive</span><span class="px-2.5 py-1.5">Shared drives</span><span class="px-2.5 py-1.5">Shared with me</span></span>
+              <div class="relative flex-1 min-w-[10rem]"><svg class="ico w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-600"><use href="#i-search"/></svg><input aria-label="Search Drive" placeholder="Search" class="w-full border-2 border-gray-500 rounded-lg pl-8 pr-2.5 py-1.5 text-[13px]"></div>
+            </div>
+            <p class="text-xs text-gray-700 m-0 flex flex-wrap items-center gap-1"><span class="text-blue-700 underline">My Drive</span><svg class="ico w-3 h-3"><use href="#i-chevr"/></svg><span class="text-blue-700 underline">eCampus Projects</span><svg class="ico w-3 h-3"><use href="#i-chevr"/></svg><b>Spring 2027</b></p>
+            <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px] max-h-[300px] overflow-y-auto" id="pickRows"></div>
+            <label class="flex items-center gap-2 text-[13px] cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"><b>Include subfolders</b> <span class="text-gray-600">of ticked folders</span></label>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 px-3 py-2.5 border-t border-gray-200 bg-gray-50">
+            <span id="pickCount" class="text-xs text-gray-700 tabular-nums">3 selected (2 folders, 1 file)</span>
+            <span class="ml-auto text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-2 bg-white">Cancel</span>
+            <span class="text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Next: check folders</span>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="border-t-4 border-slate-200">
+            <div class="px-4 pt-3"><p class="text-[11px] font-black uppercase tracking-wider text-gray-600 m-0">After “Next”</p><h3 class="font-black text-[15px] m-0 mt-1">What's inside the folders</h3>
+              <p class="text-[13px] text-gray-600 m-0 mt-1">Ticked: files whose names look like a blueprint or a quiz. Untick anything you don't want.</p></div>
+            <div class="p-3">
+              <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px]">
+                <div class="sticky top-0 bg-[#dbe7fb] text-[#0a2a6b] text-[12px] font-black uppercase tracking-wider px-3 py-1.5">BIOL 1010 <span class="ml-2 font-normal normal-case tracking-normal">4 files found</span></div>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0">BIOL 1010 Blueprint</span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Blueprint</span></label>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0">BIOL 1010 Module 3 Quiz</span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span></label>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-green-700"><use href="#i-sheet"/></svg><span class="flex-1 min-w-0">BIOL 1010 Video List</span><span class="text-[11px] text-gray-600">Other</span></label>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-amber-600"><use href="#i-slides"/></svg><span class="flex-1 min-w-0">BIOL 1010 Kickoff Slides</span><span class="text-[11px] text-gray-600">Other</span></label>
+                <div class="sticky top-0 bg-[#dbe7fb] text-[#0a2a6b] text-[12px] font-black uppercase tracking-wider px-3 py-1.5">HLTH 2200 <span class="ml-2 font-normal normal-case tracking-normal">2 files found</span></div>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0">HLTH 2200 Blueprint</span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Blueprint</span></label>
+                <label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"><svg class="ico w-4 h-4 text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0">HLTH 2200 Final Exam Quiz</span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span></label>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 px-3 py-2.5 border-t border-gray-200 bg-gray-50">
+              <span class="text-xs text-gray-700 tabular-nums">4 of 6 ticked</span>
+              <span class="ml-auto text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Add 4 to the list</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="dlgConfirm" class="dlg absolute inset-0 bg-gray-900/40 flex items-start justify-center p-3 sm:p-6 overflow-auto" hidden>
+        <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div class="flex items-center gap-2 px-4 py-3 bg-[#0033a0] text-white"><svg class="ico w-4 h-4"><use href="#i-upload"/></svg><h2 class="font-black text-[15px] m-0">Update 3 documents?</h2><svg class="ico w-4 h-4 ml-auto"><use href="#i-x"/></svg></div>
+          <div class="p-4 space-y-3 text-[13px]">
+            <p class="m-0 text-gray-700">Each script is replaced with the version from <b>Main · blueprint-tools-script (main)</b>. Every document is backed up to the backup folder first. Document text is never changed.</p>
+            <div class="rounded-xl border-2 border-gray-200 overflow-hidden">
+              <div class="px-3 py-2.5">
+                <p class="font-black m-0">BIOL 1010 Blueprint</p>
+                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code2.gs, Code8.gs, Sidebar8.html · Adds: Code9.gs, Sidebar9.html</p>
+              </div>
+              <div class="px-3 py-2.5 border-t border-gray-100">
+                <p class="font-black m-0">PSYC 3015 Blueprint</p>
+                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code.gs · Permissions in appsscript.json also change (adds Google Sheets access)</p>
+                <p class="mt-1.5 mb-0 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>People who open this blueprint will be asked by Google to allow the new access the next time they use the Blueprint Tools menu.</p>
+              </div>
+              <div class="px-3 py-2.5 border-t border-gray-100">
+                <p class="font-black m-0">HLTH 2200 Blueprint</p>
+                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code.gs</p>
+                <div class="mt-1.5 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900">
+                  <p class="m-0 flex items-start gap-2"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg><span>This script has a file that is not in GitHub: <b>MyNotes.gs</b>. Someone may have added it by hand.</span></p>
+                  <div class="mt-1.5 ml-6 space-y-1">
+                    <label class="flex items-center gap-2"><input type="radio" name="extra" checked class="accent-[#0033a0]">Keep MyNotes.gs</label>
+                    <label class="flex items-center gap-2"><input type="radio" name="extra" class="accent-[#0033a0]">Remove MyNotes.gs (it stays in the backup)</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 mt-0.5 accent-[#0033a0]"><span><b>Practice run</b> <span class="text-gray-600">: nothing will change. Untick to update for real.</span></span></label>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 px-3 py-2.5 border-t border-gray-200 bg-gray-50">
+            <span class="ml-auto text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-2 bg-white">Cancel</span>
+            <span class="text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Start practice run</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ============ NOTES ============ -->
+  <div id="notes" class="mt-4 rounded-2xl bg-white border-2 border-gray-300 p-4 text-[13px] space-y-2"></div>
+</div>
+
+<script>
+const DOCS = [
+  { n: 'BIOL 1010 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'out', d: '5 files differ', c: [['out', '5 files differ'], ['out', '7 files differ']] },
+  { n: 'BIOL 1010 Module 3 Quiz', t: 'Quiz', i: 'i-doc', a: 'GS', s: 'noscript', d: 'Skipped: there is no quiz script source yet' },
+  { n: 'HLTH 2200 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'extra', d: '1 file not in GitHub', c: [['out', '1 file differs, 1 extra'], ['out', '3 files differ, 1 extra']] },
+  { n: 'PSYC 3015 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'out', d: '1 file and permissions differ', c: [['out', '3 files differ'], ['ok', '']] },
+  { n: 'NURS 4100 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'perm', d: 'You can view this document but not edit it' },
+  { n: 'HIST 1120 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'none', d: 'Open it once so its script can be found, or paste its script ID' },
+];
+const PILL = {
+  wait: ['Not checked', 'bg-gray-100 text-gray-800'],
+  noscript: ['No quiz script yet', 'bg-gray-100 text-gray-800'],
+  ok: ['Up to date', 'bg-green-100 text-green-800'],
+  out: ['Out of date', 'bg-amber-100 text-amber-900'],
+  extra: ['Extra files', 'bg-amber-100 text-amber-900'],
+  none: ['Script not found', 'bg-gray-200 text-gray-900'],
+  perm: ['No permission', 'bg-red-100 text-red-800'],
+};
+const ERR = 'You can view NURS 4100 Blueprint but not edit it, so its script could not be changed. Ask the document’s owner for edit access, then run Check again. If it keeps happening, contact Greg Snow (gregsnow@boisestate.edu or extrasnow75@gmail.com).';
+const ERR_DETAILS = 'Apps Script API 403. The caller does not have permission. script 1x9Kq…Wm2';
+
+function rowHtml(d, idx, mode) {
+  const typeChip = d.t === 'Quiz' ? 'bg-purple-100 text-purple-900' : 'bg-gray-100 text-gray-800';
+  const acct = d.a === 'GS'
+    ? '<span class="w-4 h-4 rounded-full bg-[#0033a0] text-white text-[7px] font-black inline-flex items-center justify-center" title="gregsnow@boisestate.edu">GS</span>'
+    : '<span class="w-4 h-4 rounded-full bg-gray-600 text-white text-[7px] font-black inline-flex items-center justify-center" title="extrasnow75@gmail.com">EX</span>';
+  let status = '', extra = '';
+  if (mode === 'added') status = pill('wait');
+  if (mode === 'checked') { status = pill(d.s); if (d.d) extra = `<p class="text-xs ${d.s==='perm'?'text-red-700':'text-gray-600'} m-0 mt-0.5">${d.d}</p>`; }
+  if (mode === 'running') {
+    const r = ['done', 'skip', 'done', 'done', 'error', 'skip'][idx];
+    if (r === 'done') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800 inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Updated</span>'; extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Backed up, updated, and checked against GitHub: all 13 files match. <span class="text-blue-700 underline">Open backup</span></p>'; }
+    if (r === 'busy') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-blue-100 text-[#0a2a6b] inline-flex items-center gap-1"><svg class="ico w-3 h-3 animate-spin"><use href="#i-spin"/></svg>Updating</span>'; extra = '<p class="text-xs text-gray-700 m-0 mt-0.5">Saving a backup… (step 1 of 3)</p>'; }
+    if (r === 'skip') { status = pill(d.s === 'ok' ? 'ok' : d.s); extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${d.s === 'noscript' ? 'Skipped: no quiz script source yet' : 'Not ticked'}</p>`; if (idx===2) extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Waiting (next)</p>'; }
+    if (r === 'error') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-red-100 text-red-800">Not updated</span>';
+      extra = `<div class="mt-1.5 flex items-start gap-2.5 p-3 bg-red-50 border border-red-200 rounded-xl text-[12.5px] text-red-800">
+        <svg class="ico w-4 h-4 mt-0.5 text-red-700"><use href="#i-alert"/></svg>
+        <div class="min-w-0"><p class="m-0" role="alert">${ERR}</p>
+          <button type="button" class="td text-xs underline underline-offset-2 font-bold text-red-800 rounded py-1.5" aria-expanded="false">Show technical details</button>
+          <div class="tdbox" hidden><pre class="text-xs text-red-900 bg-red-100 rounded-lg p-2.5 whitespace-pre-wrap break-all m-0">${ERR_DETAILS}</pre><span class="text-xs underline underline-offset-2 font-bold text-red-800">Copy details</span></div>
+        </div></div>`; }
+  }
+  if (mode === 'checked' && d.c) extra += `<p class="text-xs text-gray-700 m-0 mt-1 flex flex-wrap gap-x-3 gap-y-0.5">${['Main', 'Experimental'].map((src, k) => `<span>${src}: <b class="${d.c[k][0] === 'ok' ? 'text-green-700' : 'text-amber-800'}">${d.c[k][0] === 'ok' ? 'Matches exactly' : 'Out of date'}</b>${d.c[k][1] ? ' (' + d.c[k][1] + ')' : ''}</span>`).join('')}</p>`;
+  const checked = mode === 'checked' ? (['out','extra'].includes(d.s) ? 'checked' : '') : mode === 'running' ? ([0,3,4,2].includes(idx) ? 'checked' : '') : '';
+  return `<div class="flex items-start gap-2.5 border-t border-gray-100 first:border-t-0 px-3 py-2">
+    <input type="checkbox" ${checked} class="rowcb w-3.5 h-3.5 mt-1 accent-[#0033a0]" aria-label="${d.n}">
+    <svg class="ico w-4 h-4 mt-0.5 text-blue-600"><use href="#${d.i}"/></svg>
+    <span class="flex-1 min-w-0">
+      <span class="flex flex-wrap items-center gap-x-2 gap-y-1"><b class="text-[13.5px]">${d.n}</b><span class="text-[11px] font-black rounded-full px-2 py-0.5 ${typeChip}">${d.t}</span></span>
+      <span class="flex items-center gap-2 text-xs text-gray-600 mt-0.5">${acct}<span class="text-blue-700 underline inline-flex items-center gap-1">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></span></span>
+      ${extra}
+    </span>
+    <span class="flex-shrink-0 text-right">${status}</span>
+  </div>`;
+}
+function pill(k) { return `<span class="text-[11px] font-black rounded-full px-2 py-0.5 ${PILL[k][1]}">${PILL[k][0]}</span>`; }
+
+const PICK = [
+  ['i-folder', 'text-gray-600', 'BIOL 1010', 'Folder', true],
+  ['i-folder', 'text-gray-600', 'HLTH 2200', 'Folder', true],
+  ['i-folder', 'text-gray-600', 'NURS 4100', 'Folder', false],
+  ['i-doc', 'text-blue-600', 'PSYC 3015 Blueprint', 'Google Doc', true],
+  ['i-sheet', 'text-green-700', 'Spring 2027 tracking', 'Google Sheet', false],
+  ['i-slides', 'text-amber-600', 'Spring 2027 kickoff', 'Google Slides', false],
+  ['i-form', 'text-purple-700', 'Faculty intake form', 'Google Form', false],
+];
+document.getElementById('pickRows').innerHTML = PICK.map(([i, c, n, t, on]) =>
+  `<label class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100 first:border-t-0 hover:bg-blue-50 cursor-pointer">
+    <input type="checkbox" ${on ? 'checked' : ''} class="pk w-3.5 h-3.5 accent-[#0033a0]">
+    <svg class="ico w-4 h-4 ${c}"><use href="#${i}"/></svg>
+    <span class="flex-1 min-w-0 ${t === 'Folder' ? 'font-bold' : ''}">${n}</span>
+    <span class="text-[11px] text-gray-600">${t}</span>
+    ${t === 'Folder' ? '<span class="text-[11px] font-black text-blue-700 underline flex items-center">Open<svg class="ico w-3 h-3"><use href="#i-chevr"/></svg></span>' : ''}
+  </label>`).join('');
+document.getElementById('pickRows').addEventListener('change', () => {
+  const boxes = [...document.querySelectorAll('.pk')];
+  const f = boxes.filter((b, i) => b.checked && PICK[i][3] === 'Folder').length;
+  const n = boxes.filter(b => b.checked).length;
+  document.getElementById('pickCount').textContent = `${n} selected (${f} folder${f === 1 ? '' : 's'}, ${n - f} file${n - f === 1 ? '' : 's'})`;
+});
+
+const NOTES = {
+  s1: ['First run: <i>Initial setup</i> opens by itself',
+    ['Same as Extractor Tools: the blue accordion header with status dots and “N items incomplete”, the bordered cards (green when done, amber when something needs attention), the token field with show/hide, the keychain note at the bottom. It closes itself once everything is set and can be reopened from its header.',
+     'Same as Extractor Tools: the Google sign-in, now holding <b>two accounts</b>. One is “In use”; the other has “Use this account”. The account menu at the top right switches between them too.',
+     'New card, same style: <b>Google files</b> (multi-semester list, backup folder, log). Each has a <b>Choose from Drive</b> button (opens the picker, screen 3) or a box to paste the address. The app checks it and shows the file’s name in green, like the Canvas course card. Here the picker accepts just one item: a Sheet or a folder.',
+     'New card, same style: <b>Templates</b> (blueprint template and quiz questions template), each with Choose from Drive or paste. The main screen has a one-click link to add both to the list.',
+     'New card, same style: <b>Script sources</b>, with “Add a source”. Each source is marked with the kind of document it is for (Blueprints or Quizzes), so a blueprint script can never be pushed into a quiz. The quiz script is not set up yet. Private sources are marked “Needs token”.',
+     'App icon (top of this page): the Quiz Creator’s blue rounded square, with an upload arrow over “GAS”.']],
+  s2: ['Main screen: choose a source, add documents',
+    ['<i>Initial setup</i> is collapsed and says Complete.',
+     'Script source and Add documents use the Canvas course card’s layout: icon and heading, one grey purpose line, “or” dividers between the ways to add.',
+     'New: the documents list. Each row is built like a row in Extractor Tools’ course list: name in bold, a type chip (Blueprint or Quiz), and a small line with the account it came from (GS or EX) and an Open link that opens the document in your browser. The status chip sits on the right.',
+     'Practice run is on by default. Update stays greyed out until Check has run.']],
+  s3: ['Choose from Drive: files and whole folders, with tick boxes',
+    ['New dialog, built from existing parts: blue header like the setup panel, the course list’s search box and blue group headings, and tick-box rows like the item picker.',
+     'Any type of file can be ticked (Docs, Sheets, Slides, Forms) as well as folders. “Open” goes into a folder; ticking it takes the whole folder.',
+     'Step 2 lists what was found in the ticked folders, grouped by folder. Files that look like a blueprint or quiz start ticked. The quiz name pattern is still to be confirmed.',
+     'The header shows which Google account is being browsed.']],
+  s4: ['After “Check selected”',
+    ['Each row gets a status chip, with one plain line underneath saying what it means.',
+     '<b>Compare with</b> (above the buttons): Check compares each document with every ticked source at once. Each row then says where it stands against Main and against Experimental. Example: PSYC 3015 is behind Main but matches Experimental exactly, so it was set up from the experimental version.',
+     'Files are compared by their content, not by dates. The same comparison will power the planned “Blueprint Tools Version Check” in the blueprint menu, so both always agree.',
+     'Out of date and Extra files rows are ticked for you; Update is now available.',
+     'Below the buttons: the same summary card and Update Timeline, one line per document saying what Check found.',
+     '“Script not found” covers blueprints set up before the template records its own script ID (the Phase 0 “self-stamp” idea).']],
+  s5: ['Confirm update',
+    ['Lists exactly what will change in each document, before anything happens.',
+     'Amber warnings, styled like Extractor Tools’ amber notes: files not in GitHub (with a Keep or Remove choice) and permission changes in appsscript.json.',
+     'Practice run is repeated here, so a real update is always a deliberate choice.']],
+  s6: ['Update results, with the Update Timeline',
+    ['Copied from the Rubric Creator app\u2019s Analyze & Deploy screen: a summary card (\u201c3 documents updated successfully\u201d in green, \u201c1 failed\u201d in red, a progress bar, time taken, and \u201cWhat went wrong\u201d grouped by cause), then the dark <b>Update Timeline</b>.',
+     'The timeline has one plain line per document: green \u2713 \u201cupdated successfully\u201d, red \u2717 \u201cfailed\u201d with the reason, and an amber line saying what to do. It ends with how many were updated, how long it took, and how many failed. Copy Logs and Clear work as in the Rubric app.',
+     'Each updated blueprint gets one indented line per file: \u2713 updated (green) or \u00b7 unchanged, with the \u201cLast updated\u201d stamp read from the top of that file. appsscript.json has no stamp (it is a settings file).',
+     '<b>Copy results</b> and <b>Export to Google Sheet</b> sit in the summary card. Export adds a new tab to the log sheet. The dashed box at the bottom shows what that sheet contains: one row per file per blueprint.',
+     'Each row in the list also keeps its own result. The error in the row uses Extractor Tools\u2019 error box, with \u201cShow technical details\u201d (try it).',
+     'The timeline covers this session. The log sheet (Initial setup) keeps the permanent record, one row per document.']],
+};
+
+const FILES = [
+  ['Code.gs', '2026-09-12 21:14 MDT'], ['Code2.gs', '2026-09-25 14:25 MDT'], ['Code3.gs', '2026-07-19 09:22 MDT'],
+  ['Code5.gs', '2026-08-30 13:36 MDT'], ['Code8.gs', '2026-09-07 19:51 MDT'], ['Code9.gs', '2026-09-08 01:19 MDT'],
+  ['Sidebar.html', '2026-09-07 20:28 MDT'], ['Sidebar2.html', '2026-09-04 09:44 MDT'], ['Sidebar3.html', '2026-07-19 09:22 MDT'],
+  ['Sidebar5.html', '2026-09-07 20:47 MDT'], ['Sidebar8.html', '2026-09-07 19:51 MDT'], ['Sidebar9.html', '2026-09-12 21:14 MDT'],
+  ['appsscript.json', ''],
+];
+const UPDATED = [
+  ['BIOL 1010 Blueprint', '2:14:03 PM', '2:14:06 PM', ['Code2.gs', 'Code8.gs', 'Sidebar8.html', 'Code9.gs', 'Sidebar9.html'], 'gregsnow@boisestate.edu', '1Bx7…kQ2'],
+  ['HLTH 2200 Blueprint', '2:14:06 PM', '2:14:08 PM', ['Code.gs'], 'gregsnow@boisestate.edu', '1Hc3…pL9'],
+  ['PSYC 3015 Blueprint', '2:14:08 PM', '2:14:10 PM', ['Code.gs', 'appsscript.json'], 'extrasnow75@gmail.com', '1Pq8…zT4'],
+];
+function runLines() {
+  const L = [['2:14:03 PM', 'Ready to update 4 documents from Main (13 files each)…', 'info']];
+  for (const [name, t0, t1, changed] of UPDATED) {
+    L.push([t0, `Updating "${name}"…`, 'info']);
+    L.push([t0, `   Backup saved: "${name} script backup 2026-11-25 14.14"`, 'info']);
+    for (const [f, stamp] of FILES) {
+      const ch = changed.includes(f);
+      L.push([t1, `   ${ch ? '✓' : '·'} ${f.padEnd(16)} ${ch ? 'updated  ' : 'unchanged'}  ${stamp ? 'last updated ' + stamp : '(settings file, no date stamp)'}`, ch ? 'success' : 'info']);
+    }
+    L.push([t1, `✓ "${name}" updated successfully: ${changed.length} files changed, ${FILES.length - changed.length} unchanged, checked against GitHub`, 'success']);
+  }
+  L.push(['2:14:10 PM', 'Updating "NURS 4100 Blueprint"…', 'info']);
+  L.push(['2:14:11 PM', '✗ "NURS 4100 Blueprint" failed: you can view this document but not edit it. No files were changed.', 'error']);
+  L.push(['2:14:11 PM', '   Ask the document’s owner for edit access, then try again.', 'warning']);
+  L.push(['2:14:11 PM', '3 documents successfully updated in 8 seconds (39 files: 8 changed, 31 unchanged).', 'success']);
+  L.push(['2:14:11 PM', '1 document could not be updated.', 'warning']);
+  return L;
+}
+function exportRows() {
+  const rows = [];
+  for (const [name, , , changed, acct, id] of UPDATED) for (const [f, stamp] of FILES)
+    rows.push(['2026-11-25 14:14', acct, name, `docs.google.com/document/d/${id}`, 'Main · blueprint-tools-script (main)', f, stamp || '(none)', changed.includes(f) ? 'Updated' : 'Unchanged', 'Backup']);
+  for (const [f, stamp] of FILES)
+    rows.push(['2026-11-25 14:14', 'gregsnow@boisestate.edu', 'NURS 4100 Blueprint', 'docs.google.com/document/d/1Nw2…aR6', 'Main · blueprint-tools-script (main)', f, stamp || '(none)', 'Failed: no edit access', '']);
+  return rows;
+}
+
+function show(s) {
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.s === s)));
+  const setupDone = s !== 's1';
+  setSetup(!setupDone);
+  document.querySelectorAll('.dot2').forEach(d => d.className = `dot2 w-2 h-2 rounded-full ${setupDone ? 'bg-green-400' : 'bg-white/70'}`);
+  document.getElementById('setupStatus').textContent = setupDone ? 'Complete' : '3 items incomplete';
+  document.getElementById('s1').hidden = s !== 's1';
+  document.getElementById('work').hidden = s === 's1';
+  document.getElementById('dlgPick').hidden = s !== 's3';
+  document.getElementById('dlgConfirm').hidden = s !== 's5';
+  const mode = s === 's2' || s === 's3' ? 'added' : s === 's6' ? 'running' : 'checked';
+  document.getElementById('rows').innerHTML = DOCS.map((d, i) => rowHtml(d, i, mode)).join('');
+  const line = document.querySelector('.status-line'), text = document.querySelector('.status-text');
+  const upd = document.querySelector('.act-update'), hint = document.querySelector('.act-hint');
+  if (mode === 'added') { text.textContent = '6 documents added. Tick the ones to check or update.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900'; }
+  if (mode === 'checked') { text.textContent = 'Checked 6 documents: 3 need updating, 2 could not be checked, 1 quiz skipped.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-amber-50 border-amber-200 text-amber-900'; }
+  if (mode === 'running') { text.textContent = 'Finished: 3 documents updated, 1 not updated.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-blue-50 border-blue-200 text-[#0a2a6b]'; }
+  upd.className = mode === 'added' ? 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-gray-200 text-gray-700' : 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-[#0033a0] text-white';
+  upd.textContent = 'Update selected';
+  hint.textContent = mode === 'added' ? 'Run Check first. Update becomes available for documents that are out of date.' : mode === 'checked' ? '3 documents ticked for updating. Practice run is on.' : 'Finished. This was a real update (practice run off).';
+  updateCount();
+  const RUN = {
+    checked: {
+      ok: '3 documents need updating', bad: '2 could not be checked', bar: 'bg-amber-500', time: 'Elapsed: 0:06',
+      wrong: [['You can view this document but not edit it.', 'Ask the document\u2019s owner for edit access, then run Check again.', 'NURS 4100 Blueprint'],
+              ['The document\u2019s script could not be found.', 'Open the document once so its script can be found, or paste its script ID.', 'HIST 1120 Blueprint']],
+      lines: [
+        ['2:10:41 PM', 'Checking 6 documents against Main and Experimental\u2026', 'info'],
+        ['2:10:42 PM', '"BIOL 1010 Module 3 Quiz" skipped: there is no quiz script source yet', 'warning'],
+        ['2:10:43 PM', '"BIOL 1010 Blueprint" is out of date with Main and Experimental', 'warning'],
+        ['2:10:44 PM', '"HLTH 2200 Blueprint" is out of date with Main and Experimental', 'warning'],
+        ['2:10:45 PM', '"PSYC 3015 Blueprint" is out of date with Main', 'warning'],
+        ['2:10:45 PM', '\u2713 "PSYC 3015 Blueprint" matches Experimental exactly', 'success'],
+        ['2:10:46 PM', '\u2717 "NURS 4100 Blueprint" could not be checked: you can view this document but not edit it', 'error'],
+        ['2:10:46 PM', '   Ask the document\u2019s owner for edit access, then run Check again.', 'warning'],
+        ['2:10:46 PM', '\u2717 "HIST 1120 Blueprint" could not be checked: its script was not found', 'error'],
+        ['2:10:46 PM', '   Open the document once so its script can be found, or paste its script ID.', 'warning'],
+        ['2:10:46 PM', '4 documents checked in 6 seconds. 3 need updating.', 'success'],
+        ['2:10:46 PM', '2 documents could not be checked.', 'warning'],
+      ] },
+    running: {
+      ok: '3 documents updated successfully', bad: '1 failed', bar: 'bg-amber-500', time: 'Elapsed: 0:11',
+      wrong: [['You can view this document but not edit it.', 'Ask the document’s owner for edit access, then try again.', 'NURS 4100 Blueprint']],
+      lines: runLines() },
+  }[mode];
+  document.getElementById('runArea').hidden = !RUN;
+  if (RUN) {
+    document.getElementById('runHead').innerHTML = `<div class="flex flex-wrap items-center gap-4">
+      <div class="flex items-center gap-2"><svg class="ico w-6 h-6 text-green-500"><use href="#i-ok"/></svg><span class="font-black text-gray-900">${RUN.ok}</span></div>
+      <div class="flex items-center gap-2"><svg class="ico w-5 h-5 text-red-500"><use href="#i-xc"/></svg><span class="font-bold text-red-700">${RUN.bad}</span></div></div>
+      <span class="inline-flex items-center gap-1 mt-2 text-sm text-blue-600 font-bold">Open the log sheet <svg class="ico w-3 h-3"><use href="#i-ext"/></svg></span>`;
+    document.getElementById('runBar').className = 'h-full rounded-full ' + RUN.bar;
+    document.getElementById('runTime').textContent = RUN.time;
+    document.getElementById('runWrong').innerHTML = `<div class="mt-3 rounded-xl border-2 border-amber-200 bg-amber-50 p-4 space-y-3">
+      <p class="font-black text-sm text-amber-900 uppercase tracking-wide m-0">What went wrong</p>
+      ${RUN.wrong.map(([c, f, n]) => `<div class="space-y-1"><p class="text-sm font-bold text-gray-900 m-0">${c}</p><p class="text-sm text-gray-700 m-0">${f}</p><p class="text-xs text-gray-600 m-0">${n}</p></div>`).join('')}</div>`;
+    const col = { success: 'text-green-400', error: 'text-red-400', warning: 'text-amber-400', info: 'text-gray-300' };
+    document.getElementById('runExport').hidden = mode !== 'running';
+    document.getElementById('exportPreview').hidden = mode !== 'running';
+    if (mode === 'running') {
+      const H = ['Uploaded', 'Google account', 'Blueprint', 'Address', 'Script source', 'File', 'File\u2019s \u201cLast updated\u201d', 'Result', 'Backup'];
+      document.getElementById('expHead').innerHTML = '<tr>' + H.map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 border-b border-gray-300 whitespace-nowrap">${h}</th>`).join('') + '</tr>';
+      document.getElementById('expBody').innerHTML = exportRows().slice(0, 15).map(r => '<tr>' + r.map((c, i) => `<td class="px-2 py-1 border-t border-gray-200 whitespace-nowrap ${i === 7 ? (c === 'Updated' ? 'text-green-800 font-bold' : c.startsWith('Failed') ? 'text-red-700 font-bold' : 'text-gray-600') : ''} ${i === 3 || i === 8 ? 'text-blue-700 underline' : ''}">${c}</td>`).join('') + '</tr>').join('');
+    }
+    document.getElementById('timeline').innerHTML = RUN.lines.map(([ts, m, k]) =>
+      `<div class="flex gap-2"><span class="text-gray-400 flex-shrink-0">[${ts}]</span><span class="${col[k]} whitespace-pre-wrap">${m}</span></div>`).join('');
+  }
+  const [title, items] = NOTES[s];
+  document.getElementById('notes').innerHTML = `<h2 class="font-black text-[15px] m-0">${title}</h2><ul class="m-0 pl-5 space-y-1.5 text-gray-800">${items.map(x => `<li>${x}</li>`).join('')}</ul>`;
+}
+function setSetup(open) {
+  document.getElementById('setupPanel').hidden = !open;
+  document.getElementById('setupToggle').setAttribute('aria-expanded', String(open));
+  document.getElementById('setupChev').classList.toggle('rotate-180', open);
+}
+function updateCount() {
+  const boxes = [...document.querySelectorAll('.rowcb')];
+  const n = boxes.filter(b => b.checked).length;
+  document.getElementById('selCount').textContent = `${n} of ${boxes.length} selected`;
+  const all = document.getElementById('selAll');
+  all.checked = n === boxes.length; all.indeterminate = n > 0 && n < boxes.length;
+}
+document.getElementById('setupToggle').addEventListener('click', () => setSetup(document.getElementById('setupPanel').hidden));
+document.getElementById('selAll').addEventListener('change', e => { document.querySelectorAll('.rowcb').forEach(b => b.checked = e.target.checked); updateCount(); });
+document.getElementById('rows').addEventListener('change', updateCount);
+document.getElementById('rows').addEventListener('click', e => {
+  const b = e.target.closest('.td'); if (!b) return;
+  const box = b.nextElementSibling; box.hidden = !box.hidden;
+  b.setAttribute('aria-expanded', String(!box.hidden));
+  b.textContent = box.hidden ? 'Show technical details' : 'Hide technical details';
+});
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => show(t.dataset.s)));
+show('s1');
+</script>
