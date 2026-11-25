@@ -31221,3 +31221,20 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   `✓ "name" updated successfully`, red `✗ "name" failed: reason`, an amber line saying what to do,
   and closing lines with the count and time. Copy Logs and Clear. The log sheet stays the
   permanent record.
+
+## Per-file results, copy and export
+
+- A blueprint has 13+ script files (a .gs and an .html per tool, plus appsscript.json). The Update
+  Timeline lists, under each document, one line per file: updated or unchanged, with the file's
+  "Last updated on YYYY-MM-DD at HH:MM TZ" stamp read from the top of the file. All main-repo code
+  files carry it; appsscript.json cannot (JSON has no comments); Code10.gs and Sidebar10.html in the
+  private repo have none yet.
+- "Updated" vs "Unchanged": Google replaces every file on each upload, so the app compares
+  content to say which files actually changed.
+- **Copy results** (tab-separated, pastes as a table) and **Export to Google Sheet** (a new tab in
+  the log sheet named "Update YYYY-MM-DD HH.MM"). Google Sheet chosen over CSV: the organisation
+  works in Google, and a Sheet can be shared, filtered and sorted without a download/upload step.
+- Export columns, one row per file per document: uploaded (date and time), Google account,
+  document name, document address, script source (repo and branch), file, file's "Last updated"
+  stamp, result (Updated / Unchanged / Failed: reason), backup link.
+- Check also shows stamps ("document has 2026-09-12, Main has 2026-09-25") but decides by content.
