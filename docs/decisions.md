@@ -54,3 +54,12 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
 - Holds the addresses of the **blueprint template** and the **quiz questions template** (both
   Google Docs), each set with Choose from Drive or by pasting. The main screen has a one-click
   link to add both templates to the documents list.
+
+## One script source per kind of document
+
+- Each script source is tied to one kind of document (Blueprints or Quizzes). A blueprint script is
+  never pushed into a quiz, and the reverse.
+- The quiz questions template has no script yet; Greg is working on one. Until a quiz script source
+  is set, quizzes in the list are skipped, with the reason shown in the row and the Update Timeline.
+- Later option: the Apps Script API can create a new script attached to a document that has none,
+  so the app could add the quiz script to existing quizzes. To be confirmed in testing.
