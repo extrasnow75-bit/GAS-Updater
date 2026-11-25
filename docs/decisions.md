@@ -38,3 +38,13 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
 - For now, all work and testing uses **copies** of key documents in the extrasnow75 Drive.
   Greg will provide the addresses of the live documents later. Nothing touches live documents
   until then.
+
+## Reuse from the Rubric Creator app (`extrasnow75-bit/Rubric-Creator-Desktop-App`)
+
+- **Update Timeline:** copy the Deployment Timeline in `src/components/Part3Upload.tsx` (dark
+  panel, timestamped lines, green ✓ / red ✗, Copy Logs with app version and date, Clear). It shows
+  which script files went into which document, with which Google account, the backup made, and
+  the check afterwards. The log sheet stays the permanent record.
+- **Drive picker:** start from `src/components/DriveBrowser.tsx`, the app's own Drive browser
+  (Google's Picker cannot run in a packaged desktop app). It needs multi-select with tick boxes
+  for files of any type and folders.
