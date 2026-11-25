@@ -63,3 +63,11 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
   is set, quizzes in the list are skipped, with the reason shown in the row and the Update Timeline.
 - Later option: the Apps Script API can create a new script attached to a document that has none,
   so the app could add the quiz script to existing quizzes. To be confirmed in testing.
+
+## Check compares with several sources at once
+
+- "Check selected" compares each ticked document with every ticked source (for blueprints: Main
+  and Experimental) in one pass, by file content. Each row says where the document stands against
+  each source, e.g. "Main: out of date (3 files differ) · Experimental: matches exactly".
+- Read-only: Check never changes anything. The same comparison code is meant for the planned
+  "Blueprint Tools Version Check" in the blueprint menu.
