@@ -32,3 +32,9 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
   (11_02_2026.xlsx", `1GlhVqQUkVePmkxVPyA1GjNewxIAXxlQl`. The app needs the live Google Sheet.
 - Quiz templates: Google Docs (the Quiz Creator app reads quizzes from Docs; "Quiz Questions
   Extraction Template" is a Doc). Whether they have their own script is to be confirmed.
+
+## Test files
+
+- For now, all work and testing uses **copies** of key documents in the extrasnow75 Drive.
+  Greg will provide the addresses of the live documents later. Nothing touches live documents
+  until then.
