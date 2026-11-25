@@ -14,4 +14,21 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
   - Choose individual files of any type that can hold a script (Docs, Sheets, Slides, Forms
     and so on) **and** whole folders.
   - Tick boxes, so several files and folders can be chosen at once.
-- **Desktop app or Apps Script web app:** not yet decided (see the Phase 0 report).
+- **Desktop app**, built like Extractor Tools (Electron + React + Tailwind), not an Apps Script
+  web app.
+- **Public repo:** anyone can download the app. That is fine: Google's own sharing decides who
+  can change which documents. No client secret or token goes in the repo (same pattern as
+  Extractor Tools' `googleConfig.ts`). A user allowlist is not needed.
+- **Script sources:** main = `extrasnow75-bit/blueprint-tools-script` (public); experimental =
+  `extrasnow75-bit/blueprint-tools-script-private` (private, needs a read-only GitHub token).
+  To be confirmed.
+
+## Google files found so far (extrasnow75 Drive connector)
+
+- Blueprint template test copy: "Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)",
+  `1KKlxnDcBXZJ1vrNrVsb_k03CJM7sS8i_m-Bm7LDz4_A` (owned by extrasnow75). Good candidate for the
+  Phase 0 test copy.
+- Multi-semester list: only an Excel copy was found, "Copy of Multi-Semester List
+  (11_02_2026.xlsx", `1GlhVqQUkVePmkxVPyA1GjNewxIAXxlQl`. The app needs the live Google Sheet.
+- Quiz templates: Google Docs (the Quiz Creator app reads quizzes from Docs; "Quiz Questions
+  Extraction Template" is a Doc). Whether they have their own script is to be confirmed.
