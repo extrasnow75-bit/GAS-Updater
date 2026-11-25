@@ -48,3 +48,9 @@ Changes to the original plan ("Blueprint Script Updater"), as agreed with Greg.
 - **Drive picker:** start from `src/components/DriveBrowser.tsx`, the app's own Drive browser
   (Google's Picker cannot run in a packaged desktop app). It needs multi-select with tick boxes
   for files of any type and folders.
+
+## Initial setup: Templates card
+
+- Holds the addresses of the **blueprint template** and the **quiz questions template** (both
+  Google Docs), each set with Choose from Drive or by pasting. The main screen has a one-click
+  link to add both templates to the documents list.
