@@ -31238,3 +31238,28 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   document name, document address, script source (repo and branch), file, file's "Last updated"
   stamp, result (Updated / Unchanged / Failed: reason), backup link.
 - Check also shows stamps ("document has 2026-09-12, Main has 2026-09-25") but decides by content.
+
+## Choosing where each document updates from (by tool)
+
+- Each checked blueprint gets **Update from: Main · Experimental** (Custom appears when any tool
+  is changed). It sets the starting choice for every tool; the main screen's "For blueprints"
+  source is the starting choice for every document. The row's tick box still decides whether the
+  document is included, so there is no "Don't update" option.
+- The **Tools and files** table is grouped by tool, not by file: a tool's .gs and .html files
+  always move together. Each tool has one pick-one choice: Keep (or Don't add) · Main ·
+  Experimental. A source without the tool is greyed out. Files not in GitHub get Keep · Remove.
+- Safe defaults: a tool that is newer in the document than in the chosen source starts on Keep.
+- Dependency warnings with one-click fixes (only fixes that actually clear the problem are
+  offered). A document with an unfixed warning is skipped. Known dependencies: Code.gs builds the
+  menu (must list every tool present); appsscript.json holds permissions (Create Video List needs
+  Google Sheets access). The list of dependencies will be confirmed from the code when building.
+- Confirm screen, Update Timeline and export all show which source each file came from.
+
+## appsscript.json
+
+- Checked like every other file, by content, with its own "Permissions" row. The row says in
+  plain words what each source would add or remove (e.g. "Experimental adds Google Sheets access").
+- Date stamp: JSON has no comments. To test in Phase 0 whether Google accepts an extra field in
+  the manifest. If it does not, the stamp goes on a line in Code.gs's header
+  ("appsscript.json last updated on ..."), and the app can also date it from the GitHub commit
+  that last changed it. To be added when building (the user asked for it).

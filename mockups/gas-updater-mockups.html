@@ -339,7 +339,7 @@
           </div>
           <div id="exportPreview" class="bg-white rounded-2xl border-2 border-dashed border-gray-300 p-4">
             <p class="text-[11px] font-black uppercase tracking-wider text-gray-600 m-0">Mockup only: what the exported sheet contains</p>
-            <p class="text-[13px] text-gray-700 m-0 mt-1 mb-2.5">One row per file per blueprint (52 rows for this run). The first rows:</p>
+            <p class="text-[13px] text-gray-700 m-0 mt-1 mb-2.5">One row per file per blueprint (<span id="expCount"></span> rows for this run), including which source each file came from. The first rows:</p>
             <div class="overflow-x-auto rounded-lg border border-gray-300"><table class="text-[11.5px] border-collapse min-w-[900px]"><thead id="expHead"></thead><tbody id="expBody"></tbody></table></div>
           </div>
         </div>
@@ -394,36 +394,15 @@
 
       <div id="dlgConfirm" class="dlg absolute inset-0 bg-gray-900/40 flex items-start justify-center p-3 sm:p-6 overflow-auto" hidden>
         <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div class="flex items-center gap-2 px-4 py-3 bg-[#0033a0] text-white"><svg class="ico w-4 h-4"><use href="#i-upload"/></svg><h2 class="font-black text-[15px] m-0">Update 3 documents?</h2><svg class="ico w-4 h-4 ml-auto"><use href="#i-x"/></svg></div>
+          <div class="flex items-center gap-2 px-4 py-3 bg-[#0033a0] text-white"><svg class="ico w-4 h-4"><use href="#i-upload"/></svg><h2 id="cfTitle" class="font-black text-[15px] m-0">Update 3 documents?</h2><svg class="ico w-4 h-4 ml-auto"><use href="#i-x"/></svg></div>
           <div class="p-4 space-y-3 text-[13px]">
-            <p class="m-0 text-gray-700">Each script is replaced with the version from <b>Main · blueprint-tools-script (main)</b>. Every document is backed up to the backup folder first. Document text is never changed.</p>
-            <div class="rounded-xl border-2 border-gray-200 overflow-hidden">
-              <div class="px-3 py-2.5">
-                <p class="font-black m-0">BIOL 1010 Blueprint</p>
-                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code2.gs, Code8.gs, Sidebar8.html · Adds: Code9.gs, Sidebar9.html</p>
-              </div>
-              <div class="px-3 py-2.5 border-t border-gray-100">
-                <p class="font-black m-0">PSYC 3015 Blueprint</p>
-                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code.gs · Permissions in appsscript.json also change (adds Google Sheets access)</p>
-                <p class="mt-1.5 mb-0 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>People who open this blueprint will be asked by Google to allow the new access the next time they use the Blueprint Tools menu.</p>
-              </div>
-              <div class="px-3 py-2.5 border-t border-gray-100">
-                <p class="font-black m-0">HLTH 2200 Blueprint</p>
-                <p class="text-xs text-gray-600 m-0 mt-0.5">Changes: Code.gs</p>
-                <div class="mt-1.5 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900">
-                  <p class="m-0 flex items-start gap-2"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg><span>This script has a file that is not in GitHub: <b>MyNotes.gs</b>. Someone may have added it by hand.</span></p>
-                  <div class="mt-1.5 ml-6 space-y-1">
-                    <label class="flex items-center gap-2"><input type="radio" name="extra" checked class="accent-[#0033a0]">Keep MyNotes.gs</label>
-                    <label class="flex items-center gap-2"><input type="radio" name="extra" class="accent-[#0033a0]">Remove MyNotes.gs (it stays in the backup)</label>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <p class="m-0 text-gray-700">Each document gets the tools you chose on the Check screen. Every document is backed up to the backup folder first. Document text is never changed.</p>
+            <div id="cfList" class="rounded-xl border-2 border-gray-200 overflow-hidden"></div>
             <label class="flex items-start gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 mt-0.5 accent-[#0033a0]"><span><b>Practice run</b> <span class="text-gray-600">: nothing will change. Untick to update for real.</span></span></label>
           </div>
           <div class="flex flex-wrap items-center gap-2 px-3 py-2.5 border-t border-gray-200 bg-gray-50">
             <span class="ml-auto text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-3 py-2 bg-white">Cancel</span>
-            <span class="text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Start practice run</span>
+            <span id="cfGo" class="text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Start practice run</span>
           </div>
         </div>
       </div>
@@ -464,8 +443,9 @@ function rowHtml(d, idx, mode) {
   if (mode === 'added') status = pill('wait');
   if (mode === 'checked') { status = pill(d.s); if (d.d) extra = `<p class="text-xs ${d.s==='perm'?'text-red-700':'text-gray-600'} m-0 mt-0.5">${d.d}</p>`; }
   if (mode === 'running') {
-    const r = ['done', 'skip', 'done', 'done', 'error', 'skip'][idx];
-    if (r === 'done') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800 inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Updated</span>'; extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Backed up, updated, and checked against GitHub: all 13 files match. <span class="text-blue-700 underline">Open backup</span></p>'; }
+    const r = [docResult(0), 'skip', docResult(2), docResult(3), 'error', 'skip'][idx];
+    if (r === 'done') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800 inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Updated</span>'; extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Backed up, updated, and checked against GitHub: every file matches what was chosen. <span class="text-blue-700 underline">Open backup</span></p>'; }
+    if (r === 'blocked' || r === 'nochange') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Skipped</span>'; extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${r === 'blocked' ? 'Skipped until its choices are fixed on the Check screen.' : 'Nothing to update with the choices made.'}</p>`; }
     if (r === 'busy') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-blue-100 text-[#0a2a6b] inline-flex items-center gap-1"><svg class="ico w-3 h-3 animate-spin"><use href="#i-spin"/></svg>Updating</span>'; extra = '<p class="text-xs text-gray-700 m-0 mt-0.5">Saving a backup… (step 1 of 3)</p>'; }
     if (r === 'skip') { status = pill(d.s === 'ok' ? 'ok' : d.s); extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${d.s === 'noscript' ? 'Skipped: no quiz script source yet' : 'Not ticked'}</p>`; if (idx===2) extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Waiting (next)</p>'; }
     if (r === 'error') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-red-100 text-red-800">Not updated</span>';
@@ -533,23 +513,25 @@ const NOTES = {
      'Any type of file can be ticked (Docs, Sheets, Slides, Forms) as well as folders. “Open” goes into a folder; ticking it takes the whole folder.',
      'Step 2 lists what was found in the ticked folders, grouped by folder. Files that look like a blueprint or quiz start ticked. The quiz name pattern is still to be confirmed.',
      'The header shows which Google account is being browsed.']],
-  s4: ['After “Check selected”',
+  s4: ['After “Check selected”: choose where each document updates from',
     ['Each row gets a status chip, with one plain line underneath saying what it means.',
-     '<b>Compare with</b> (above the buttons): Check compares each document with every ticked source at once. Each row then says where it stands against Main and against Experimental. Example: PSYC 3015 is behind Main but matches Experimental exactly, so it was set up from the experimental version.',
-     'New: the <b>Files</b> caret next to Main / Experimental opens a file-by-file table: each file’s “Last updated” date in the document, in Main and in Experimental. It shows only the files that differ, with <b>Show all files</b> to see the rest. BIOL 1010 starts open; try HLTH 2200 and PSYC 3015.',
-     'Tags in the table say what kind of difference it is: <b>Newer in GitHub</b> (normal: the document is behind), <b>Missing</b> (a newer tool the document does not have yet), <b>Not in Main</b> (an extra file), <b>Document is newer</b> (an update would go backwards: PSYC 3015’s Code.gs), and <b>Same date, different content</b> (someone edited the script in the document without changing the date: HLTH 2200’s Code.gs).',
-     'Files are compared by their content, not by dates. The same comparison will power the planned “Blueprint Tools Version Check” in the blueprint menu, so both always agree.',
-     'Out of date and Extra files rows are ticked for you; Update is now available.',
+     '<b>Update from: Main · Experimental</b> sits under that line. It sets the starting choice for every tool in the document, so most of the time you never open the table. The “For blueprints” source on the main screen is the starting choice for every document.',
+     '<b>Tools and files</b> opens the table, one block per tool. Each tool has a pick-one choice: <b>Keep · Main · Experimental</b> (or <b>Don’t add</b> if the document doesn’t have that tool yet). A tool’s .gs and .html files always move together. A source that doesn’t have the tool is greyed out. Change any one and the document-level choice switches to <b>Custom</b>, with a summary of what will happen. Picking Main or Experimental again resets every tool.',
+     'Starting choices are safe: a tool that is newer in the document than in the chosen source starts on <b>Keep</b>, so an update never goes backwards unless you choose it. Files not in GitHub (HLTH 2200’s MyNotes.gs) get <b>Keep · Remove</b>.',
+     '<b>Permissions</b> (appsscript.json) is checked like every other file and has its own row. The row says in plain words what each source would add or remove, e.g. “Experimental adds Google Sheets access”.',
+     'Amber warnings appear when choices would break a tool, each with one-click fixes. PSYC 3015 shows one: it has Create Video List, but Main’s menu (Code.gs) has no item for it. A document with a warning is skipped until it is fixed. Try it on BIOL 1010 too: set Create Video List to Experimental.',
+     'Tags in the table: <b>Newer in GitHub</b>, <b>Missing</b>, <b>Not in Main</b>, <b>Document is newer</b>, <b>Same date, different content</b>. Files are compared by their content, not by dates; the same comparison will power the planned “Blueprint Tools Version Check”.',
      'Below the buttons: the same summary card and Update Timeline, one line per document saying what Check found.',
      '“Script not found” covers blueprints set up before the template records its own script ID (the Phase 0 “self-stamp” idea).']],
   s5: ['Confirm update',
-    ['Lists exactly what will change in each document, before anything happens.',
-     'Amber warnings, styled like Extractor Tools’ amber notes: files not in GitHub (with a Keep or Remove choice) and permission changes in appsscript.json.',
+    ['Built from the choices on the Check screen (change them on tab 4 and come back): for each document, which tools come from Main, which from Experimental, what is kept and what is removed.',
+     'A document with an unfixed warning is listed as “Needs a choice” and is not counted or updated.',
+     'Amber note when Permissions change, because people will be asked by Google to allow the new access.',
      'Practice run is repeated here, so a real update is always a deliberate choice.']],
   s6: ['Update results, with the Update Timeline',
     ['Copied from the Rubric Creator app\u2019s Analyze & Deploy screen: a summary card (\u201c3 documents updated successfully\u201d in green, \u201c1 failed\u201d in red, a progress bar, time taken, and \u201cWhat went wrong\u201d grouped by cause), then the dark <b>Update Timeline</b>.',
      'The timeline has one plain line per document: green \u2713 \u201cupdated successfully\u201d, red \u2717 \u201cfailed\u201d with the reason, and an amber line saying what to do. It ends with how many were updated, how long it took, and how many failed. Copy Logs and Clear work as in the Rubric app.',
-     'Each updated blueprint gets one indented line per file: \u2713 updated (green) or \u00b7 unchanged, with the \u201cLast updated\u201d stamp read from the top of that file. appsscript.json has no stamp (it is a settings file).',
+     'Each updated blueprint gets one indented line per file: \u2713 updated or added (green) or \u00b7 unchanged, which source it came from, and the \u201cLast updated\u201d stamp read from the top of that file. A document skipped because of a warning gets an amber line instead.',
      '<b>Copy results</b> and <b>Export to Google Sheet</b> sit in the summary card. Export adds a new tab to the log sheet. The dashed box at the bottom shows what that sheet contains: one row per file per blueprint.',
      'Each row in the list also keeps its own result. The error in the row uses Extractor Tools\u2019 error box, with \u201cShow technical details\u201d (try it).',
      'The timeline covers this session. The log sheet (Initial setup) keeps the permanent record, one row per document.']],
@@ -563,13 +545,27 @@ const FILES = [
   ['appsscript.json', ''],
 ];
 
-// ---- File-by-file comparison (Check results) ----
+// ---- Tool-by-tool comparison and choices (Check results) ----
 const MAIN = Object.fromEntries(FILES.map(([f, st]) => [f, { s: st, v: 'm' }]));
+MAIN['appsscript.json'] = { s: '2026-07-19 09:22 MDT', v: 'm' };      // proposed stamp, see notes
 const EXP = { ...MAIN,
-  'Code.gs': { s: '2026-11-20 10:05 MST', v: 'x' },
-  'appsscript.json': { s: '', v: 'x' },
+  'Code.gs': { s: '2026-08-20 15:40 MDT', v: 'x' },                     // menu includes Create Video List
+  'appsscript.json': { s: '2026-11-25 16:34 MST', v: 'x' },             // adds Google Sheets access
   'Code10.gs': { s: '2026-11-25 16:34 MST', v: 'x' },
   'Sidebar10.html': { s: '2026-11-25 16:34 MST', v: 'x' } };
+const SRC = { main: MAIN, exp: EXP };
+const SRCNAME = { main: 'Main', exp: 'Experimental' };
+const SCOPES = { m: ['Edit this document', 'Menus and sidebars', 'Connect to outside services'], x: ['Edit this document', 'Menus and sidebars', 'Connect to outside services', 'Google Sheets'] };
+const TOOLS = [
+  { k: 'menu', n: 'Add Activity Titles, Tools, Due Date Headers, & Times', sub: 'Also builds the Blueprint Tools menu', f: ['Code.gs', 'Sidebar.html'] },
+  { k: 'dir', n: 'Deploy Activity Directions', f: ['Code2.gs', 'Sidebar2.html'] },
+  { k: 'time', n: 'Time Estimator', f: ['Code3.gs', 'Sidebar3.html'] },
+  { k: 'model', n: 'Create Model Module', f: ['Code5.gs', 'Sidebar5.html'] },
+  { k: 'dates', n: 'Specialty Tool: Add Module Dates &/or Holiday Modules', f: ['Code8.gs', 'Sidebar8.html'] },
+  { k: 'map', n: 'Design Map → Dev Tab', f: ['Code9.gs', 'Sidebar9.html'] },
+  { k: 'video', n: 'Create Video List', sub: 'Experimental only, for now', f: ['Code10.gs', 'Sidebar10.html'] },
+  { k: 'perm', n: 'Permissions', sub: 'appsscript.json: what the tools are allowed to do', f: ['appsscript.json'] },
+];
 const DOCFILES = {
   0: (() => { const o = { ...MAIN,
         'Code2.gs': { s: '2026-08-14 11:02 MDT', v: 'o' },
@@ -579,13 +575,78 @@ const DOCFILES = {
   2: { ...MAIN, 'Code.gs': { s: '2026-09-12 21:14 MDT', v: 'e' }, 'MyNotes.gs': { s: '', v: 'n' } },
   3: { ...EXP },
 };
-const SOURCES = [['Main', MAIN], ['Experimental', EXP]];
-const OPEN = new Set([0]);
+// What the person has chosen. doc = whole-document source; t = per-tool changes from the default.
+const ST = { 0: { doc: 'main', t: {} }, 2: { doc: 'main', t: {} }, 3: { doc: 'main', t: {} } };
+const OPEN = new Set([0]), SHOWALL = new Set();
+
+function toolsFor(idx) {
+  const doc = DOCFILES[idx], known = new Set(TOOLS.flatMap(t => t.f));
+  const other = Object.keys(doc).filter(f => !known.has(f));
+  return other.length ? [...TOOLS, { k: 'other', n: 'Files not in GitHub', sub: 'Someone may have added these by hand', f: other, other: true }] : TOOLS;
+}
 function cmpState(doc, src, f) {
   const d = doc[f], g = src[f];
   if (!d && !g) return 'na';
   if (d && g) return d.v === g.v ? 'same' : 'differ';
   return d ? 'extra' : 'missing';
+}
+const has = (files, t) => t.f.some(f => files[f]);
+function defaultChoice(idx, t) {
+  const doc = DOCFILES[idx], s = ST[idx].doc, src = SRC[s];
+  if (t.other) return 'keep';
+  if (!has(src, t)) return 'keep';
+  if (t.f.every(f => cmpState(doc, src, f) === 'same')) return s;
+  if (t.f.some(f => doc[f] && src[f] && doc[f].v !== src[f].v && doc[f].s > src[f].s)) return 'keep';   // document is newer
+  return s;
+}
+const choice = (idx, t) => ST[idx].t[t.k] ?? defaultChoice(idx, t);
+const isCustom = idx => toolsFor(idx).some(t => ST[idx].t[t.k] !== undefined && ST[idx].t[t.k] !== defaultChoice(idx, t));
+function finalFiles(idx) {
+  const doc = DOCFILES[idx], out = {};
+  for (const t of toolsFor(idx)) { const c = choice(idx, t);
+    for (const f of t.f) { const v = c === 'keep' ? doc[f] : c === 'remove' ? undefined : SRC[c][f]; if (v) out[f] = v; } }
+  return out;
+}
+function plan(idx) {   // one entry per file: what an update would do
+  const doc = DOCFILES[idx], fin = finalFiles(idx), rows = [];
+  for (const t of toolsFor(idx)) { const c = choice(idx, t);
+    for (const f of t.f) { const d = doc[f], n = fin[f];
+      if (!d && !n) continue;
+      const res = !n ? 'removed' : !d ? 'added' : d.v === n.v ? 'unchanged' : 'updated';
+      rows.push({ f, t, res, src: c, stamp: (n || d).s }); } }
+  return rows;
+}
+function warnCore(idx) {
+  const fin = finalFiles(idx), W = [];
+  const video = !!fin['Code10.gs'], menuHasVideo = fin['Code.gs'] && fin['Code.gs'].v === 'x', sheets = fin['appsscript.json'] && fin['appsscript.json'].v === 'x';
+  const dropVideo = has(DOCFILES[idx], TOOLS[6]) ? [] : [['video', 'keep', 'Don’t add Create Video List']];
+  if (video && !menuHasVideo) W.push(['menu', 'Create Video List would be in this document, but the Blueprint Tools menu you chose has no item for it, so nobody could open it.',
+    [['menu', 'keep', 'Keep this document’s menu'], ['menu', 'exp', 'Take the menu from Experimental'], ...dropVideo]]);
+  if (video && !sheets) W.push(['perm', 'Create Video List needs Google Sheets access, which is only in Experimental’s Permissions.', [['perm', 'exp', 'Take Permissions from Experimental'], ...dropVideo]]);
+  if (!video && menuHasVideo) W.push(['novideo', 'The menu you chose lists Create Video List, but the tool itself would not be in this document.', [['video', 'exp', 'Add Create Video List from Experimental'], ['menu', 'main', 'Take the menu from Main']]]);
+  return W;
+}
+function warnings(idx) {   // only offer fixes that actually clear the problem
+  return warnCore(idx).map(([id, msg, fixes]) => [msg, fixes.filter(([k, c]) => {
+    const t = TOOLS.find(x => x.k === k); if (choice(idx, t) === c) return false;
+    const had = Object.prototype.hasOwnProperty.call(ST[idx].t, k), old = ST[idx].t[k];
+    ST[idx].t[k] = c; const ok = !warnCore(idx).some(w => w[0] === id);
+    if (had) ST[idx].t[k] = old; else delete ST[idx].t[k];
+    return ok; })]);
+}
+function summary(idx) {
+  const by = { main: [], exp: [] }; let kept = 0, removed = 0, notAdded = 0;
+  for (const t of toolsFor(idx)) { const c = choice(idx, t), p = plan(idx).filter(r => r.t === t);
+    if (p.some(r => r.res === 'removed')) removed++;
+    else if (p.some(r => r.res !== 'unchanged')) by[c].push(t.n);
+    else if (c === 'keep' && !has(DOCFILES[idx], t)) notAdded++;
+    else if (c === 'keep' && ['main', 'exp'].some(s => has(SRC[s], t) && t.f.some(f => cmpState(DOCFILES[idx], SRC[s], f) !== 'same'))) kept++; }
+  const parts = [];
+  for (const s of ['main', 'exp']) if (by[s].length) parts.push(`${by[s].length} tool${by[s].length === 1 ? '' : 's'} from ${SRCNAME[s]}`);
+  if (kept) parts.push(`${kept} kept as ${kept === 1 ? 'it is' : 'they are'}`);
+  if (removed) parts.push(`${removed} removed`);
+  if (notAdded) parts.push(`${notAdded} not added`);
+  return parts.length && (by.main.length || by.exp.length || removed) ? 'Will update: ' + parts.join(' · ') : 'Nothing to update with these choices';
 }
 function cmpCounts(doc, src) {
   const c = { differ: 0, missing: 0, extra: 0 };
@@ -600,72 +661,119 @@ const tag = (t, cls) => `<span class="ml-1 text-[10.5px] font-black rounded-full
 function srcCell(doc, src, f, name) {
   const d = doc[f], g = src[f], k = cmpState(doc, src, f);
   if (k === 'same') return '<span class="text-green-700 font-bold inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Same</span>';
-  if (k === 'extra') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
-  if (k === 'na') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
-  const st = g.s || '<span class="italic text-gray-600">settings file</span>';
-  if (k === 'missing') return `${st}${tag('Missing', 'bg-amber-100 text-amber-900')}`;
-  if (!g.s) return `${st}${tag('Different settings', 'bg-amber-100 text-amber-900')}`;
-  if (g.s === d.s) return `${st}${tag('Same date, different content', 'bg-red-100 text-red-800')}`;
-  return g.s > d.s ? `${st}${tag('Newer in GitHub', 'bg-amber-100 text-amber-900')}` : `${st}${tag('Document is newer', 'bg-blue-100 text-[#0a2a6b]')}`;
+  if (k === 'extra' || k === 'na') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
+  if (k === 'missing') return `${g.s}${tag('Missing', 'bg-amber-100 text-amber-900')}`;
+  if (g.s === d.s) return `${g.s}${tag('Same date, different content', 'bg-red-100 text-red-800')}`;
+  return g.s > d.s ? `${g.s}${tag('Newer in GitHub', 'bg-amber-100 text-amber-900')}` : `${g.s}${tag('Document is newer', 'bg-blue-100 text-[#0a2a6b]')}`;
+}
+function seg(name, opts, value) {   // pick-one control: real radio buttons styled as a segmented control
+  return `<span class="inline-flex rounded-lg border-2 border-gray-300 overflow-hidden text-[11.5px] font-black bg-white" role="radiogroup">${opts.map(([v, label, disabled, title]) =>
+    `<label class="${disabled ? 'cursor-not-allowed' : 'cursor-pointer'} border-l border-gray-300 first:border-l-0" ${title ? `title="${title}"` : ''}>
+      <input type="radio" class="sr-only peer" name="${name}" value="${v}" ${v === value ? 'checked' : ''} ${disabled ? 'disabled' : ''}>
+      <span class="block px-2.5 py-1 text-gray-700 peer-checked:bg-[#0033a0] peer-checked:text-white peer-disabled:text-gray-400 peer-disabled:bg-gray-50 peer-focus-visible:ring-2 peer-focus-visible:ring-inset peer-focus-visible:ring-blue-300">${label}</span></label>`).join('')}</span>`;
+}
+function permDiff(idx) {
+  const d = DOCFILES[idx]['appsscript.json'], out = [];
+  for (const s of ['main', 'exp']) { const g = SRC[s]['appsscript.json']; if (!d || d.v === g.v) continue;
+    const add = SCOPES[g.v].filter(x => !SCOPES[d.v].includes(x)), rem = SCOPES[d.v].filter(x => !SCOPES[g.v].includes(x));
+    out.push(`${SRCNAME[s]} ${[add.length ? 'adds ' + add.join(', ') : '', rem.length ? 'removes ' + rem.join(', ') : ''].filter(Boolean).join(' and ')}`); }
+  return out.length ? out.join(' · ') : '';
 }
 function cmpHtml(idx) {
-  const doc = DOCFILES[idx], open = OPEN.has(idx);
-  const order = [...FILES.map(x => x[0]), 'Code10.gs', 'Sidebar10.html', ...Object.keys(doc)];
-  const files = [...new Set(order)].filter(f => doc[f] || SOURCES.some(([, s]) => s[f]));
-  const line = SOURCES.map(([n, src]) => { const p = cmpCounts(doc, src);
-    return `<span>${n}: <b class="${p.length ? 'text-amber-800' : 'text-green-700'}">${p.length ? 'Out of date' : 'Matches exactly'}</b>${p.length ? ' (' + p.join(', ') + ')' : ''}</span>`; }).join('');
-  const diffCount = files.filter(f => SOURCES.some(([, s]) => cmpState(doc, s, f) !== 'same')).length;
-  const rows = files.map(f => {
-    const same = SOURCES.every(([, s]) => cmpState(doc, s, f) === 'same');
-    const d = doc[f];
-    return `<tr class="${same ? 'samerow' : ''}" ${same ? 'hidden' : ''}>
-      <td class="px-2 py-1.5 border-t border-gray-200 font-mono text-[11.5px] whitespace-nowrap">${f}</td>
-      <td class="px-2 py-1.5 border-t border-gray-200 whitespace-nowrap">${d ? (d.s || '<span class="italic text-gray-600">' + (f.endsWith('.json') ? 'settings file' : 'no date stamp') + '</span>') : '<span class="italic text-gray-500">Not in this document</span>'}</td>
-      ${SOURCES.map(([n, s]) => `<td class="px-2 py-1.5 border-t border-gray-200">${srcCell(doc, s, f, n)}</td>`).join('')}
-    </tr>`; }).join('');
-  return `<div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-700">
-      <button type="button" class="cmpbtn inline-flex items-center gap-1 rounded font-bold text-[#0033a0] hover:underline" aria-expanded="${open}" data-i="${idx}">
-        <svg class="ico w-3.5 h-3.5 transition-transform ${open ? '' : '-rotate-90'}"><use href="#i-chev"/></svg>Files</button>${line}</div>
+  const doc = DOCFILES[idx], open = OPEN.has(idx), all = SHOWALL.has(idx), tools = toolsFor(idx), custom = isCustom(idx);
+  const line = ['main', 'exp'].map(s => { const p = cmpCounts(doc, SRC[s]);
+    return `<span>${SRCNAME[s]}: <b class="${p.length ? 'text-amber-800' : 'text-green-700'}">${p.length ? 'Out of date' : 'Matches exactly'}</b>${p.length ? ' (' + p.join(', ') + ')' : ''}</span>`; }).join('');
+  const W = warnings(idx);
+  const docOpts = [['main', 'Main'], ['exp', 'Experimental']].concat(custom ? [['custom', 'Custom']] : []);
+  const differs = t => !t.f.every(f => ['main', 'exp'].every(s => ['same', 'na'].includes(cmpState(doc, SRC[s], f)))) || !t.f.some(f => doc[f]) && t.f.some(f => SRC.main[f] || SRC.exp[f]);
+  const nDiff = tools.filter(differs).length;
+  const body = tools.map(t => {
+    const c = choice(idx, t), inDoc = has(doc, t), hide = !all && !differs(t);
+    const opts = t.other ? [['keep', 'Keep'], ['remove', 'Remove']]
+      : [['keep', inDoc ? 'Keep' : 'Don’t add'], ['main', 'Main', !has(MAIN, t), 'Not in Main'], ['exp', 'Experimental', !has(EXP, t), 'Not in Experimental']];
+    const extraNote = t.k === 'perm' && permDiff(idx) ? `<span class="block text-[11.5px] text-gray-700 mt-0.5">${permDiff(idx)}</span>` : '';
+    return `<tbody class="${differs(t) ? '' : 'samerow'}" ${hide ? 'hidden' : ''}>
+      <tr><td colspan="4" class="px-2 pt-2.5 pb-1 border-t-2 border-gray-200 bg-white">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5"><span class="flex-1 min-w-[12rem]"><b class="text-[12.5px]">${t.n}</b>${t.sub ? `<span class="block text-[11.5px] text-gray-600">${t.sub}</span>` : ''}${extraNote}</span>
+        ${seg(`c${idx}-${t.k}`, opts, c)}</div></td></tr>
+      ${t.f.map(f => `<tr>
+        <td class="pl-5 pr-2 py-1 font-mono text-[11.5px] whitespace-nowrap text-gray-800">${f}</td>
+        <td class="px-2 py-1 whitespace-nowrap">${doc[f] ? (doc[f].s || '<span class="italic text-gray-600">no date stamp</span>') : '<span class="italic text-gray-500">Not in this document</span>'}</td>
+        <td class="px-2 py-1">${srcCell(doc, MAIN, f, 'Main')}</td><td class="px-2 py-1">${srcCell(doc, EXP, f, 'Experimental')}</td></tr>`).join('')}
+    </tbody>`; }).join('');
+  return `<div class="cmpwrap" data-i="${idx}">
+    <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
+      <span class="font-bold text-gray-800">Update from:</span>${seg(`d${idx}`, docOpts, custom ? 'custom' : ST[idx].doc)}
+      <span class="text-gray-700">${summary(idx)}</span></div>
+    ${W.map(([m, fixes]) => `<div class="mt-1.5 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>
+      <span class="min-w-0">${m}<span class="block mt-1 space-x-3">${fixes.map(([k, c, label]) => `<button type="button" class="fix font-bold underline underline-offset-2" data-k="${k}" data-c="${c}">${label}</button>`).join('')}</span>
+      <span class="block mt-0.5 text-[11.5px]">This document is skipped until this is fixed.</span></span></div>`).join('')}
+    <div class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-700">
+      <button type="button" class="cmpbtn inline-flex items-center gap-1 rounded font-bold text-[#0033a0] hover:underline" aria-expanded="${open}">
+        <svg class="ico w-3.5 h-3.5 ${open ? '' : '-rotate-90'}"><use href="#i-chev"/></svg>Tools and files</button>${line}</div>
     <div class="cmppanel mt-2 rounded-xl border-2 border-gray-200 overflow-hidden" ${open ? '' : 'hidden'}>
       <div class="flex flex-wrap items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200 text-xs">
-        <span class="cmpcount text-gray-700">Showing the ${diffCount} files that differ (of ${files.length})</span>
-        <button type="button" class="cmpall ml-auto font-bold text-blue-700 underline underline-offset-2" data-n="${diffCount}" data-t="${files.length}">Show all files</button>
+        <span class="text-gray-700">${all ? `Showing all ${tools.length} tools` : `Showing the ${nDiff} tools that differ (of ${tools.length})`}</span>
+        <button type="button" class="cmpall ml-auto font-bold text-blue-700 underline underline-offset-2">${all ? 'Show only tools that differ' : 'Show all tools'}</button>
       </div>
-      <div class="overflow-x-auto"><table class="w-full text-xs border-collapse">
+      <div class="overflow-x-auto"><table class="w-full text-xs border-collapse min-w-[520px]">
         <thead><tr>${['File', 'In this document', 'Main (GitHub)', 'Experimental (GitHub)'].map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 whitespace-nowrap">${h}</th>`).join('')}</tr></thead>
-        <tbody>${rows}</tbody></table></div>
-      <p class="m-0 px-3 py-2 border-t border-gray-200 text-[11.5px] text-gray-600">Dates are the “Last updated” line at the top of each file. Whether a file differs is decided by its content, so a file edited without changing its date still shows up.</p>
-    </div>`;
+        ${body}</table></div>
+      <p class="m-0 px-3 py-2 border-t border-gray-200 text-[11.5px] text-gray-600">Each tool’s two files always move together. Dates are the “Last updated” line at the top of each file. Whether a file differs is decided by its content, so a file edited without changing its date still shows up.</p>
+    </div></div>`;
 }
-const UPDATED = [
-  ['BIOL 1010 Blueprint', '2:14:03 PM', '2:14:06 PM', ['Code2.gs', 'Code8.gs', 'Sidebar8.html', 'Code9.gs', 'Sidebar9.html'], 'gregsnow@boisestate.edu', '1Bx7…kQ2'],
-  ['HLTH 2200 Blueprint', '2:14:06 PM', '2:14:08 PM', ['Code.gs'], 'gregsnow@boisestate.edu', '1Hc3…pL9'],
-  ['PSYC 3015 Blueprint', '2:14:08 PM', '2:14:10 PM', ['Code.gs', 'appsscript.json'], 'extrasnow75@gmail.com', '1Pq8…zT4'],
-];
+function rerender(idx) { const w = document.querySelector(`.cmpwrap[data-i="${idx}"]`); if (w) w.outerHTML = cmpHtml(idx); }
+function confirmHtml() {
+  const ids = [0, 2, 3].filter(i => ST[i]);
+  const blocks = ids.map(i => {
+    const p = plan(i), W = warnings(i), name = DOCS[i].n;
+    const grp = s => [...new Set(p.filter(r => r.src === s && r.res !== 'unchanged' && r.res !== 'removed').map(r => r.t.n))];
+    const lines = [];
+    for (const s of ['main', 'exp']) { const g = grp(s); if (g.length) lines.push(`<b>From ${SRCNAME[s]}:</b> ${g.join(', ')}`); }
+    const rem = p.filter(r => r.res === 'removed').map(r => r.f); if (rem.length) lines.push(`<b>Removed:</b> ${rem.join(', ')} (kept in the backup)`);
+    const kept = toolsFor(i).filter(t => choice(i, t) === 'keep' && has(DOCFILES[i], t) && t.f.some(f => ['main', 'exp'].some(s => ['differ', 'extra'].includes(cmpState(DOCFILES[i], SRC[s], f))))).map(t => t.other ? t.f.join(', ') : t.n);
+    if (kept.length) lines.push(`<b>Kept as is:</b> ${kept.join(', ')}`);
+    const permChange = p.find(r => r.f === 'appsscript.json' && r.res === 'updated');
+    let extra = '';
+    if (W.length) extra = `<p class="mt-1.5 mb-0 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>Skipped: ${W[0][0]} Fix it on the Check screen.</p>`;
+    else if (permChange) extra = `<p class="mt-1.5 mb-0 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12.5px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>Permissions change. People who open this blueprint will be asked by Google to allow the new access the next time they use the Blueprint Tools menu.</p>`;
+    return `<div class="px-3 py-2.5 border-t border-gray-100 first:border-t-0 ${W.length ? 'bg-gray-50' : ''}"><p class="font-black m-0">${name}${W.length ? ' <span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900 align-middle">Needs a choice</span>' : ''}</p>
+      <p class="text-xs text-gray-700 m-0 mt-0.5 space-y-0.5">${lines.map(l => `<span class="block">${l}</span>`).join('') || '<span class="block">Nothing to change.</span>'}</p>${extra}</div>`; });
+  const ready = ids.filter(i => !warnings(i).length && plan(i).some(r => r.res !== 'unchanged')).length;
+  return [ready, blocks.join('')];
+}
+const RUNDOCS = [[0, '2:14:03 PM', '2:14:06 PM', 'gregsnow@boisestate.edu', '1Bx7…kQ2'], [2, '2:14:06 PM', '2:14:08 PM', 'gregsnow@boisestate.edu', '1Hc3…pL9'], [3, '2:14:08 PM', '2:14:08 PM', 'extrasnow75@gmail.com', '1Pq8…zT4']];
+const docResult = i => warnings(i).length ? 'blocked' : plan(i).some(r => r.res !== 'unchanged') ? 'done' : 'nochange';
+const SRCLONG = { main: 'Main · blueprint-tools-script', exp: 'Experimental · blueprint-tools-script-private', keep: 'Kept (not changed)', remove: 'Removed' };
 function runLines() {
-  const L = [['2:14:03 PM', 'Ready to update 4 documents from Main (13 files each)…', 'info']];
-  for (const [name, t0, t1, changed] of UPDATED) {
+  const go = RUNDOCS.filter(([i]) => docResult(i) === 'done');
+  const L = [['2:14:03 PM', `Ready to update ${go.length + 1} documents, using the choices from Check…`, 'info']];
+  let changed = 0, total = 0;
+  for (const [i, t0, t1] of RUNDOCS) {
+    const name = DOCS[i].n, r = docResult(i);
+    if (r === 'blocked') { L.push([t0, `"${name}" skipped: ${warnings(i)[0][0]}`, 'warning']); continue; }
+    if (r === 'nochange') { L.push([t0, `"${name}" skipped: nothing to update with the choices made`, 'info']); continue; }
     L.push([t0, `Updating "${name}"…`, 'info']);
     L.push([t0, `   Backup saved: "${name} script backup 2026-11-25 14.14"`, 'info']);
-    for (const [f, stamp] of FILES) {
-      const ch = changed.includes(f);
-      L.push([t1, `   ${ch ? '✓' : '·'} ${f.padEnd(16)} ${ch ? 'updated  ' : 'unchanged'}  ${stamp ? 'last updated ' + stamp : '(settings file, no date stamp)'}`, ch ? 'success' : 'info']);
-    }
-    L.push([t1, `✓ "${name}" updated successfully: ${changed.length} files changed, ${FILES.length - changed.length} unchanged, checked against GitHub`, 'success']);
+    const p = plan(i); let n = 0;
+    for (const r of p) { const ch = r.res !== 'unchanged'; if (ch) n++; total++;
+      L.push([t1, `   ${ch ? '✓' : '·'} ${r.f.padEnd(16)} ${r.res.padEnd(9)} ${ch ? ('from ' + (SRCNAME[r.src] || r.src)).padEnd(17) : ''.padEnd(17)} ${r.stamp ? 'last updated ' + r.stamp : '(no date stamp)'}`, ch ? 'success' : 'info']); }
+    changed += n;
+    L.push([t1, `✓ "${name}" updated successfully: ${n} file${n === 1 ? '' : 's'} changed, ${p.length - n} unchanged, checked against GitHub`, 'success']);
   }
   L.push(['2:14:10 PM', 'Updating "NURS 4100 Blueprint"…', 'info']);
   L.push(['2:14:11 PM', '✗ "NURS 4100 Blueprint" failed: you can view this document but not edit it. No files were changed.', 'error']);
   L.push(['2:14:11 PM', '   Ask the document’s owner for edit access, then try again.', 'warning']);
-  L.push(['2:14:11 PM', '3 documents successfully updated in 8 seconds (39 files: 8 changed, 31 unchanged).', 'success']);
+  L.push(['2:14:11 PM', `${go.length} document${go.length === 1 ? '' : 's'} successfully updated in 8 seconds (${total} files: ${changed} changed, ${total - changed} unchanged).`, 'success']);
   L.push(['2:14:11 PM', '1 document could not be updated.', 'warning']);
   return L;
 }
 function exportRows() {
   const rows = [];
-  for (const [name, , , changed, acct, id] of UPDATED) for (const [f, stamp] of FILES)
-    rows.push(['2026-11-25 14:14', acct, name, `docs.google.com/document/d/${id}`, 'Main · blueprint-tools-script (main)', f, stamp || '(none)', changed.includes(f) ? 'Updated' : 'Unchanged', 'Backup']);
+  for (const [i, , , acct, id] of RUNDOCS) if (docResult(i) === 'done') for (const r of plan(i))
+    rows.push(['2026-11-25 14:14', acct, DOCS[i].n, `docs.google.com/document/d/${id}`, SRCLONG[r.src], r.f, r.stamp || '(none)', r.res[0].toUpperCase() + r.res.slice(1), 'Backup']);
   for (const [f, stamp] of FILES)
-    rows.push(['2026-11-25 14:14', 'gregsnow@boisestate.edu', 'NURS 4100 Blueprint', 'docs.google.com/document/d/1Nw2…aR6', 'Main · blueprint-tools-script (main)', f, stamp || '(none)', 'Failed: no edit access', '']);
+    rows.push(['2026-11-25 14:14', 'gregsnow@boisestate.edu', 'NURS 4100 Blueprint', 'docs.google.com/document/d/1Nw2…aR6', '(not reached)', f, stamp || '(none)', 'Failed: no edit access', '']);
   return rows;
 }
 
@@ -679,16 +787,19 @@ function show(s) {
   document.getElementById('work').hidden = s === 's1';
   document.getElementById('dlgPick').hidden = s !== 's3';
   document.getElementById('dlgConfirm').hidden = s !== 's5';
+  { const [ready, html] = confirmHtml(); document.getElementById('cfList').innerHTML = html;
+    document.getElementById('cfTitle').textContent = `Update ${ready} document${ready === 1 ? '' : 's'}?`;
+    document.getElementById('cfGo').textContent = `Start practice run (${ready} document${ready === 1 ? '' : 's'})`; }
   const mode = s === 's2' || s === 's3' ? 'added' : s === 's6' ? 'running' : 'checked';
   document.getElementById('rows').innerHTML = DOCS.map((d, i) => rowHtml(d, i, mode)).join('');
   const line = document.querySelector('.status-line'), text = document.querySelector('.status-text');
   const upd = document.querySelector('.act-update'), hint = document.querySelector('.act-hint');
   if (mode === 'added') { text.textContent = '6 documents added. Tick the ones to check or update.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900'; }
   if (mode === 'checked') { text.textContent = 'Checked 6 documents: 3 need updating, 2 could not be checked, 1 quiz skipped.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-amber-50 border-amber-200 text-amber-900'; }
-  if (mode === 'running') { text.textContent = 'Finished: 3 documents updated, 1 not updated.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-blue-50 border-blue-200 text-[#0a2a6b]'; }
+  if (mode === 'running') { const nd = [0, 2, 3].filter(i => docResult(i) === 'done').length, ns = [0, 2, 3].length - nd; text.textContent = `Finished: ${nd} documents updated, ${ns} skipped, 1 not updated.`; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-blue-50 border-blue-200 text-[#0a2a6b]'; }
   upd.className = mode === 'added' ? 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-gray-200 text-gray-700' : 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-[#0033a0] text-white';
   upd.textContent = 'Update selected';
-  hint.textContent = mode === 'added' ? 'Run Check first. Update becomes available for documents that are out of date.' : mode === 'checked' ? '3 documents ticked for updating. Practice run is on.' : 'Finished. This was a real update (practice run off).';
+  hint.textContent = mode === 'added' ? 'Run Check first. Update becomes available for documents that are out of date.' : mode === 'checked' ? '3 documents ticked. Choose where each one updates from, then Update. Practice run is on.' : 'Finished. This was a real update (practice run off).';
   updateCount();
   const RUN = {
     checked: {
@@ -700,7 +811,7 @@ function show(s) {
         ['2:10:42 PM', '"BIOL 1010 Module 3 Quiz" skipped: there is no quiz script source yet', 'warning'],
         ['2:10:43 PM', '"BIOL 1010 Blueprint" is out of date with Main and Experimental', 'warning'],
         ['2:10:44 PM', '"HLTH 2200 Blueprint" is out of date with Main and Experimental', 'warning'],
-        ['2:10:45 PM', '"PSYC 3015 Blueprint" is out of date with Main', 'warning'],
+        ['2:10:45 PM', '"PSYC 3015 Blueprint" is out of date with Main (Main has a newer menu, Code.gs)', 'warning'],
         ['2:10:45 PM', '\u2713 "PSYC 3015 Blueprint" matches Experimental exactly', 'success'],
         ['2:10:46 PM', '\u2717 "NURS 4100 Blueprint" could not be checked: you can view this document but not edit it', 'error'],
         ['2:10:46 PM', '   Ask the document\u2019s owner for edit access, then run Check again.', 'warning'],
@@ -710,7 +821,7 @@ function show(s) {
         ['2:10:46 PM', '2 documents could not be checked.', 'warning'],
       ] },
     running: {
-      ok: '3 documents updated successfully', bad: '1 failed', bar: 'bg-amber-500', time: 'Elapsed: 0:11',
+      ok: `${[0, 2, 3].filter(i => docResult(i) === 'done').length} documents updated successfully`, bad: '1 failed', bar: 'bg-amber-500', time: 'Elapsed: 0:11',
       wrong: [['You can view this document but not edit it.', 'Ask the document’s owner for edit access, then try again.', 'NURS 4100 Blueprint']],
       lines: runLines() },
   }[mode];
@@ -731,6 +842,7 @@ function show(s) {
     if (mode === 'running') {
       const H = ['Uploaded', 'Google account', 'Blueprint', 'Address', 'Script source', 'File', 'File\u2019s \u201cLast updated\u201d', 'Result', 'Backup'];
       document.getElementById('expHead').innerHTML = '<tr>' + H.map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 border-b border-gray-300 whitespace-nowrap">${h}</th>`).join('') + '</tr>';
+      document.getElementById('expCount').textContent = exportRows().length;
       document.getElementById('expBody').innerHTML = exportRows().slice(0, 15).map(r => '<tr>' + r.map((c, i) => `<td class="px-2 py-1 border-t border-gray-200 whitespace-nowrap ${i === 7 ? (c === 'Updated' ? 'text-green-800 font-bold' : c.startsWith('Failed') ? 'text-red-700 font-bold' : 'text-gray-600') : ''} ${i === 3 || i === 8 ? 'text-blue-700 underline' : ''}">${c}</td>`).join('') + '</tr>').join('');
     }
     document.getElementById('timeline').innerHTML = RUN.lines.map(([ts, m, k]) =>
@@ -753,17 +865,19 @@ function updateCount() {
 }
 document.getElementById('setupToggle').addEventListener('click', () => setSetup(document.getElementById('setupPanel').hidden));
 document.getElementById('selAll').addEventListener('change', e => { document.querySelectorAll('.rowcb').forEach(b => b.checked = e.target.checked); updateCount(); });
-document.getElementById('rows').addEventListener('change', updateCount);
+document.getElementById('rows').addEventListener('change', e => {
+  const r = e.target; const w = r.closest('.cmpwrap');
+  if (w && r.type === 'radio') { const i = +w.dataset.i;
+    if (r.name.startsWith('d')) { if (r.value !== 'custom') { ST[i].doc = r.value; ST[i].t = {}; } }
+    else ST[i].t[r.name.split('-')[1]] = r.value;
+    rerender(i); const again = document.querySelector(`.cmpwrap[data-i="${i}"] input[name="${r.name}"]:checked`); if (again) again.focus(); return; }
+  updateCount(); });
 document.getElementById('rows').addEventListener('click', e => {
-  const c = e.target.closest('.cmpbtn');
-  if (c) { const i = +c.dataset.i, open = !OPEN.has(i); open ? OPEN.add(i) : OPEN.delete(i);
-    const panel = c.parentElement.nextElementSibling; panel.hidden = !open;
-    c.setAttribute('aria-expanded', String(open)); c.querySelector('svg').classList.toggle('-rotate-90', !open); return; }
-  const a = e.target.closest('.cmpall');
-  if (a) { const panel = a.closest('.cmppanel'), showAll = a.textContent === 'Show all files';
-    panel.querySelectorAll('.samerow').forEach(r => r.hidden = !showAll);
-    a.textContent = showAll ? 'Show only files that differ' : 'Show all files';
-    panel.querySelector('.cmpcount').textContent = showAll ? `Showing all ${a.dataset.t} files` : `Showing the ${a.dataset.n} files that differ (of ${a.dataset.t})`; return; }
+  const w = e.target.closest('.cmpwrap'), i = w ? +w.dataset.i : -1;
+  if (e.target.closest('.cmpbtn')) { OPEN.has(i) ? OPEN.delete(i) : OPEN.add(i); rerender(i); document.querySelector(`.cmpwrap[data-i="${i}"] .cmpbtn`).focus(); return; }
+  if (e.target.closest('.cmpall')) { SHOWALL.has(i) ? SHOWALL.delete(i) : SHOWALL.add(i); rerender(i); return; }
+  const fx = e.target.closest('.fix');
+  if (fx) { ST[i].t[fx.dataset.k] = fx.dataset.c; OPEN.add(i); rerender(i); return; }
   const b = e.target.closest('.td'); if (!b) return;
   const box = b.nextElementSibling; box.hidden = !box.hidden;
   b.setAttribute('aria-expanded', String(!box.hidden));
