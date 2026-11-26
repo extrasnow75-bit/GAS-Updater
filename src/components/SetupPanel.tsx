@@ -5,7 +5,8 @@
  */
 import React, { useEffect, useRef, useState } from 'react'
 import { SlidersHorizontal, ChevronDown, KeyRound, Shield, Eye, EyeOff, CheckCircle2, Link2, FileText, FileSpreadsheet, Folder, GitBranch, Plus } from 'lucide-react'
-import { ACCOUNTS } from '../logic/exampleData'
+import { ACCOUNTS, TOKEN_HELP_URL } from '../logic/exampleData'
+import { FOCUS_RING, OpenLink } from './ui'
 
 export interface SetupState {
   account: 'GS' | 'EX'
@@ -28,12 +29,23 @@ export const FIELD_INFO: Record<SetupField, { label: string; kind: 'sheet' | 'fo
   quizTemplate: { label: 'Quiz questions template (Google Doc)', kind: 'doc', placeholder: 'or paste: https://docs.google.com/document/d/…', required: false },
 }
 
+const DOT_NAMES = ['Google accounts', 'GitHub token (optional)', 'Google files', 'Templates', 'GitHub repos']
+
 export function setupRemaining(s: SetupState): string[] {
   const out: string[] = []
   if (!s.signedIn.GS && !s.signedIn.EX) out.push('Google account')
   if (!s.semesterList || !s.backupFolder) out.push('Google files')
   if (!s.blueprintTemplate) out.push('Templates')
   return out
+}
+
+function Required() {
+  return (
+    <>
+      <span className="text-red-700" aria-hidden="true">*</span>
+      <span className="sr-only">(required)</span>
+    </>
+  )
 }
 
 const GoogleIcon = () => (
@@ -59,16 +71,18 @@ function FileField({ field, value, onChange, onChoose, help }: { field: SetupFie
   const info = FIELD_INFO[field]
   const [draft, setDraft] = useState('')
   const id = `field-${field}`
+  const labelId = `${id}-label`
   return (
     <div>
-      <label htmlFor={id} className="text-[13px] font-bold block mb-1">
+      <label id={labelId} htmlFor={id} className="text-[13px] font-bold block mb-1">
         {info.label}
         {!info.required && <span className="font-normal text-gray-600"> (optional)</span>}
       </label>
       <button
         type="button"
         onClick={onChoose}
-        className="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0033a0]"
+        aria-describedby={labelId}
+        className={`w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2 ${FOCUS_RING}`}
       >
         <KindIcon kind={info.kind} />
         Choose from Drive
@@ -83,12 +97,14 @@ function FileField({ field, value, onChange, onChoose, help }: { field: SetupFie
         />
         <button
           type="button"
-          disabled={!draft.trim()}
+          aria-disabled={!draft.trim()}
+          aria-describedby={labelId}
           onClick={() => {
+            if (!draft.trim()) return
             onChange(`Pasted address (test build: not checked)`)
             setDraft('')
           }}
-          className={`flex-shrink-0 px-3 rounded-xl border-2 font-black text-sm ${draft.trim() ? 'border-[#0033a0] text-[#0033a0] hover:bg-blue-50' : 'border-gray-300 text-gray-500'}`}
+          className={`flex-shrink-0 px-3 rounded-xl border-2 font-black text-sm ${FOCUS_RING} ${draft.trim() ? 'border-[#0033a0] text-[#0033a0] hover:bg-blue-50' : 'border-gray-400 text-gray-600 cursor-not-allowed'}`}
         >
           Check
         </button>
@@ -97,7 +113,7 @@ function FileField({ field, value, onChange, onChoose, help }: { field: SetupFie
         <p className="mt-1.5 flex items-center gap-2 text-sm font-black text-green-700">
           <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" aria-hidden="true" />
           <span className="min-w-0 [overflow-wrap:anywhere]">{value}</span>
-          <button type="button" onClick={() => onChange('')} className="ml-auto text-xs font-bold text-gray-600 underline">
+          <button type="button" onClick={() => onChange('')} aria-describedby={labelId} className={`ml-auto text-xs font-bold text-gray-700 underline rounded px-1 py-0.5 ${FOCUS_RING}`}>
             Clear
           </button>
         </p>
@@ -145,19 +161,20 @@ export function SetupPanel({
           type="button"
           aria-expanded={open}
           aria-controls="setup-panel"
+          id="setup-toggle"
           onClick={() => setOpen(!open)}
           className="w-full bg-[#0033a0] hover:bg-[#002d8f] text-white px-4 py-3.5 flex items-center gap-3 transition-colors text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-inset"
         >
           <SlidersHorizontal className="w-[18px] h-[18px]" aria-hidden="true" />
           <span className="font-black text-[15px]">Initial setup</span>
           <span className="ml-auto flex items-center gap-3">
-            <span className="flex items-center gap-1.5" aria-hidden="true">
+            <span className="flex items-center gap-1.5" aria-hidden="true" title={DOT_NAMES.map((n, i) => `${n}: ${dots[i] ? 'done' : 'not done'}`).join('\n')}>
               {dots.map((d, i) => (
                 <span key={i} className={`w-2 h-2 rounded-full ${d ? 'bg-green-400' : 'bg-white/70'}`} />
               ))}
             </span>
             <span className="text-[11px] font-bold">
-              {complete ? 'Complete' : `${remaining.length} item${remaining.length === 1 ? '' : 's'} incomplete`}
+              {complete ? (state.token ? 'Complete' : 'Complete · GitHub token optional') : `${remaining.length} required item${remaining.length === 1 ? '' : 's'} incomplete`}
             </span>
             <ChevronDown className={`w-[18px] h-[18px] transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden="true" />
           </span>
@@ -166,12 +183,15 @@ export function SetupPanel({
 
       {open && (
         <div id="setup-panel" className="bg-white border border-gray-200 border-t-0 rounded-b-2xl p-3.5 space-y-3">
+          <p className="text-[12px] text-gray-600">
+            <span className="text-red-700" aria-hidden="true">*</span> Required
+          </p>
           {/* Google accounts */}
           <div className={cardClass(state.signedIn.GS || state.signedIn.EX)}>
             <div className="flex items-center gap-2 mb-2">
               <GoogleIcon />
               <h3 className="font-black text-[15px]">
-                Google accounts <span className="text-red-700">*</span>
+                Google accounts <Required />
               </h3>
             </div>
             <p className="text-[13px] text-gray-600 mb-2.5">
@@ -194,7 +214,7 @@ export function SetupPanel({
                     {state.signedIn[k] ? (
                       <>
                         {!inUse && (
-                          <button type="button" onClick={() => set({ account: k })} className="text-xs font-bold text-blue-600 underline">
+                          <button type="button" onClick={() => set({ account: k })} className={`text-xs font-bold text-blue-700 underline rounded ${FOCUS_RING}`}>
                             Use this account
                           </button>
                         )}
@@ -205,7 +225,7 @@ export function SetupPanel({
                             const other = k === 'GS' ? 'EX' : 'GS'
                             set({ signedIn, account: signedIn[other] ? other : state.account })
                           }}
-                          className="text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-2.5 py-1.5 hover:bg-gray-50"
+                          className={`text-xs font-bold text-gray-700 border border-gray-500 rounded-lg px-2.5 py-1.5 hover:bg-gray-50 ${FOCUS_RING}`}
                         >
                           Sign out
                         </button>
@@ -214,7 +234,7 @@ export function SetupPanel({
                       <button
                         type="button"
                         onClick={() => set({ signedIn: { ...state.signedIn, [k]: true }, account: state.signedIn.GS || state.signedIn.EX ? state.account : k })}
-                        className="text-xs font-black text-white bg-[#0033a0] rounded-lg px-3 py-1.5 hover:bg-[#002d8f]"
+                        className={`text-xs font-black text-white bg-[#0033a0] rounded-lg px-3 py-1.5 hover:bg-[#002d8f] ${FOCUS_RING}`}
                       >
                         Sign in with Google
                       </button>
@@ -223,7 +243,8 @@ export function SetupPanel({
                 )
               })}
             </div>
-            <p className="mt-2.5 text-[12.5px] text-gray-700">Test build: signing in and out only changes this screen. Nothing connects to Google.</p>
+            <p className="mt-2.5 text-[12.5px] text-gray-700">Documents you add are opened with the account in use. You can switch accounts here or from the account button at the top.</p>
+            <p className="mt-1 text-[12.5px] text-gray-700">Test build: signing in and out only changes this screen. Nothing connects to Google.</p>
           </div>
 
           {/* GitHub token */}
@@ -238,7 +259,7 @@ export function SetupPanel({
             {state.token ? (
               <div className="flex items-center gap-2 text-sm font-black text-green-700">
                 <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> Token saved
-                <button type="button" onClick={() => set({ token: '' })} className="ml-auto text-xs font-bold text-gray-700 border border-gray-300 rounded-lg px-2.5 py-1.5">
+                <button type="button" onClick={() => set({ token: '' })} className={`ml-auto text-xs font-bold text-gray-700 border border-gray-500 rounded-lg px-2.5 py-1.5 ${FOCUS_RING}`}>
                   Remove
                 </button>
               </div>
@@ -251,23 +272,30 @@ export function SetupPanel({
                     placeholder="Paste your GitHub token"
                     value={tokenDraft}
                     onChange={(e) => setTokenDraft(e.target.value)}
-                    className="w-full border-2 border-gray-500 rounded-xl px-3.5 py-2.5 pr-10 text-sm font-mono focus:outline-none focus:border-[#0033a0] focus:ring-2 focus:ring-blue-200"
+                    className="w-full border-2 border-gray-500 rounded-xl px-3.5 py-2.5 pr-12 text-sm font-mono focus:outline-none focus:border-[#0033a0] focus:ring-2 focus:ring-blue-200"
                   />
-                  <button type="button" onClick={() => setShowToken(!showToken)} aria-label={showToken ? 'Hide token' : 'Show token'} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600">
+                  <button type="button" onClick={() => setShowToken(!showToken)} aria-label={showToken ? 'Hide token' : 'Show token'} aria-pressed={showToken} className={`absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-700 p-1.5 rounded-lg hover:bg-gray-100 ${FOCUS_RING}`}>
                     {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
                 <button
                   type="button"
-                  disabled={!tokenDraft.trim()}
+                  aria-disabled={!tokenDraft.trim()}
                   onClick={() => {
+                    if (!tokenDraft.trim()) return
                     set({ token: 'saved' })
                     setTokenDraft('')
                   }}
-                  className={`block w-full py-2.5 rounded-xl text-sm font-black ${tokenDraft.trim() ? 'bg-[#0033a0] text-white hover:bg-[#002d8f]' : 'bg-gray-200 text-gray-700'}`}
+                  className={`block w-full py-2.5 rounded-xl text-sm font-black ${FOCUS_RING} ${tokenDraft.trim() ? 'bg-[#0033a0] text-white hover:bg-[#002d8f]' : 'bg-gray-200 text-gray-700 cursor-not-allowed'}`}
                 >
                   Save token
                 </button>
+                <p className="text-xs text-gray-700 mt-2">
+                  Use a <b>fine-grained, read-only</b> token for the Experimental Repo only, with an expiry date. It will be stored encrypted on this computer only.
+                </p>
+                <p className="mt-1.5 text-center">
+                  <OpenLink url={TOKEN_HELP_URL} className="text-[12.5px]">How do I get a GitHub token?</OpenLink>
+                </p>
                 <p className="text-xs text-gray-600 mt-2">Test build: the token is not stored anywhere. Paste any text to try it.</p>
               </>
             )}
@@ -278,7 +306,7 @@ export function SetupPanel({
             <div className="flex items-center gap-2 mb-2">
               <Link2 className="w-4 h-4 text-[#0033a0]" aria-hidden="true" />
               <h3 className="font-black text-[15px]">
-                Google files <span className="text-red-700">*</span>
+                Google files <Required />
               </h3>
             </div>
             <p className="text-[13px] text-gray-600 mb-3">Where the app finds projects, keeps backups and records its update history. Choose each one from Drive, or paste its address.</p>
@@ -305,7 +333,7 @@ export function SetupPanel({
             <div className="flex items-center gap-2 mb-2">
               <FileText className="w-4 h-4 text-[#0033a0]" aria-hidden="true" />
               <h3 className="font-black text-[15px]">
-                Templates <span className="text-red-700">*</span>
+                Templates <Required />
               </h3>
             </div>
             <p className="text-[13px] text-gray-600 mb-3">The templates new projects are copied from. Keeping their scripts up to date means new projects start with the latest version.</p>
@@ -347,9 +375,9 @@ export function SetupPanel({
                 </span>
               </div>
             </div>
-            <button type="button" disabled className="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-gray-500" title="Comes later">
-              <Plus className="w-3.5 h-3.5" aria-hidden="true" /> Add a repo (comes later)
-            </button>
+            <p className="inline-flex items-center gap-1 mt-2 text-[12.5px] text-gray-600">
+              <Plus className="w-3.5 h-3.5" aria-hidden="true" /> Adding a repo comes later.
+            </p>
           </div>
 
           <div className="flex items-start gap-1.5 text-[11px] text-gray-600 px-1">

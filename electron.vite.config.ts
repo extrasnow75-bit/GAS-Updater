@@ -4,33 +4,23 @@ import { resolve } from 'path'
 import type { Plugin } from 'vite'
 
 /**
- * Content-Security-Policy for the packaged renderer.
+ * Content-Security-Policy for the packaged window.
  *
- * The renderer makes no network requests of its own — every Canvas and Google call happens
- * in the main process and arrives over IPC — so `connect-src 'none'` costs nothing and closes
- * the quiet exfiltration routes: fetch, XHR, WebSocket, beacons.
- *
- * It is not airtight, and should not be described as such. CSP does not govern top-level
- * navigation, and `will-navigate` hands http(s) URLs to shell.openExternal, so injected script
- * could still leak data by navigating to `https://attacker/?data=…`. That opens the user's real
- * browser, which is conspicuous rather than silent — worth having, but a speed bump, not a wall.
+ * The window makes no network requests of its own. Every Google and GitHub call will happen in
+ * the main process and arrive over IPC, and tokens never reach the window. So `connect-src
+ * 'none'` costs nothing and closes the quiet ways data could leak out: fetch, XHR, WebSocket,
+ * beacons. Images are limited to the app's own files (no remote images at all).
  *
  * `style-src` needs 'unsafe-inline' because React writes `style={{…}}` as inline style
- * attributes (the draggable title bar, the tile colours, the progress bar width). `img-src`
- * allows the Google profile picture and the data: URIs Vite inlines for small assets.
+ * attributes (the draggable title bar, the progress bar width).
  *
- * Injected at build time only. The dev server needs a websocket for HMR and serves inline
- * module scripts, so applying this policy there would just break `npm run dev` — and dev is
- * developer-only, where the threat model does not apply.
+ * Injected at build time only; the dev server needs a websocket and inline scripts.
  */
 const CSP = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
-  // Any *.googleusercontent.com host: profile pictures come back from lh3, lh4, lh5 and
-  // others depending on the account, so pinning one subdomain would silently drop the
-  // avatar for some users and fall back to initials with no clue why.
-  "img-src 'self' data: https://*.googleusercontent.com",
+  "img-src 'self' data:",
   "font-src 'self'",
   "connect-src 'none'",
   "object-src 'none'",

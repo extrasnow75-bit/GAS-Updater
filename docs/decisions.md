@@ -31303,3 +31303,18 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
 - "Up to date" means up to date with the Main Repo (every document starts on it). A document that
   matches the Experimental Repo exactly says so, and still shows as out of date with Main.
 - Real updates (practice run off) need an extra "I understand" tick in the confirm dialog.
+
+## After the four reviews (2026-11-26)
+
+- Check / Update buttons and Practice run moved to a bar pinned to the bottom of the window.
+  "Check compares with" sits above the list. Tool tables start closed (Open all / Close all).
+- "Mixed" Update from: dashed border, readable text; choosing a repo asks before replacing the
+  tool-by-tool choices.
+- Tags: "Not in document" (was "Missing"); "Same date, different content" is amber, not red.
+  A document is "Out of date" or "Up to date" against the Main Repo; extra files are a note.
+- Real update: red header and button, "for real" title, and an "I understand" tick. After a
+  practice run the main button is "Update for real…".
+- Warnings say cause, then "Choose one:" with real buttons; a document with a warning is
+  skipped; the confirm dialog links to it ("Go to …").
+- Facts the warnings need (menu items in Code.gs, permissions in appsscript.json) are now read
+  from each file's data instead of example markers, ready for real files.

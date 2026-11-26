@@ -3,7 +3,7 @@
  * Main Repo files are the real "Last updated" lines from blueprint-tools-script; everything
  * else is invented to show each kind of difference.
  */
-import type { DocChoice, FileSet, Repos } from './compare'
+import type { FileSet, Repos } from './compare'
 
 export const MAIN_FILES: [string, string][] = [
   ['Code.gs', '2026-09-12 21:14 MDT'], ['Code2.gs', '2026-09-25 14:25 MDT'], ['Code3.gs', '2026-07-19 09:22 MDT'],
@@ -13,11 +13,17 @@ export const MAIN_FILES: [string, string][] = [
   ['appsscript.json', '2026-07-19 09:22 MDT'],
 ]
 
+/** What the Blueprint Tools menu lists, and what each appsscript.json allows, in plain words. */
+const MAIN_MENU = ['menu', 'dir', 'time', 'model', 'dates', 'map']
+const BASE_SCOPES = ['Edit this document', 'Menus and sidebars', 'Connect to outside services']
+
 const MAIN: FileSet = Object.fromEntries(MAIN_FILES.map(([f, s]) => [f, { s, v: 'm' }]))
+MAIN['Code.gs'] = { ...MAIN['Code.gs'], menu: MAIN_MENU }
+MAIN['appsscript.json'] = { ...MAIN['appsscript.json'], scopes: BASE_SCOPES }
 const EXP: FileSet = {
   ...MAIN,
-  'Code.gs': { s: '2026-08-20 15:40 MDT', v: 'x' },
-  'appsscript.json': { s: '2026-11-25 16:34 MST', v: 'x' },
+  'Code.gs': { s: '2026-08-20 15:40 MDT', v: 'x', menu: [...MAIN_MENU, 'video'] },
+  'appsscript.json': { s: '2026-11-25 16:34 MST', v: 'x', scopes: [...BASE_SCOPES, 'Google Sheets'] },
   'Code10.gs': { s: '2026-11-25 16:34 MST', v: 'x' },
   'Sidebar10.html': { s: '2026-11-25 16:34 MST', v: 'x' },
 }
@@ -49,20 +55,15 @@ delete biol['Sidebar9.html']
 const fake = (id: string) => `https://docs.google.com/document/d/${id}/edit`
 
 export const DOCS: ExampleDoc[] = [
-  { id: 'biol', name: 'BIOL 1010 Blueprint', type: 'Blueprint', account: 'GS', url: fake('EXAMPLE-biol1010'), status: 'out', note: 'Behind both repos', files: biol },
+  { id: 'biol', name: 'BIOL 1010 Blueprint', type: 'Blueprint', account: 'GS', url: fake('EXAMPLE-biol1010'), status: 'out', note: 'Behind both repos: 3 tools are older and 1 is missing', files: biol },
   { id: 'quiz', name: 'BIOL 1010 Module 3 Quiz', type: 'Quiz', account: 'GS', url: fake('EXAMPLE-biol1010-quiz'), status: 'noscript', note: 'Skipped: there is no Quiz Repo yet' },
-  { id: 'hlth', name: 'HLTH 2200 Blueprint', type: 'Blueprint', account: 'GS', url: fake('EXAMPLE-hlth2200'), status: 'extra', note: '1 file is not in GitHub (MyNotes.gs), and Code.gs was edited in the document', files: { ...MAIN, 'Code.gs': { s: '2026-09-12 21:14 MDT', v: 'e' }, 'MyNotes.gs': { s: '', v: 'n' } } },
+  { id: 'hlth', name: 'HLTH 2200 Blueprint', type: 'Blueprint', account: 'GS', url: fake('EXAMPLE-hlth2200'), status: 'extra', note: 'Code.gs was edited in the document. Also has 1 file that is not in GitHub (MyNotes.gs)', files: { ...MAIN, 'Code.gs': { s: '2026-09-12 21:14 MDT', v: 'e', menu: MAIN_MENU }, 'MyNotes.gs': { s: '', v: 'n' } } },
   { id: 'hquiz', name: 'HLTH 2200 Introduction to Community and Public Health: Final Exam Quiz Questions (Fall 2026 revision)', type: 'Quiz', account: 'GS', url: fake('EXAMPLE-hlth2200-quiz'), status: 'noscript', note: 'Skipped: there is no Quiz Repo yet' },
   { id: 'psyc', name: 'PSYC 3015 Blueprint', type: 'Blueprint', account: 'EX', url: fake('EXAMPLE-psyc3015'), status: 'out', note: 'Set up from the Experimental Repo', files: { ...EXP } },
   { id: 'nurs', name: 'NURS 4100 Blueprint', type: 'Blueprint', account: 'GS', url: fake('EXAMPLE-nurs4100'), status: 'perm', note: 'You can view this document but not edit it' },
   { id: 'hist', name: 'HIST 1120 Blueprint', type: 'Blueprint', account: 'EX', url: fake('EXAMPLE-hist1120'), status: 'none', note: 'Open it once so its script can be found, or paste its script ID' },
 ]
 
-export const START_CHOICES: Record<string, DocChoice> = {
-  biol: { doc: 'main', t: {} },
-  hlth: { doc: 'main', t: {} },
-  psyc: { doc: 'main', t: {} },
-}
 
 export const ACCOUNTS = {
   GS: { label: 'GS', email: 'gregsnow@boisestate.edu', name: 'Greg Snow' },
@@ -70,3 +71,9 @@ export const ACCOUNTS = {
 } as const
 
 export const SUPPORT_CONTACT = 'Greg Snow (gregsnow@boisestate.edu or extrasnow75@gmail.com)'
+
+/** Example address of the update history sheet and backup folder, for the Open links. */
+export const HISTORY_URL = 'https://docs.google.com/spreadsheets/d/EXAMPLE-update-history/edit'
+export const BACKUP_URL = 'https://drive.google.com/drive/folders/EXAMPLE-script-backups'
+export const TOKEN_HELP_URL =
+  'https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token'

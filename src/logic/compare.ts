@@ -8,12 +8,21 @@
  */
 
 export type RepoKey = 'main' | 'exp'
+/** Every repo the app compares with, in display order. Add the Quiz Repo here later. */
+export const REPO_KEYS: readonly RepoKey[] = ['main', 'exp']
 export type Choice = RepoKey | 'keep' | 'remove'
 
-/** One script file: its date stamp (may be empty) and a stand-in for its content. */
+/**
+ * One script file: its date stamp (may be empty) and a stand-in for its content. In the real
+ * app `v` becomes a hash of the file, and the facts the warnings need are read from the file
+ * when it is fetched: `menu` (tool keys the Blueprint Tools menu in Code.gs lists) and
+ * `scopes` (plain-language permissions in appsscript.json).
+ */
 export interface FileVersion {
   s: string
   v: string
+  menu?: string[]
+  scopes?: string[]
 }
 export type FileSet = Record<string, FileVersion>
 
@@ -45,16 +54,7 @@ export const TOOLS: Tool[] = [
   { k: 'perm', n: 'Permissions', sub: 'appsscript.json: what the tools are allowed to do', f: ['appsscript.json'] },
 ]
 
-/** Plain-language names for the permissions each version of appsscript.json asks for. */
-export const SCOPES: Record<string, string[]> = {
-  m: ['Edit this document', 'Menus and sidebars', 'Connect to outside services'],
-  x: ['Edit this document', 'Menus and sidebars', 'Connect to outside services', 'Google Sheets'],
-}
-
-export interface Repos {
-  main: FileSet
-  exp: FileSet
-}
+export type Repos = Record<RepoKey, FileSet>
 
 /** What the person has chosen for one document: a whole-document repo plus per-tool changes. */
 export interface DocChoice {
@@ -95,6 +95,9 @@ export function defaultChoice(doc: FileSet, repos: Repos, repo: RepoKey, t: Tool
   if (t.f.some((f) => doc[f] && src[f] && doc[f].v !== src[f].v && doc[f].s > src[f].s)) return 'keep'
   return repo
 }
+
+/** Every document starts on the Main Repo until the person chooses otherwise. */
+export const DEFAULT_CHOICE: DocChoice = { doc: 'main', t: {} }
 
 export const choiceFor = (doc: FileSet, repos: Repos, c: DocChoice, t: Tool): Choice =>
   c.t[t.k] ?? defaultChoice(doc, repos, c.doc, t)
@@ -156,13 +159,13 @@ function warnCore(doc: FileSet, repos: Repos, c: DocChoice): Warning[] {
   const fin = finalFiles(doc, repos, c)
   const W: Warning[] = []
   const video = !!fin['Code10.gs']
-  const menuHasVideo = !!fin['Code.gs'] && fin['Code.gs'].v === 'x'
-  const sheets = !!fin['appsscript.json'] && fin['appsscript.json'].v === 'x'
+  const menuHasVideo = !!fin['Code.gs']?.menu?.includes('video')
+  const sheets = !!fin['appsscript.json']?.scopes?.includes('Google Sheets')
   const dropVideo: Fix[] = has(doc, VIDEO) ? [] : [{ k: 'video', c: 'keep', label: 'Don’t add Create Video List' }]
   if (video && !menuHasVideo)
     W.push({
       id: 'menu',
-      msg: 'Create Video List would be in this document, but the Blueprint Tools menu you chose has no item for it, so nobody could open it.',
+      msg: 'The Blueprint Tools menu you chose (Code.gs) has no “Create Video List” item, so nobody could open that tool.',
       fixes: [
         { k: 'menu', c: 'keep', label: 'Keep this document’s menu' },
         { k: 'menu', c: 'exp', label: 'Take the menu from the Experimental Repo' },
@@ -172,13 +175,13 @@ function warnCore(doc: FileSet, repos: Repos, c: DocChoice): Warning[] {
   if (video && !sheets)
     W.push({
       id: 'perm',
-      msg: 'Create Video List needs Google Sheets access, which only the Experimental Repo’s Permissions include.',
+      msg: '“Create Video List” needs Google Sheets access, and the Permissions you chose (appsscript.json) do not include it.',
       fixes: [{ k: 'perm', c: 'exp', label: 'Take Permissions from the Experimental Repo' }, ...dropVideo],
     })
   if (!video && menuHasVideo)
     W.push({
       id: 'novideo',
-      msg: 'The menu you chose lists Create Video List, but the tool itself would not be in this document.',
+      msg: 'The menu you chose lists “Create Video List”, but the tool itself would not be in this document.',
       fixes: [
         { k: 'video', c: 'exp', label: 'Add Create Video List from the Experimental Repo' },
         { k: 'menu', c: 'main', label: 'Take the menu from the Main Repo' },
@@ -214,7 +217,7 @@ export function shownDoc(doc: FileSet, repos: Repos, c: DocChoice): RepoKey | 'm
       .join()
   const tools = toolsFor(doc)
   const cur = Object.fromEntries(tools.map((t) => [t.k, choiceFor(doc, repos, c, t)]))
-  const order: RepoKey[] = c.doc === 'main' ? ['main', 'exp'] : ['exp', 'main']
+  const order: RepoKey[] = [c.doc, ...REPO_KEYS.filter((k) => k !== c.doc)]
   for (const s of order) {
     const ok = tools.every((t) =>
       [s, defaultChoice(doc, repos, s, t)].some((ch) => fin(t, ch as Choice) === fin(t, cur[t.k])),
@@ -243,11 +246,11 @@ export function summary(doc: FileSet, repos: Repos, c: DocChoice): string {
     if (rows.some((r) => r.res === 'removed')) removed++
     else if (rows.some((r) => r.res !== 'unchanged') && (ch === 'main' || ch === 'exp')) by[ch].push(t.n)
     else if (ch === 'keep' && !has(doc, t)) notAdded++
-    else if (ch === 'keep' && (['main', 'exp'] as RepoKey[]).some((s) => has(repos[s], t) && t.f.some((f) => cmpState(doc, repos[s], f) !== 'same')))
+    else if (ch === 'keep' && REPO_KEYS.some((s) => has(repos[s], t) && t.f.some((f) => cmpState(doc, repos[s], f) !== 'same')))
       kept++
   }
   const parts: string[] = []
-  for (const s of ['main', 'exp'] as RepoKey[])
+  for (const s of REPO_KEYS)
     if (by[s].length) parts.push(`${by[s].length} tool${by[s].length === 1 ? '' : 's'} from ${REPO_NAME[s]}`)
   if (kept) parts.push(`${kept} kept as ${kept === 1 ? 'it is' : 'they are'}`)
   if (removed) parts.push(`${removed} removed`)
@@ -271,7 +274,7 @@ export function cmpCounts(doc: FileSet, src: FileSet): string[] {
 
 /** True when any repo differs from the document for this tool, or the tool is missing. */
 export function toolDiffers(doc: FileSet, repos: Repos, t: Tool): boolean {
-  const allSame = t.f.every((f) => (['main', 'exp'] as RepoKey[]).every((s) => ['same', 'na'].includes(cmpState(doc, repos[s], f))))
+  const allSame = t.f.every((f) => REPO_KEYS.every((s) => ['same', 'na'].includes(cmpState(doc, repos[s], f))))
   const missing = !t.f.some((f) => doc[f]) && t.f.some((f) => repos.main[f] || repos.exp[f])
   return !allSame || missing
 }
@@ -280,16 +283,57 @@ export function toolDiffers(doc: FileSet, repos: Repos, t: Tool): boolean {
 export function permDiff(doc: FileSet, repos: Repos): string {
   const d = doc['appsscript.json']
   const out: string[] = []
-  for (const s of ['main', 'exp'] as RepoKey[]) {
+  for (const s of REPO_KEYS) {
     const g = repos[s]['appsscript.json']
     if (!d || !g || d.v === g.v) continue
-    const add = SCOPES[g.v].filter((x) => !SCOPES[d.v].includes(x))
-    const rem = SCOPES[d.v].filter((x) => !SCOPES[g.v].includes(x))
+    const have = d.scopes ?? []
+    const want = g.scopes ?? []
+    const add = want.filter((x) => !have.includes(x))
+    const rem = have.filter((x) => !want.includes(x))
     const bits = [add.length ? 'adds ' + add.join(', ') : '', rem.length ? 'removes ' + rem.join(', ') : ''].filter(Boolean)
-    out.push(`${REPO_NAME[s]} ${bits.join(' and ')}`)
+    out.push(`${REPO_NAME[s]} ${bits.length ? bits.join(' and ') : 'has different settings'}`)
   }
   return out.join(' · ')
 }
 
 /** Dates without the time zone, for the narrow table. All stamps are Mountain Time. */
 export const shortStamp = (st: string): string => (st ? st.replace(/ M[DS]T$/, '') : st)
+
+/**
+ * Tools that are kept as they are although some repo has a different version: the ones the
+ * person (or a safe default) chose to leave alone.
+ */
+export function keptTools(doc: FileSet, repos: Repos, c: DocChoice): Tool[] {
+  return toolsFor(doc).filter(
+    (t) =>
+      choiceFor(doc, repos, c, t) === 'keep' &&
+      has(doc, t) &&
+      t.f.some((f) => REPO_KEYS.some((s) => ['differ', 'extra'].includes(cmpState(doc, repos[s], f)))),
+  )
+}
+
+/** Everything the documents list shows for one document, worked out once per change. */
+export interface Analysis {
+  tools: Tool[]
+  lit: RepoKey | 'mixed'
+  warnings: Warning[]
+  summary: string
+  differing: Tool[]
+  counts: Record<RepoKey, string[]>
+  permDiff: string
+  choices: Record<string, Choice>
+}
+
+export function analyse(doc: FileSet, repos: Repos, c: DocChoice): Analysis {
+  const tools = toolsFor(doc)
+  return {
+    tools,
+    lit: shownDoc(doc, repos, c),
+    warnings: warnings(doc, repos, c),
+    summary: summary(doc, repos, c),
+    differing: tools.filter((t) => toolDiffers(doc, repos, t)),
+    counts: Object.fromEntries(REPO_KEYS.map((r) => [r, cmpCounts(doc, repos[r])])) as Record<RepoKey, string[]>,
+    permDiff: permDiff(doc, repos),
+    choices: Object.fromEntries(tools.map((t) => [t.k, choiceFor(doc, repos, c, t)])),
+  }
+}

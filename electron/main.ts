@@ -3,9 +3,10 @@
  *
  * TEST BUILD: the app shows example data only. It makes no network calls and does not
  * connect to Google or GitHub. The window, title bar, zoom and link handling follow
- * Canvas Extractor Tools so the apps look and behave the same.
+ * Canvas Extractor Tools so the apps look and behave the same, with the extra hardening from
+ * the 2026-11-26 security review (see docs/reviews/).
  */
-import { app, BrowserWindow, ipcMain, shell } from 'electron'
+import { app, BrowserWindow, clipboard, ipcMain, session, shell, type IpcMainInvokeEvent } from 'electron'
 import { join } from 'path'
 import {
   applyZoomLevel,
@@ -18,6 +19,9 @@ import {
 import { isAllowedExternalUrl } from './ipc/externalUrls'
 
 const IS_MAC = process.platform === 'darwin'
+
+/** The longest text the window may ask to copy (a full results table is far smaller). */
+const MAX_COPY_CHARS = 2_000_000
 
 /** True only for a navigation back to the page this window already shows (see Extractor Tools). */
 function isOwnPage(win: BrowserWindow, url: string): boolean {
@@ -43,8 +47,8 @@ async function openExternalSafely(url: string): Promise<void> {
 
 function createWindow(): BrowserWindow {
   const win = new BrowserWindow({
-    width: 980,
-    height: 760,
+    width: 1040,
+    height: 780,
     minWidth: 720,
     minHeight: 560,
     webPreferences: {
@@ -52,13 +56,13 @@ function createWindow(): BrowserWindow {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true,
+      webviewTag: false,
     },
     titleBarStyle: IS_MAC ? 'hiddenInset' : 'hidden',
     ...(IS_MAC
       ? { trafficLightPosition: { x: 13, y: 11 } }
       : { titleBarOverlay: { color: '#0033a0', symbolColor: '#ffffff', height: 36 } }),
     backgroundColor: '#f8fafc',
-    icon: join(__dirname, '../../resources/icon.png'),
   })
 
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -72,35 +76,67 @@ function createWindow(): BrowserWindow {
   })
 
   registerZoomShortcuts(win)
+  // applyZoomLevel (not a bare setZoomLevel) so the Text size readout hears about it.
   win.webContents.on('did-finish-load', () => {
-    win.webContents.setZoomLevel(getSavedZoomLevel())
+    applyZoomLevel(win, getSavedZoomLevel())
   })
 
-  if (process.env['ELECTRON_RENDERER_URL']) {
-    void win.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    void win.loadFile(join(__dirname, '../renderer/index.html'))
+  // The development server address is honoured only when running from source. In the
+  // installed app this setting is ignored, so nobody can point the window (and the preload
+  // bridge) at a page of their own.
+  const devUrl = !app.isPackaged ? process.env['ELECTRON_RENDERER_URL'] : undefined
+  if (devUrl) void win.loadURL(devUrl)
+  else void win.loadFile(join(__dirname, '../renderer/index.html'))
+  return win
+}
+
+/**
+ * Every request from the window must come from the app's own page, in its main frame. Anything
+ * else (a frame, a page loaded some other way) is refused before the handler runs.
+ */
+function trustedWindow(event: IpcMainInvokeEvent): BrowserWindow {
+  const win = BrowserWindow.fromWebContents(event.sender)
+  const frame = event.senderFrame
+  if (!win || !frame || frame !== event.sender.mainFrame || !isOwnPage(win, frame.url)) {
+    throw new Error('This request did not come from the GAS Updater window.')
   }
   return win
 }
 
-function senderWindow(event: Electron.IpcMainInvokeEvent): BrowserWindow {
-  const win = BrowserWindow.fromWebContents(event.sender)
-  if (!win) throw new Error('The app window has closed.')
-  return win
-}
-
-ipcMain.handle('app:version', () => app.getVersion())
 ipcMain.handle('app:getZoom', (event) => ({
-  level: senderWindow(event).webContents.getZoomLevel(),
+  level: trustedWindow(event).webContents.getZoomLevel(),
   min: MIN_ZOOM_LEVEL,
   max: MAX_ZOOM_LEVEL,
 }))
-ipcMain.handle('app:stepZoom', (event, delta: number) => stepZoom(senderWindow(event), Math.sign(delta)))
-ipcMain.handle('app:resetZoom', (event) => applyZoomLevel(senderWindow(event), 0))
-ipcMain.handle('app:openExternal', (_event, url: string) => openExternalSafely(String(url)))
+ipcMain.handle('app:stepZoom', (event, delta: unknown) => {
+  const win = trustedWindow(event)
+  if (delta !== 1 && delta !== -1) throw new Error('Text size can only change one step at a time.')
+  return stepZoom(win, delta)
+})
+ipcMain.handle('app:resetZoom', (event) => applyZoomLevel(trustedWindow(event), 0))
+ipcMain.handle('app:openExternal', (event, url: unknown) => {
+  trustedWindow(event)
+  if (typeof url !== 'string') return
+  return openExternalSafely(url)
+})
+// Copying goes through here so the window never needs clipboard permission.
+ipcMain.handle('app:copyText', (event, text: unknown) => {
+  trustedWindow(event)
+  if (typeof text !== 'string' || text.length > MAX_COPY_CHARS) throw new Error('That could not be copied.')
+  clipboard.writeText(text)
+})
+
+// No window may ever host a <webview> or open a new window inside the app.
+app.on('web-contents-created', (_event, contents) => {
+  contents.on('will-attach-webview', (e) => e.preventDefault())
+  contents.setWindowOpenHandler(() => ({ action: 'deny' }))
+})
 
 app.whenReady().then(() => {
+  // The app needs no camera, microphone, location, notifications or clipboard reading.
+  session.defaultSession.setPermissionRequestHandler((_wc, _permission, callback) => callback(false))
+  session.defaultSession.setPermissionCheckHandler(() => false)
+
   createWindow()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()

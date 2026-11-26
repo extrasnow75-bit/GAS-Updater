@@ -17,7 +17,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
-    "electron": "^43.3.0",
+    "electron": "^43.8.13",
     "electron-builder": "^26.15.3",
     "electron-vite": "^5.0.0",
     "postcss": "^8.5.25",
@@ -34,15 +34,46 @@
   "build": {
     "appId": "com.boisestate.gas-updater",
     "productName": "GAS Updater",
-    "directories": { "output": "release" },
-    "win": { "target": "nsis", "icon": "resources/icon.ico" },
-    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true },
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
     "mac": {
-      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
       "icon": "resources/icon.png",
       "category": "public.app-category.education"
     },
-    "linux": { "target": "dir", "icon": "resources/icon.png" },
-    "files": ["out/**"]
+    "linux": {
+      "target": "dir",
+      "icon": "resources/icon.png"
+    },
+    "files": [
+      "out/**"
+    ],
+    "electronFuses": {
+      "runAsNode": false,
+      "enableCookieEncryption": true,
+      "enableNodeOptionsEnvironmentVariable": false,
+      "enableNodeCliInspectArguments": false,
+      "enableEmbeddedAsarIntegrityValidation": true,
+      "onlyLoadAppFromAsar": true,
+      "loadBrowserProcessSpecificV8Snapshot": false
+    },
+    "asar": true
   }
 }

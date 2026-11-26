@@ -83,3 +83,21 @@ Google/GitHub connections.
   example markers; parse date stamps properly; don't hard-code exactly two repos (Quiz Repo
   coming); share the counting rules in one place; memoise per-document calculations (every
   table recalculates ~9 times a second during a run).
+
+## Status (2026-11-26, later)
+
+Everything under "Fix now" is fixed, with these notes:
+
+- Electron upgraded from 43.3.0 to 43.8.13: the full audit showed high-severity advisories in
+  the Electron runtime itself (it ships inside the app even though npm lists it as a build tool).
+  6 moderate advisories remain, all in electron-builder's own tooling (minimatch), which does
+  not ship; the only "fix" is a breaking downgrade.
+- Electron fuses on: no run-as-Node, no NODE_OPTIONS, no --inspect, asar integrity checking,
+  app loads only from its asar, cookies encrypted. `grantFileProtocolExtraPrivileges` is left on
+  deliberately: the window loads from file://, and switching it off would stop the app's own
+  scripts loading. Verified on a packaged build: ELECTRON_RUN_AS_NODE, ELECTRON_RENDERER_URL,
+  NODE_OPTIONS and --inspect are all ignored.
+- Copying uses the main process's clipboard, so the window is denied every permission.
+- Sheets, Slides and Forms stay tickable in the Drive picker: scripts can be bound to them, and
+  picking any file type was an original requirement. A note explains it.
+- The personal email addresses are unchanged, pending the owner's decision.

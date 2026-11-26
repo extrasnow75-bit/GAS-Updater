@@ -26,11 +26,15 @@ export function ZoomControl() {
   const ready = useRef(false)
 
   useEffect(() => {
-    window.api.app.getZoom().then(({ level, min, max }) => {
-      setLevel(level)
-      setRange({ min, max })
-      ready.current = true
-    })
+    window.api.app
+      .getZoom()
+      .then(({ level, min, max }) => {
+        setLevel(level)
+        setRange({ min, max })
+        ready.current = true
+      })
+      // If the size cannot be read, the control simply starts at 100%.
+      .catch(() => undefined)
     return window.api.app.onZoomChanged((next) => {
       setLevel(next)
       // Covers the keyboard shortcuts too, which change zoom without touching this UI.

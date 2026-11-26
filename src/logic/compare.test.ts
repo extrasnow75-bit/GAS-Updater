@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { cmpCounts, normalise, plan, shownDoc, summary, warnings, TOOLS, type DocChoice } from './compare'
 import { DOCS, REPOS } from './exampleData'
+import { checkCounts, checkLines, checkSentence, checkedNote, checkedStatus, exportRows, outcomeFor, parsePasted, updateLines } from './run'
+import { permDiff } from './compare'
 
 const doc = (id: string) => DOCS.find((d) => d.id === id)!.files!
 const main: DocChoice = { doc: 'main', t: {} }
@@ -59,27 +61,52 @@ describe('the whole-document toggle', () => {
   })
 })
 
-import { checkLines, exportRows, outcomeFor, updateLines, type ListDoc } from './run'
-
 describe('check and update reports', () => {
-  const list = DOCS.map((d) => ({ ...d, checked: true })) as ListDoc[]
-  it('reports every document in plain words', () => {
-    const L = checkLines(list, REPOS)
+  const both = ['main', 'exp'] as const
+  const list = [...DOCS]
+  it('reports every document, and the counts agree everywhere', () => {
+    const L = checkLines(list, REPOS, [...both])
     expect(L.some((l) => l.kind === 'error' && l.msg.includes('NURS 4100'))).toBe(true)
-    expect(L.some((l) => l.msg.includes('BIOL 1010 Module 3 Quiz') && l.msg.includes('no Quiz Repo'))).toBe(true)
+    const c = checkCounts(list, REPOS, [...both])
+    expect(c.total).toBe(c.need + c.upToDate + c.cannot + c.skipped)
+    expect(L[L.length - 1].msg).toBe(checkSentence(c))
+  })
+  it('measures "up to date" against the Main Repo, or the Experimental Repo when only it is compared', () => {
+    const psyc = DOCS.find((d) => d.id === 'psyc')!
+    expect(checkedStatus(psyc, REPOS, [...both])).toBe('out')
+    expect(checkedNote(psyc, REPOS, [...both])).toContain('Matches the Experimental Repo exactly')
+    expect(checkedStatus(psyc, REPOS, ['exp'])).toBe('ok')
   })
   it('skips a document with an unfixed warning and fails one without edit access', () => {
-    const psyc = outcomeFor(list.find((d) => d.id === 'psyc')!, REPOS, { doc: 'main', t: {} })
-    expect(psyc.result).toBe('blocked')
-    const nurs = outcomeFor(list.find((d) => d.id === 'nurs')!, REPOS, undefined)
+    expect(outcomeFor(DOCS.find((d) => d.id === 'psyc')!, REPOS).result).toBe('blocked')
+    const nurs = outcomeFor(DOCS.find((d) => d.id === 'nurs')!, REPOS)
     expect(nurs.result).toBe('error')
     expect(nurs.message).toContain('Details for support:')
   })
-  it('lists one line and one export row per file for an updated blueprint', () => {
-    const biol = list.find((d) => d.id === 'biol')!
-    const o = outcomeFor(biol, REPOS, { doc: 'main', t: {} })
-    const L = updateLines([biol], [o], false)
-    expect(L.filter((l) => l.msg.includes('last updated') || l.msg.includes('no date stamp'))).toHaveLength(o.rows.length)
-    expect(exportRows([biol], [o], 'x@y', false)).toHaveLength(o.rows.length)
+  it('uses the Main Repo for a document nobody has chosen for yet', () => {
+    expect(outcomeFor(DOCS.find((d) => d.id === 'biol')!, REPOS).result).toBe('done')
+  })
+  it('lists one line and one export row per file, under the document’s own account', () => {
+    const biol = DOCS.find((d) => d.id === 'biol')!
+    const psyc = { ...DOCS.find((d) => d.id === 'psyc')!, account: 'EX' as const, files: biol.files }
+    const os = new Map([biol, psyc].map((d) => [d.id, outcomeFor(d, REPOS)]))
+    const L = updateLines([biol], os, false)
+    expect(L.filter((l) => l.ts === '' && /^[✓·]/.test(l.msg))).toHaveLength(os.get('biol')!.rows.length)
+    const rows = exportRows([biol, psyc], os, false)
+    expect(rows.filter((r) => r[1] === 'extrasnow75@gmail.com')).toHaveLength(os.get('psyc')!.rows.length)
+  })
+})
+
+describe('pasted addresses', () => {
+  it('keeps Google file addresses and lists the other lines', () => {
+    const r = parsePasted('https://docs.google.com/document/d/1KKlxnDcBXZJ1vrNrVsb_k03CJM7sS8i_m-Bm7LDz4_A/edit\nhello world\n\nhttps://example.com/x')
+    expect(r.ok).toEqual(['1KKlxnDcBXZJ1vrNrVsb_k03CJM7sS8i_m-Bm7LDz4_A'])
+    expect(r.bad).toEqual(['hello world', 'https://example.com/x'])
+  })
+})
+
+describe('permissions', () => {
+  it('says in plain words what a repo would add', () => {
+    expect(permDiff(DOCS.find((d) => d.id === 'biol')!.files!, REPOS)).toBe('Experimental Repo adds Google Sheets')
   })
 })
