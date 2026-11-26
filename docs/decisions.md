@@ -31289,3 +31289,17 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
 - The folder action is renamed **Look inside ›** so "Open" always means "open in the browser".
 - Long file names wrap onto more lines in the picker (never cut off with "…"), including names
   with no spaces. The type label, Open link and Look inside stay on the first line, at the right.
+
+## Test build (2026-11-26)
+
+- First runnable app: the agreed screens in Electron + React + Tailwind, using example data only.
+  No Google or GitHub connections, no tokens stored, nothing changes any real document. A yellow
+  "Test build" note at the top of the window says so.
+- Copied from Canvas Extractor Tools: title bar, ribbon, zoom control, error text and "Details
+  for support" handling, window security settings, build tooling.
+- Windows installer built by GitHub Actions (`.github/workflows/test-build.yml`) on every push to
+  a claude/ branch, kept as a downloadable file on the run's page for 30 days. No release is
+  published.
+- "Up to date" means up to date with the Main Repo (every document starts on it). A document that
+  matches the Experimental Repo exactly says so, and still shows as out of date with Main.
+- Real updates (practice run off) need an extra "I understand" tick in the confirm dialog.
