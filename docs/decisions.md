@@ -31279,3 +31279,11 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   "Mixed". They stay clickable as a one-click reset (not disabled). When the choices again match
   one repo (counting tools where both repos are identical, and safe Keep defaults), that repo's
   button lights up again.
+
+## Open links in the Drive picker
+
+- Every file in the picker (and in step 2, "What's inside the folders") has an **Open ↗** link that
+  opens it in the default web browser (Drive gives each file's web address; Electron's
+  shell.openExternal opens it). Read-only: it does not tick, untick or change anything, and the
+  picker stays open. The link is separate from the file name so clicking the name still ticks.
+- The folder action is renamed **Look inside ›** so "Open" always means "open in the browser".
