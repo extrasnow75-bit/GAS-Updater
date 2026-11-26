@@ -31263,3 +31263,19 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   the manifest. If it does not, the stamp goes on a line in Code.gs's header
   ("appsscript.json last updated on ..."), and the app can also date it from the GitHub commit
   that last changed it. To be added when building (the user asked for it).
+
+## Naming and layout changes (after mockup review)
+
+- Repos are called **Main Repo** (blueprint-tools-script) and **Experimental Repo**
+  (blueprint-tools-script-private) everywhere. The branch name "(main)" is no longer shown: it
+  repeated the word Main and confused the two meanings. Branch only shown if it is ever not main.
+- The **Script source** card on the main screen is removed: the per-document "Update from" choice
+  replaces it. Every document starts on the Main Repo. A bar at the top of the list after Check,
+  "Update every ticked blueprint from: Main Repo · Experimental Repo", switches many at once.
+  The Initial setup card is renamed **GitHub repos** (Main Repo, Experimental Repo, Quiz Repo).
+- "Log (Google Sheet)" renamed **Update history (Google Sheet)**: the permanent record, one row per
+  document per update, plus a tab for each "Export to Google Sheet".
+- Per-document toggle: once tools are mixed, the Update from buttons fade and the line says
+  "Mixed". They stay clickable as a one-click reset (not disabled). When the choices again match
+  one repo (counting tools where both repos are identical, and safe Keep defaults), that repo's
+  button lights up again.

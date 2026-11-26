@@ -146,7 +146,7 @@
                 <svg class="ico w-4 h-4 text-red-600"><use href="#i-key"/></svg>
                 <h3 class="font-black text-[15px] m-0">GitHub token</h3>
               </div>
-              <p class="text-[13px] text-gray-600 mb-2.5">Only needed for private script sources, such as blueprint-tools-script-private. The main source is public and needs no token.</p>
+              <p class="text-[13px] text-gray-600 mb-2.5">Only needed for private repos, such as the Experimental Repo (blueprint-tools-script-private). The Main Repo is public and needs no token.</p>
               <p class="text-[13px] text-gray-600 mb-2.5">Paste a read-only GitHub token here. It's stored encrypted on this computer only.</p>
               <div class="relative mb-2.5">
                 <input type="password" aria-label="GitHub token" placeholder="Paste your GitHub token" class="w-full border-2 border-gray-500 rounded-xl px-3.5 py-2.5 pr-10 text-sm font-mono focus:outline-none focus:border-[#0033a0] focus:ring-2 focus:ring-blue-200">
@@ -162,7 +162,7 @@
                 <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-link"/></svg>
                 <h3 class="font-black text-[15px] m-0">Google files <span class="text-red-700">*</span></h3>
               </div>
-              <p class="text-[13px] text-gray-600 mb-3">Where the app finds projects, keeps backups and writes its log. Choose each one from Drive, or paste its address.</p>
+              <p class="text-[13px] text-gray-600 mb-3">Where the app finds projects, keeps backups and records its update history. Choose each one from Drive, or paste its address.</p>
               <div class="space-y-3">
                 <div>
                   <label class="text-[13px] font-bold block mb-1">Multi-semester list (Google Sheet)</label>
@@ -176,10 +176,10 @@
                   <div class="flex gap-2"><input placeholder="or paste: https://drive.google.com/drive/folders/…" aria-label="Backup folder" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
                 </div>
                 <div>
-                  <label class="text-[13px] font-bold block mb-1">Log (Google Sheet)</label>
+                  <label class="text-[13px] font-bold block mb-1">Update history (Google Sheet)</label>
                   <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-sheet"/></svg>Choose from Drive</button>
-                  <div class="flex gap-2"><input placeholder="or paste: https://docs.google.com/spreadsheets/d/…" aria-label="Log sheet" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
-                  <p class="text-xs text-gray-600 mt-1.5 m-0">Leave empty and the app makes a new “GAS Updater log” sheet in the backup folder.</p>
+                  <div class="flex gap-2"><input placeholder="or paste: https://docs.google.com/spreadsheets/d/…" aria-label="Update history sheet" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
+                  <p class="text-xs text-gray-600 mt-1.5 m-0">A permanent record of every update: one row per document, added automatically after each run, plus a tab for each “Export to Google Sheet”. Leave empty and the app makes a new “GAS Updater update history” sheet in the backup folder.</p>
                 </div>
               </div>
             </div>
@@ -206,19 +206,19 @@
               </div>
             </div>
 
-            <!-- Script sources -->
+            <!-- GitHub repos -->
             <div class="rounded-2xl border-2 p-4 border-gray-200">
               <div class="flex items-center gap-2 mb-2">
                 <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
-                <h3 class="font-black text-[15px] m-0">Script sources</h3>
+                <h3 class="font-black text-[15px] m-0">GitHub repos</h3>
               </div>
-              <p class="text-[13px] text-gray-600 mb-2.5">The GitHub repositories the app can copy scripts from. Each source is for one kind of document.</p>
+              <p class="text-[13px] text-gray-600 mb-2.5">The GitHub repos the app copies scripts from. Each repo is for one kind of document, so a blueprint script never goes into a quiz.</p>
               <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px]">
-                <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Main <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script · main</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Public</span></div>
-                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><span class="flex-1 min-w-0"><b class="block">Experimental <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script-private · main</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900">Needs token</span></div>
-                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100 bg-gray-50"><span class="flex-1 min-w-0"><b class="block">Quiz script <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900 align-middle">Quizzes</span></b><small class="text-xs text-gray-600">Not set up yet. Until it is, quizzes are skipped.</small></span></div>
+                <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Main Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Public</span></div>
+                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><span class="flex-1 min-w-0"><b class="block">Experimental Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script-private</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900">Needs token</span></div>
+                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100 bg-gray-50"><span class="flex-1 min-w-0"><b class="block">Quiz Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900 align-middle">Quizzes</span></b><small class="text-xs text-gray-600">Not set up yet. Until it is, quizzes are skipped.</small></span></div>
               </div>
-              <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add a source</span>
+              <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add a repo</span>
             </div>
 
             <div class="flex items-start gap-1.5 text-[11px] text-gray-600 px-1">
@@ -236,26 +236,6 @@
 
       <!-- ===== Screens 2–6 share the working area ===== -->
       <section id="work" class="screen max-w-2xl mx-auto py-6 px-4 sm:px-6 space-y-3.5" hidden>
-
-        <!-- Script source -->
-        <div class="rounded-2xl border-2 p-4 border-green-200 shadow-[0_0_0_3px_rgba(240,253,244,1)] bg-white">
-          <div class="flex items-center gap-2 mb-1">
-            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
-            <h2 class="font-black text-[15px] m-0">Script source</h2>
-            <svg class="ico w-[17px] h-[17px] text-green-500 ml-auto"><use href="#i-ok"/></svg>
-          </div>
-          <p class="text-[13px] text-gray-600 mb-2.5">Where the new scripts come from. Each kind of document has its own source, so a blueprint script never goes into a quiz.</p>
-          <label class="text-[13px] font-bold block mb-1" for="srcBp">For blueprints</label>
-          <select id="srcBp" class="w-full border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white">
-            <option>Main · blueprint-tools-script (main)</option>
-            <option>Experimental · blueprint-tools-script-private (main)</option>
-          </select>
-          <label class="text-[13px] font-bold block mb-1 mt-3" for="srcQz">For quizzes</label>
-          <select id="srcQz" class="w-full border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white text-gray-600">
-            <option>None yet: quizzes are skipped</option>
-          </select>
-          <p class="mt-2.5 flex items-center gap-2 text-sm font-black text-green-700 m-0"><svg class="ico w-4 h-4 text-green-600"><use href="#i-ok"/></svg>13 files, last changed 25 Sep 2026</p>
-        </div>
 
         <!-- Add documents -->
         <div class="add-card rounded-2xl border-2 p-4 border-gray-200 bg-white">
@@ -295,6 +275,12 @@
             </label>
             <span id="selCount" class="ml-auto text-[11px] text-gray-600 tabular-nums">0 of 6 selected</span>
           </div>
+          <div id="bulkBar" class="flex flex-wrap items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200 text-xs" hidden>
+            <span class="font-bold text-gray-800">Update every ticked blueprint from:</span>
+            <button type="button" class="bulk rounded-lg border-2 border-[#0033a0] text-[#0033a0] font-black px-2.5 py-1 hover:bg-blue-50" data-s="main">Main Repo</button>
+            <button type="button" class="bulk rounded-lg border-2 border-[#0033a0] text-[#0033a0] font-black px-2.5 py-1 hover:bg-blue-50" data-s="exp">Experimental Repo</button>
+            <span class="text-gray-600">Resets each one’s tool choices.</span>
+          </div>
           <div id="rows"></div>
         </div>
 
@@ -306,8 +292,8 @@
           </label>
           <div class="text-[13px]"><b>Compare with</b> <span class="text-gray-600">(Check looks at every ticked source at once)</span>
             <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Main (public)</label>
-              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Experimental (private)</label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Main Repo (public)</label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]">Experimental Repo (private)</label>
             </div>
           </div>
           <div class="flex flex-wrap gap-2">
@@ -327,7 +313,7 @@
             <div id="runExport" class="mt-4 pt-4 border-t border-gray-100 flex flex-wrap gap-2">
               <span class="flex-1 min-w-[10rem] inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm">Copy results</span>
               <span class="flex-1 min-w-[10rem] inline-flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#0033a0] text-white font-black text-sm"><svg class="ico w-4 h-4"><use href="#i-sheet"/></svg>Export to Google Sheet</span>
-              <p class="w-full text-xs text-gray-600 m-0">Export adds a tab named “Update 2026-11-25 14.14” to your log sheet. Copy results pastes as a table into any Sheet or Doc.</p>
+              <p class="w-full text-xs text-gray-600 m-0">Export adds a tab named “Update 2026-11-25 14.14” to your update history sheet. Copy results pastes as a table into any Sheet or Doc.</p>
             </div>
           </div>
           <div class="rounded-2xl overflow-hidden border border-gray-700 shadow-lg">
@@ -416,15 +402,15 @@
 <script>
 const DOCS = [
   { n: 'BIOL 1010 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'out', d: 'Behind both sources', cmp: true },
-  { n: 'BIOL 1010 Module 3 Quiz', t: 'Quiz', i: 'i-doc', a: 'GS', s: 'noscript', d: 'Skipped: there is no quiz script source yet' },
+  { n: 'BIOL 1010 Module 3 Quiz', t: 'Quiz', i: 'i-doc', a: 'GS', s: 'noscript', d: 'Skipped: there is no Quiz Repo yet' },
   { n: 'HLTH 2200 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'extra', d: '1 file is not in GitHub (MyNotes.gs), and Code.gs was edited in the document', cmp: true },
-  { n: 'PSYC 3015 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'out', d: 'Set up from Experimental', cmp: true },
+  { n: 'PSYC 3015 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'out', d: 'Set up from the Experimental Repo', cmp: true },
   { n: 'NURS 4100 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'perm', d: 'You can view this document but not edit it' },
   { n: 'HIST 1120 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'none', d: 'Open it once so its script can be found, or paste its script ID' },
 ];
 const PILL = {
   wait: ['Not checked', 'bg-gray-100 text-gray-800'],
-  noscript: ['No quiz script yet', 'bg-gray-100 text-gray-800'],
+  noscript: ['No Quiz Repo yet', 'bg-gray-100 text-gray-800'],
   ok: ['Up to date', 'bg-green-100 text-green-800'],
   out: ['Out of date', 'bg-amber-100 text-amber-900'],
   extra: ['Extra files', 'bg-amber-100 text-amber-900'],
@@ -447,7 +433,7 @@ function rowHtml(d, idx, mode) {
     if (r === 'done') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800 inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Updated</span>'; extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Backed up, updated, and checked against GitHub: every file matches what was chosen. <span class="text-blue-700 underline">Open backup</span></p>'; }
     if (r === 'blocked' || r === 'nochange') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Skipped</span>'; extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${r === 'blocked' ? 'Skipped until its choices are fixed on the Check screen.' : 'Nothing to update with the choices made.'}</p>`; }
     if (r === 'busy') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-blue-100 text-[#0a2a6b] inline-flex items-center gap-1"><svg class="ico w-3 h-3 animate-spin"><use href="#i-spin"/></svg>Updating</span>'; extra = '<p class="text-xs text-gray-700 m-0 mt-0.5">Saving a backup… (step 1 of 3)</p>'; }
-    if (r === 'skip') { status = pill(d.s === 'ok' ? 'ok' : d.s); extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${d.s === 'noscript' ? 'Skipped: no quiz script source yet' : 'Not ticked'}</p>`; if (idx===2) extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Waiting (next)</p>'; }
+    if (r === 'skip') { status = pill(d.s === 'ok' ? 'ok' : d.s); extra = `<p class="text-xs text-gray-600 m-0 mt-0.5">${d.s === 'noscript' ? 'Skipped: no Quiz Repo yet' : 'Not ticked'}</p>`; if (idx===2) extra = '<p class="text-xs text-gray-600 m-0 mt-0.5">Waiting (next)</p>'; }
     if (r === 'error') { status = '<span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-red-100 text-red-800">Not updated</span>';
       extra = `<div class="mt-1.5 flex items-start gap-2.5 p-3 bg-red-50 border border-red-200 rounded-xl text-[12.5px] text-red-800">
         <svg class="ico w-4 h-4 mt-0.5 text-red-700"><use href="#i-alert"/></svg>
@@ -499,13 +485,13 @@ const NOTES = {
   s1: ['First run: <i>Initial setup</i> opens by itself',
     ['Same as Extractor Tools: the blue accordion header with status dots and “N items incomplete”, the bordered cards (green when done, amber when something needs attention), the token field with show/hide, the keychain note at the bottom. It closes itself once everything is set and can be reopened from its header.',
      'Same as Extractor Tools: the Google sign-in, now holding <b>two accounts</b>. One is “In use”; the other has “Use this account”. The account menu at the top right switches between them too.',
-     'New card, same style: <b>Google files</b> (multi-semester list, backup folder, log). Each has a <b>Choose from Drive</b> button (opens the picker, screen 3) or a box to paste the address. The app checks it and shows the file’s name in green, like the Canvas course card. Here the picker accepts just one item: a Sheet or a folder.',
+     'New card, same style: <b>Google files</b> (multi-semester list, backup folder, update history). Each has a <b>Choose from Drive</b> button (opens the picker, screen 3) or a box to paste the address. The app checks it and shows the file’s name in green, like the Canvas course card. Here the picker accepts just one item: a Sheet or a folder.',
      'New card, same style: <b>Templates</b> (blueprint template and quiz questions template), each with Choose from Drive or paste. The main screen has a one-click link to add both to the list.',
      'New card, same style: <b>Script sources</b>, with “Add a source”. Each source is marked with the kind of document it is for (Blueprints or Quizzes), so a blueprint script can never be pushed into a quiz. The quiz script is not set up yet. Private sources are marked “Needs token”.',
      'App icon (top of this page): the Quiz Creator’s blue rounded square, with an upload arrow over “GAS”.']],
   s2: ['Main screen: choose a source, add documents',
     ['<i>Initial setup</i> is collapsed and says Complete.',
-     'Script source and Add documents use the Canvas course card’s layout: icon and heading, one grey purpose line, “or” dividers between the ways to add.',
+     'Add documents uses the Canvas course card’s layout: icon and heading, one grey purpose line, “or” dividers between the ways to add. There is no separate Script source card: which repo each document updates from is chosen in the list, after Check.',
      'New: the documents list. Each row is built like a row in Extractor Tools’ course list: name in bold, a type chip (Blueprint or Quiz), and a small line with the account it came from (GS or EX) and an Open link that opens the document in your browser. The status chip sits on the right.',
      'Practice run is on by default. Update stays greyed out until Check has run.']],
   s3: ['Choose from Drive: files and whole folders, with tick boxes',
@@ -515,8 +501,9 @@ const NOTES = {
      'The header shows which Google account is being browsed.']],
   s4: ['After “Check selected”: choose where each document updates from',
     ['Each row gets a status chip, with one plain line underneath saying what it means.',
-     '<b>Update from: Main · Experimental</b> sits under that line. It sets the starting choice for every tool in the document, so most of the time you never open the table. The “For blueprints” source on the main screen is the starting choice for every document.',
-     '<b>Tools and files</b> opens the table, one block per tool. Each tool has a pick-one choice: <b>Keep · Main · Experimental</b> (or <b>Don’t add</b> if the document doesn’t have that tool yet). A tool’s .gs and .html files always move together. A source that doesn’t have the tool is greyed out. Change any one and the document-level choice switches to <b>Custom</b>, with a summary of what will happen. Picking Main or Experimental again resets every tool.',
+     '<b>Update from: Main Repo · Experimental Repo</b> sits under that line. It sets the starting choice for every tool in the document, so most of the time you never open the table. Every document starts on the Main Repo. To switch many at once, use <b>Update every ticked blueprint from</b> at the top of the list.',
+     '<b>Tools and files</b> opens the table, one block per tool. Each tool has a pick-one choice: <b>Keep · Main Repo · Experimental Repo</b> (or <b>Don’t add</b> if the document doesn’t have that tool yet). A tool’s .gs and .html files always move together. A repo that doesn’t have the tool is greyed out.',
+     'Once tools are mixed, the Update from buttons fade and the line says <b>Mixed</b>. They stay clickable as a one-click reset (“Set every tool back to the Main Repo”). If your choices end up matching one repo again, its button lights up again by itself.',
      'Starting choices are safe: a tool that is newer in the document than in the chosen source starts on <b>Keep</b>, so an update never goes backwards unless you choose it. Files not in GitHub (HLTH 2200’s MyNotes.gs) get <b>Keep · Remove</b>.',
      '<b>Permissions</b> (appsscript.json) is checked like every other file and has its own row. The row says in plain words what each source would add or remove, e.g. “Experimental adds Google Sheets access”.',
      'Amber warnings appear when choices would break a tool, each with one-click fixes. PSYC 3015 shows one: it has Create Video List, but Main’s menu (Code.gs) has no item for it. A document with a warning is skipped until it is fixed. Try it on BIOL 1010 too: set Create Video List to Experimental.',
@@ -524,7 +511,7 @@ const NOTES = {
      'Below the buttons: the same summary card and Update Timeline, one line per document saying what Check found.',
      '“Script not found” covers blueprints set up before the template records its own script ID (the Phase 0 “self-stamp” idea).']],
   s5: ['Confirm update',
-    ['Built from the choices on the Check screen (change them on tab 4 and come back): for each document, which tools come from Main, which from Experimental, what is kept and what is removed.',
+    ['Built from the choices on the Check screen (change them on tab 4 and come back): for each document, which tools come from the Main Repo, which from the Experimental Repo, what is kept and what is removed.',
      'A document with an unfixed warning is listed as “Needs a choice” and is not counted or updated.',
      'Amber note when Permissions change, because people will be asked by Google to allow the new access.',
      'Practice run is repeated here, so a real update is always a deliberate choice.']],
@@ -532,9 +519,9 @@ const NOTES = {
     ['Copied from the Rubric Creator app\u2019s Analyze & Deploy screen: a summary card (\u201c3 documents updated successfully\u201d in green, \u201c1 failed\u201d in red, a progress bar, time taken, and \u201cWhat went wrong\u201d grouped by cause), then the dark <b>Update Timeline</b>.',
      'The timeline has one plain line per document: green \u2713 \u201cupdated successfully\u201d, red \u2717 \u201cfailed\u201d with the reason, and an amber line saying what to do. It ends with how many were updated, how long it took, and how many failed. Copy Logs and Clear work as in the Rubric app.',
      'Each updated blueprint gets one indented line per file: \u2713 updated or added (green) or \u00b7 unchanged, which source it came from, and the \u201cLast updated\u201d stamp read from the top of that file. A document skipped because of a warning gets an amber line instead.',
-     '<b>Copy results</b> and <b>Export to Google Sheet</b> sit in the summary card. Export adds a new tab to the log sheet. The dashed box at the bottom shows what that sheet contains: one row per file per blueprint.',
+     '<b>Copy results</b> and <b>Export to Google Sheet</b> sit in the summary card. Export adds a new tab to the update history sheet. The dashed box at the bottom shows what that sheet contains: one row per file per blueprint.',
      'Each row in the list also keeps its own result. The error in the row uses Extractor Tools\u2019 error box, with \u201cShow technical details\u201d (try it).',
-     'The timeline covers this session. The log sheet (Initial setup) keeps the permanent record, one row per document.']],
+     'The timeline covers this session. The update history sheet (Initial setup) keeps the permanent record, one row per document.']],
 };
 
 const FILES = [
@@ -554,7 +541,7 @@ const EXP = { ...MAIN,
   'Code10.gs': { s: '2026-11-25 16:34 MST', v: 'x' },
   'Sidebar10.html': { s: '2026-11-25 16:34 MST', v: 'x' } };
 const SRC = { main: MAIN, exp: EXP };
-const SRCNAME = { main: 'Main', exp: 'Experimental' };
+const SRCNAME = { main: 'Main Repo', exp: 'Experimental Repo' };
 const SCOPES = { m: ['Edit this document', 'Menus and sidebars', 'Connect to outside services'], x: ['Edit this document', 'Menus and sidebars', 'Connect to outside services', 'Google Sheets'] };
 const TOOLS = [
   { k: 'menu', n: 'Add Activity Titles, Tools, Due Date Headers, & Times', sub: 'Also builds the Blueprint Tools menu', f: ['Code.gs', 'Sidebar.html'] },
@@ -600,7 +587,15 @@ function defaultChoice(idx, t) {
   return s;
 }
 const choice = (idx, t) => ST[idx].t[t.k] ?? defaultChoice(idx, t);
-const isCustom = idx => toolsFor(idx).some(t => ST[idx].t[t.k] !== undefined && ST[idx].t[t.k] !== defaultChoice(idx, t));
+function shownDoc(idx) {   // which document-level button is lit: the repo whose defaults match every tool choice, else none
+  const keep = ST[idx].doc, cur = Object.fromEntries(toolsFor(idx).map(t => [t.k, choice(idx, t)]));
+  for (const s of [keep, keep === 'main' ? 'exp' : 'main']) { ST[idx].doc = s;
+    const fin = (t, c) => t.f.map(f => { const v = c === 'keep' ? DOCFILES[idx][f] : c === 'remove' ? null : (SRC[c] || {})[f]; return v ? v.v : '-'; }).join();
+    const ok = toolsFor(idx).every(t => [s, defaultChoice(idx, t)].some(c => fin(t, c) === fin(t, cur[t.k]))); ST[idx].doc = keep; if (ok) return s; }
+  return 'custom';
+}
+const isCustom = idx => shownDoc(idx) === 'custom';
+function normalise(idx) { const s = shownDoc(idx); if (s !== 'custom') ST[idx].doc = s; }
 function finalFiles(idx) {
   const doc = DOCFILES[idx], out = {};
   for (const t of toolsFor(idx)) { const c = choice(idx, t);
@@ -621,9 +616,9 @@ function warnCore(idx) {
   const video = !!fin['Code10.gs'], menuHasVideo = fin['Code.gs'] && fin['Code.gs'].v === 'x', sheets = fin['appsscript.json'] && fin['appsscript.json'].v === 'x';
   const dropVideo = has(DOCFILES[idx], TOOLS[6]) ? [] : [['video', 'keep', 'Don’t add Create Video List']];
   if (video && !menuHasVideo) W.push(['menu', 'Create Video List would be in this document, but the Blueprint Tools menu you chose has no item for it, so nobody could open it.',
-    [['menu', 'keep', 'Keep this document’s menu'], ['menu', 'exp', 'Take the menu from Experimental'], ...dropVideo]]);
-  if (video && !sheets) W.push(['perm', 'Create Video List needs Google Sheets access, which is only in Experimental’s Permissions.', [['perm', 'exp', 'Take Permissions from Experimental'], ...dropVideo]]);
-  if (!video && menuHasVideo) W.push(['novideo', 'The menu you chose lists Create Video List, but the tool itself would not be in this document.', [['video', 'exp', 'Add Create Video List from Experimental'], ['menu', 'main', 'Take the menu from Main']]]);
+    [['menu', 'keep', 'Keep this document’s menu'], ['menu', 'exp', 'Take the menu from the Experimental Repo'], ...dropVideo]]);
+  if (video && !sheets) W.push(['perm', 'Create Video List needs Google Sheets access, which only the Experimental Repo’s Permissions include.', [['perm', 'exp', 'Take Permissions from the Experimental Repo'], ...dropVideo]]);
+  if (!video && menuHasVideo) W.push(['novideo', 'The menu you chose lists Create Video List, but the tool itself would not be in this document.', [['video', 'exp', 'Add Create Video List from the Experimental Repo'], ['menu', 'main', 'Take the menu from the Main Repo']]]);
   return W;
 }
 function warnings(idx) {   // only offer fixes that actually clear the problem
@@ -657,14 +652,16 @@ function cmpCounts(doc, src) {
   if (c.extra) parts.push(`${c.extra} extra`);
   return parts;
 }
+const short = st => st ? st.replace(/ M[DS]T$/, '') : st;
 const tag = (t, cls) => `<span class="ml-1 text-[10.5px] font-black rounded-full px-1.5 py-px whitespace-nowrap ${cls}">${t}</span>`;
 function srcCell(doc, src, f, name) {
   const d = doc[f], g = src[f], k = cmpState(doc, src, f);
   if (k === 'same') return '<span class="text-green-700 font-bold inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Same</span>';
   if (k === 'extra' || k === 'na') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
-  if (k === 'missing') return `${g.s}${tag('Missing', 'bg-amber-100 text-amber-900')}`;
-  if (g.s === d.s) return `${g.s}${tag('Same date, different content', 'bg-red-100 text-red-800')}`;
-  return g.s > d.s ? `${g.s}${tag('Newer in GitHub', 'bg-amber-100 text-amber-900')}` : `${g.s}${tag('Document is newer', 'bg-blue-100 text-[#0a2a6b]')}`;
+  const gs = short(g.s), ds = short(d && d.s);
+  if (k === 'missing') return `${gs}${tag('Missing', 'bg-amber-100 text-amber-900')}`;
+  if (g.s === d.s) return `${gs}${tag('Same date, different content', 'bg-red-100 text-red-800')}`;
+  return g.s > d.s ? `${gs}${tag('Newer in GitHub', 'bg-amber-100 text-amber-900')}` : `${gs}${tag('Document is newer', 'bg-blue-100 text-[#0a2a6b]')}`;
 }
 function seg(name, opts, value) {   // pick-one control: real radio buttons styled as a segmented control
   return `<span class="inline-flex rounded-lg border-2 border-gray-300 overflow-hidden text-[11.5px] font-black bg-white" role="radiogroup">${opts.map(([v, label, disabled, title]) =>
@@ -684,13 +681,13 @@ function cmpHtml(idx) {
   const line = ['main', 'exp'].map(s => { const p = cmpCounts(doc, SRC[s]);
     return `<span>${SRCNAME[s]}: <b class="${p.length ? 'text-amber-800' : 'text-green-700'}">${p.length ? 'Out of date' : 'Matches exactly'}</b>${p.length ? ' (' + p.join(', ') + ')' : ''}</span>`; }).join('');
   const W = warnings(idx);
-  const docOpts = [['main', 'Main'], ['exp', 'Experimental']].concat(custom ? [['custom', 'Custom']] : []);
+
   const differs = t => !t.f.every(f => ['main', 'exp'].every(s => ['same', 'na'].includes(cmpState(doc, SRC[s], f)))) || !t.f.some(f => doc[f]) && t.f.some(f => SRC.main[f] || SRC.exp[f]);
   const nDiff = tools.filter(differs).length;
   const body = tools.map(t => {
     const c = choice(idx, t), inDoc = has(doc, t), hide = !all && !differs(t);
     const opts = t.other ? [['keep', 'Keep'], ['remove', 'Remove']]
-      : [['keep', inDoc ? 'Keep' : 'Don’t add'], ['main', 'Main', !has(MAIN, t), 'Not in Main'], ['exp', 'Experimental', !has(EXP, t), 'Not in Experimental']];
+      : [['keep', inDoc ? 'Keep' : 'Don’t add'], ['main', 'Main Repo', !has(MAIN, t), 'Not in the Main Repo'], ['exp', 'Experimental Repo', !has(EXP, t), 'Not in the Experimental Repo']];
     const extraNote = t.k === 'perm' && permDiff(idx) ? `<span class="block text-[11.5px] text-gray-700 mt-0.5">${permDiff(idx)}</span>` : '';
     return `<tbody class="${differs(t) ? '' : 'samerow'}" ${hide ? 'hidden' : ''}>
       <tr><td colspan="4" class="px-2 pt-2.5 pb-1 border-t-2 border-gray-200 bg-white">
@@ -698,13 +695,13 @@ function cmpHtml(idx) {
         ${seg(`c${idx}-${t.k}`, opts, c)}</div></td></tr>
       ${t.f.map(f => `<tr>
         <td class="pl-5 pr-2 py-1 font-mono text-[11.5px] whitespace-nowrap text-gray-800">${f}</td>
-        <td class="px-2 py-1 whitespace-nowrap">${doc[f] ? (doc[f].s || '<span class="italic text-gray-600">no date stamp</span>') : '<span class="italic text-gray-500">Not in this document</span>'}</td>
-        <td class="px-2 py-1">${srcCell(doc, MAIN, f, 'Main')}</td><td class="px-2 py-1">${srcCell(doc, EXP, f, 'Experimental')}</td></tr>`).join('')}
+        <td class="px-2 py-1 whitespace-nowrap">${doc[f] ? (short(doc[f].s) || '<span class="italic text-gray-600">no date stamp</span>') : '<span class="italic text-gray-500">Not in this document</span>'}</td>
+        <td class="px-2 py-1">${srcCell(doc, MAIN, f, 'Main Repo')}</td><td class="px-2 py-1">${srcCell(doc, EXP, f, 'Experimental Repo')}</td></tr>`).join('')}
     </tbody>`; }).join('');
   return `<div class="cmpwrap" data-i="${idx}">
     <div class="mt-2 flex flex-wrap items-center gap-2 text-xs">
-      <span class="font-bold text-gray-800">Update from:</span>${seg(`d${idx}`, docOpts, custom ? 'custom' : ST[idx].doc)}
-      <span class="text-gray-700">${summary(idx)}</span></div>
+      <span class="font-bold text-gray-800">Update from:</span>${docToggle(idx, custom)}
+      <span class="text-gray-700">${custom ? '<b>Mixed</b> (set tool by tool below) · ' : ''}${summary(idx)}</span></div>
     ${W.map(([m, fixes]) => `<div class="mt-1.5 flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-[12px] text-amber-900"><svg class="ico w-4 h-4 mt-0.5"><use href="#i-warn"/></svg>
       <span class="min-w-0">${m}<span class="block mt-1 space-x-3">${fixes.map(([k, c, label]) => `<button type="button" class="fix font-bold underline underline-offset-2" data-k="${k}" data-c="${c}">${label}</button>`).join('')}</span>
       <span class="block mt-0.5 text-[11.5px]">This document is skipped until this is fixed.</span></span></div>`).join('')}
@@ -716,11 +713,17 @@ function cmpHtml(idx) {
         <span class="text-gray-700">${all ? `Showing all ${tools.length} tools` : `Showing the ${nDiff} tools that differ (of ${tools.length})`}</span>
         <button type="button" class="cmpall ml-auto font-bold text-blue-700 underline underline-offset-2">${all ? 'Show only tools that differ' : 'Show all tools'}</button>
       </div>
-      <div class="overflow-x-auto"><table class="w-full text-xs border-collapse min-w-[520px]">
-        <thead><tr>${['File', 'In this document', 'Main (GitHub)', 'Experimental (GitHub)'].map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 whitespace-nowrap">${h}</th>`).join('')}</tr></thead>
+      <div class="overflow-x-auto"><table class="w-full text-xs border-collapse">
+        <thead><tr>${['File', 'In this document', 'Main Repo (GitHub)', 'Experimental Repo (GitHub)'].map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left align-bottom px-2 py-1.5">${h}</th>`).join('')}</tr></thead>
         ${body}</table></div>
-      <p class="m-0 px-3 py-2 border-t border-gray-200 text-[11.5px] text-gray-600">Each tool’s two files always move together. Dates are the “Last updated” line at the top of each file. Whether a file differs is decided by its content, so a file edited without changing its date still shows up.</p>
+      <p class="m-0 px-3 py-2 border-t border-gray-200 text-[11.5px] text-gray-600">Each tool’s two files always move together. Dates are the “Last updated” line at the top of each file. Times are Mountain Time. Whether a file differs is decided by its content, so a file edited without changing its date still shows up.</p>
     </div></div>`;
+}
+function docToggle(idx, custom) {
+  const cur = shownDoc(idx);
+  return `<span class="inline-flex rounded-lg border-2 overflow-hidden text-[11.5px] font-black ${custom ? 'border-gray-200 bg-gray-50' : 'border-gray-300 bg-white'}" role="radiogroup" aria-label="Update from">${[['main', 'Main Repo'], ['exp', 'Experimental Repo']].map(([v, l]) =>
+    `<label class="cursor-pointer border-l first:border-l-0 ${custom ? 'border-gray-200' : 'border-gray-300'}" title="${custom ? 'Set every tool back to the ' + l : ''}"><input type="radio" class="sr-only peer" name="d${idx}" value="${v}" ${cur === v ? 'checked' : ''}>
+      <span class="block px-2.5 py-1 ${custom ? 'text-gray-400' : 'text-gray-700'} peer-checked:bg-[#0033a0] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-inset peer-focus-visible:ring-blue-300">${l}</span></label>`).join('')}</span>`;
 }
 function rerender(idx) { const w = document.querySelector(`.cmpwrap[data-i="${idx}"]`); if (w) w.outerHTML = cmpHtml(idx); }
 function confirmHtml() {
@@ -744,7 +747,7 @@ function confirmHtml() {
 }
 const RUNDOCS = [[0, '2:14:03 PM', '2:14:06 PM', 'gregsnow@boisestate.edu', '1Bx7…kQ2'], [2, '2:14:06 PM', '2:14:08 PM', 'gregsnow@boisestate.edu', '1Hc3…pL9'], [3, '2:14:08 PM', '2:14:08 PM', 'extrasnow75@gmail.com', '1Pq8…zT4']];
 const docResult = i => warnings(i).length ? 'blocked' : plan(i).some(r => r.res !== 'unchanged') ? 'done' : 'nochange';
-const SRCLONG = { main: 'Main · blueprint-tools-script', exp: 'Experimental · blueprint-tools-script-private', keep: 'Kept (not changed)', remove: 'Removed' };
+const SRCLONG = { main: 'Main Repo (blueprint-tools-script)', exp: 'Experimental Repo (blueprint-tools-script-private)', keep: 'Kept (not changed)', remove: 'Removed' };
 function runLines() {
   const go = RUNDOCS.filter(([i]) => docResult(i) === 'done');
   const L = [['2:14:03 PM', `Ready to update ${go.length + 1} documents, using the choices from Check…`, 'info']];
@@ -787,6 +790,7 @@ function show(s) {
   document.getElementById('work').hidden = s === 's1';
   document.getElementById('dlgPick').hidden = s !== 's3';
   document.getElementById('dlgConfirm').hidden = s !== 's5';
+  document.getElementById('bulkBar').hidden = s !== 's4';
   { const [ready, html] = confirmHtml(); document.getElementById('cfList').innerHTML = html;
     document.getElementById('cfTitle').textContent = `Update ${ready} document${ready === 1 ? '' : 's'}?`;
     document.getElementById('cfGo').textContent = `Start practice run (${ready} document${ready === 1 ? '' : 's'})`; }
@@ -808,7 +812,7 @@ function show(s) {
               ['The document\u2019s script could not be found.', 'Open the document once so its script can be found, or paste its script ID.', 'HIST 1120 Blueprint']],
       lines: [
         ['2:10:41 PM', 'Checking 6 documents against Main and Experimental\u2026', 'info'],
-        ['2:10:42 PM', '"BIOL 1010 Module 3 Quiz" skipped: there is no quiz script source yet', 'warning'],
+        ['2:10:42 PM', '"BIOL 1010 Module 3 Quiz" skipped: there is no Quiz Repo yet', 'warning'],
         ['2:10:43 PM', '"BIOL 1010 Blueprint" is out of date with Main and Experimental', 'warning'],
         ['2:10:44 PM', '"HLTH 2200 Blueprint" is out of date with Main and Experimental', 'warning'],
         ['2:10:45 PM', '"PSYC 3015 Blueprint" is out of date with Main (Main has a newer menu, Code.gs)', 'warning'],
@@ -830,7 +834,7 @@ function show(s) {
     document.getElementById('runHead').innerHTML = `<div class="flex flex-wrap items-center gap-4">
       <div class="flex items-center gap-2"><svg class="ico w-6 h-6 text-green-500"><use href="#i-ok"/></svg><span class="font-black text-gray-900">${RUN.ok}</span></div>
       <div class="flex items-center gap-2"><svg class="ico w-5 h-5 text-red-500"><use href="#i-xc"/></svg><span class="font-bold text-red-700">${RUN.bad}</span></div></div>
-      <span class="inline-flex items-center gap-1 mt-2 text-sm text-blue-600 font-bold">Open the log sheet <svg class="ico w-3 h-3"><use href="#i-ext"/></svg></span>`;
+      <span class="inline-flex items-center gap-1 mt-2 text-sm text-blue-600 font-bold">Open the update history <svg class="ico w-3 h-3"><use href="#i-ext"/></svg></span>`;
     document.getElementById('runBar').className = 'h-full rounded-full ' + RUN.bar;
     document.getElementById('runTime').textContent = RUN.time;
     document.getElementById('runWrong').innerHTML = `<div class="mt-3 rounded-xl border-2 border-amber-200 bg-amber-50 p-4 space-y-3">
@@ -840,7 +844,7 @@ function show(s) {
     document.getElementById('runExport').hidden = mode !== 'running';
     document.getElementById('exportPreview').hidden = mode !== 'running';
     if (mode === 'running') {
-      const H = ['Uploaded', 'Google account', 'Blueprint', 'Address', 'Script source', 'File', 'File\u2019s \u201cLast updated\u201d', 'Result', 'Backup'];
+      const H = ['Uploaded', 'Google account', 'Blueprint', 'Address', 'Repo', 'File', 'File\u2019s \u201cLast updated\u201d', 'Result', 'Backup'];
       document.getElementById('expHead').innerHTML = '<tr>' + H.map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 border-b border-gray-300 whitespace-nowrap">${h}</th>`).join('') + '</tr>';
       document.getElementById('expCount').textContent = exportRows().length;
       document.getElementById('expBody').innerHTML = exportRows().slice(0, 15).map(r => '<tr>' + r.map((c, i) => `<td class="px-2 py-1 border-t border-gray-200 whitespace-nowrap ${i === 7 ? (c === 'Updated' ? 'text-green-800 font-bold' : c.startsWith('Failed') ? 'text-red-700 font-bold' : 'text-gray-600') : ''} ${i === 3 || i === 8 ? 'text-blue-700 underline' : ''}">${c}</td>`).join('') + '</tr>').join('');
@@ -868,8 +872,8 @@ document.getElementById('selAll').addEventListener('change', e => { document.que
 document.getElementById('rows').addEventListener('change', e => {
   const r = e.target; const w = r.closest('.cmpwrap');
   if (w && r.type === 'radio') { const i = +w.dataset.i;
-    if (r.name.startsWith('d')) { if (r.value !== 'custom') { ST[i].doc = r.value; ST[i].t = {}; } }
-    else ST[i].t[r.name.split('-')[1]] = r.value;
+    if (r.name.startsWith('d')) { ST[i].doc = r.value; ST[i].t = {}; }
+    else { ST[i].t[r.name.split('-')[1]] = r.value; normalise(i); }
     rerender(i); const again = document.querySelector(`.cmpwrap[data-i="${i}"] input[name="${r.name}"]:checked`); if (again) again.focus(); return; }
   updateCount(); });
 document.getElementById('rows').addEventListener('click', e => {
@@ -877,12 +881,14 @@ document.getElementById('rows').addEventListener('click', e => {
   if (e.target.closest('.cmpbtn')) { OPEN.has(i) ? OPEN.delete(i) : OPEN.add(i); rerender(i); document.querySelector(`.cmpwrap[data-i="${i}"] .cmpbtn`).focus(); return; }
   if (e.target.closest('.cmpall')) { SHOWALL.has(i) ? SHOWALL.delete(i) : SHOWALL.add(i); rerender(i); return; }
   const fx = e.target.closest('.fix');
-  if (fx) { ST[i].t[fx.dataset.k] = fx.dataset.c; OPEN.add(i); rerender(i); return; }
+  if (fx) { ST[i].t[fx.dataset.k] = fx.dataset.c; normalise(i); OPEN.add(i); rerender(i); return; }
   const b = e.target.closest('.td'); if (!b) return;
   const box = b.nextElementSibling; box.hidden = !box.hidden;
   b.setAttribute('aria-expanded', String(!box.hidden));
   b.textContent = box.hidden ? 'Show technical details' : 'Hide technical details';
 });
+document.getElementById('bulkBar').addEventListener('click', e => { const b = e.target.closest('.bulk'); if (!b) return;
+  document.querySelectorAll('.rowcb').forEach((cb, i) => { if (cb.checked && ST[i]) { ST[i].doc = b.dataset.s; ST[i].t = {}; rerender(i); } }); });
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => show(t.dataset.s)));
 show('s1');
 </script>
