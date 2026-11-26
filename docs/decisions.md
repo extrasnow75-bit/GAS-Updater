@@ -31287,3 +31287,5 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   shell.openExternal opens it). Read-only: it does not tick, untick or change anything, and the
   picker stays open. The link is separate from the file name so clicking the name still ticks.
 - The folder action is renamed **Look inside ›** so "Open" always means "open in the browser".
+- Long file names wrap onto more lines in the picker (never cut off with "…"), including names
+  with no spaces. The type label, Open link and Look inside stay on the first line, at the right.
