@@ -436,10 +436,10 @@
 
 <script>
 const DOCS = [
-  { n: 'BIOL 1010 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'out', d: '5 files differ', c: [['out', '5 files differ'], ['out', '7 files differ']] },
+  { n: 'BIOL 1010 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'out', d: 'Behind both sources', cmp: true },
   { n: 'BIOL 1010 Module 3 Quiz', t: 'Quiz', i: 'i-doc', a: 'GS', s: 'noscript', d: 'Skipped: there is no quiz script source yet' },
-  { n: 'HLTH 2200 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'extra', d: '1 file not in GitHub', c: [['out', '1 file differs, 1 extra'], ['out', '3 files differ, 1 extra']] },
-  { n: 'PSYC 3015 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'out', d: '1 file and permissions differ', c: [['out', '3 files differ'], ['ok', '']] },
+  { n: 'HLTH 2200 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'extra', d: '1 file is not in GitHub (MyNotes.gs), and Code.gs was edited in the document', cmp: true },
+  { n: 'PSYC 3015 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'out', d: 'Set up from Experimental', cmp: true },
   { n: 'NURS 4100 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'GS', s: 'perm', d: 'You can view this document but not edit it' },
   { n: 'HIST 1120 Blueprint', t: 'Blueprint', i: 'i-doc', a: 'EX', s: 'none', d: 'Open it once so its script can be found, or paste its script ID' },
 ];
@@ -476,7 +476,7 @@ function rowHtml(d, idx, mode) {
           <div class="tdbox" hidden><pre class="text-xs text-red-900 bg-red-100 rounded-lg p-2.5 whitespace-pre-wrap break-all m-0">${ERR_DETAILS}</pre><span class="text-xs underline underline-offset-2 font-bold text-red-800">Copy details</span></div>
         </div></div>`; }
   }
-  if (mode === 'checked' && d.c) extra += `<p class="text-xs text-gray-700 m-0 mt-1 flex flex-wrap gap-x-3 gap-y-0.5">${['Main', 'Experimental'].map((src, k) => `<span>${src}: <b class="${d.c[k][0] === 'ok' ? 'text-green-700' : 'text-amber-800'}">${d.c[k][0] === 'ok' ? 'Matches exactly' : 'Out of date'}</b>${d.c[k][1] ? ' (' + d.c[k][1] + ')' : ''}</span>`).join('')}</p>`;
+  if (mode === 'checked' && d.cmp) extra += cmpHtml(idx);
   const checked = mode === 'checked' ? (['out','extra'].includes(d.s) ? 'checked' : '') : mode === 'running' ? ([0,3,4,2].includes(idx) ? 'checked' : '') : '';
   return `<div class="flex items-start gap-2.5 border-t border-gray-100 first:border-t-0 px-3 py-2">
     <input type="checkbox" ${checked} class="rowcb w-3.5 h-3.5 mt-1 accent-[#0033a0]" aria-label="${d.n}">
@@ -536,6 +536,8 @@ const NOTES = {
   s4: ['After “Check selected”',
     ['Each row gets a status chip, with one plain line underneath saying what it means.',
      '<b>Compare with</b> (above the buttons): Check compares each document with every ticked source at once. Each row then says where it stands against Main and against Experimental. Example: PSYC 3015 is behind Main but matches Experimental exactly, so it was set up from the experimental version.',
+     'New: the <b>Files</b> caret next to Main / Experimental opens a file-by-file table: each file’s “Last updated” date in the document, in Main and in Experimental. It shows only the files that differ, with <b>Show all files</b> to see the rest. BIOL 1010 starts open; try HLTH 2200 and PSYC 3015.',
+     'Tags in the table say what kind of difference it is: <b>Newer in GitHub</b> (normal: the document is behind), <b>Missing</b> (a newer tool the document does not have yet), <b>Not in Main</b> (an extra file), <b>Document is newer</b> (an update would go backwards: PSYC 3015’s Code.gs), and <b>Same date, different content</b> (someone edited the script in the document without changing the date: HLTH 2200’s Code.gs).',
      'Files are compared by their content, not by dates. The same comparison will power the planned “Blueprint Tools Version Check” in the blueprint menu, so both always agree.',
      'Out of date and Extra files rows are ticked for you; Update is now available.',
      'Below the buttons: the same summary card and Update Timeline, one line per document saying what Check found.',
@@ -560,6 +562,81 @@ const FILES = [
   ['Sidebar5.html', '2026-09-07 20:47 MDT'], ['Sidebar8.html', '2026-09-07 19:51 MDT'], ['Sidebar9.html', '2026-09-12 21:14 MDT'],
   ['appsscript.json', ''],
 ];
+
+// ---- File-by-file comparison (Check results) ----
+const MAIN = Object.fromEntries(FILES.map(([f, st]) => [f, { s: st, v: 'm' }]));
+const EXP = { ...MAIN,
+  'Code.gs': { s: '2026-11-20 10:05 MST', v: 'x' },
+  'appsscript.json': { s: '', v: 'x' },
+  'Code10.gs': { s: '2026-11-25 16:34 MST', v: 'x' },
+  'Sidebar10.html': { s: '2026-11-25 16:34 MST', v: 'x' } };
+const DOCFILES = {
+  0: (() => { const o = { ...MAIN,
+        'Code2.gs': { s: '2026-08-14 11:02 MDT', v: 'o' },
+        'Code8.gs': { s: '2026-08-02 09:15 MDT', v: 'o' },
+        'Sidebar8.html': { s: '2026-08-02 09:15 MDT', v: 'o' } };
+      delete o['Code9.gs']; delete o['Sidebar9.html']; return o; })(),
+  2: { ...MAIN, 'Code.gs': { s: '2026-09-12 21:14 MDT', v: 'e' }, 'MyNotes.gs': { s: '', v: 'n' } },
+  3: { ...EXP },
+};
+const SOURCES = [['Main', MAIN], ['Experimental', EXP]];
+const OPEN = new Set([0]);
+function cmpState(doc, src, f) {
+  const d = doc[f], g = src[f];
+  if (!d && !g) return 'na';
+  if (d && g) return d.v === g.v ? 'same' : 'differ';
+  return d ? 'extra' : 'missing';
+}
+function cmpCounts(doc, src) {
+  const c = { differ: 0, missing: 0, extra: 0 };
+  for (const f of new Set([...Object.keys(doc), ...Object.keys(src)])) { const k = cmpState(doc, src, f); if (k in c) c[k]++; }
+  const parts = [];
+  if (c.differ) parts.push(`${c.differ} file${c.differ === 1 ? '' : 's'} differ${c.differ === 1 ? 's' : ''}`);
+  if (c.missing) parts.push(`${c.missing} missing`);
+  if (c.extra) parts.push(`${c.extra} extra`);
+  return parts;
+}
+const tag = (t, cls) => `<span class="ml-1 text-[10.5px] font-black rounded-full px-1.5 py-px whitespace-nowrap ${cls}">${t}</span>`;
+function srcCell(doc, src, f, name) {
+  const d = doc[f], g = src[f], k = cmpState(doc, src, f);
+  if (k === 'same') return '<span class="text-green-700 font-bold inline-flex items-center gap-1"><svg class="ico w-3 h-3"><use href="#i-check"/></svg>Same</span>';
+  if (k === 'extra') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
+  if (k === 'na') return `<span class="text-gray-500 italic">Not in ${name}</span>`;
+  const st = g.s || '<span class="italic text-gray-600">settings file</span>';
+  if (k === 'missing') return `${st}${tag('Missing', 'bg-amber-100 text-amber-900')}`;
+  if (!g.s) return `${st}${tag('Different settings', 'bg-amber-100 text-amber-900')}`;
+  if (g.s === d.s) return `${st}${tag('Same date, different content', 'bg-red-100 text-red-800')}`;
+  return g.s > d.s ? `${st}${tag('Newer in GitHub', 'bg-amber-100 text-amber-900')}` : `${st}${tag('Document is newer', 'bg-blue-100 text-[#0a2a6b]')}`;
+}
+function cmpHtml(idx) {
+  const doc = DOCFILES[idx], open = OPEN.has(idx);
+  const order = [...FILES.map(x => x[0]), 'Code10.gs', 'Sidebar10.html', ...Object.keys(doc)];
+  const files = [...new Set(order)].filter(f => doc[f] || SOURCES.some(([, s]) => s[f]));
+  const line = SOURCES.map(([n, src]) => { const p = cmpCounts(doc, src);
+    return `<span>${n}: <b class="${p.length ? 'text-amber-800' : 'text-green-700'}">${p.length ? 'Out of date' : 'Matches exactly'}</b>${p.length ? ' (' + p.join(', ') + ')' : ''}</span>`; }).join('');
+  const diffCount = files.filter(f => SOURCES.some(([, s]) => cmpState(doc, s, f) !== 'same')).length;
+  const rows = files.map(f => {
+    const same = SOURCES.every(([, s]) => cmpState(doc, s, f) === 'same');
+    const d = doc[f];
+    return `<tr class="${same ? 'samerow' : ''}" ${same ? 'hidden' : ''}>
+      <td class="px-2 py-1.5 border-t border-gray-200 font-mono text-[11.5px] whitespace-nowrap">${f}</td>
+      <td class="px-2 py-1.5 border-t border-gray-200 whitespace-nowrap">${d ? (d.s || '<span class="italic text-gray-600">' + (f.endsWith('.json') ? 'settings file' : 'no date stamp') + '</span>') : '<span class="italic text-gray-500">Not in this document</span>'}</td>
+      ${SOURCES.map(([n, s]) => `<td class="px-2 py-1.5 border-t border-gray-200">${srcCell(doc, s, f, n)}</td>`).join('')}
+    </tr>`; }).join('');
+  return `<div class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-gray-700">
+      <button type="button" class="cmpbtn inline-flex items-center gap-1 rounded font-bold text-[#0033a0] hover:underline" aria-expanded="${open}" data-i="${idx}">
+        <svg class="ico w-3.5 h-3.5 transition-transform ${open ? '' : '-rotate-90'}"><use href="#i-chev"/></svg>Files</button>${line}</div>
+    <div class="cmppanel mt-2 rounded-xl border-2 border-gray-200 overflow-hidden" ${open ? '' : 'hidden'}>
+      <div class="flex flex-wrap items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200 text-xs">
+        <span class="cmpcount text-gray-700">Showing the ${diffCount} files that differ (of ${files.length})</span>
+        <button type="button" class="cmpall ml-auto font-bold text-blue-700 underline underline-offset-2" data-n="${diffCount}" data-t="${files.length}">Show all files</button>
+      </div>
+      <div class="overflow-x-auto"><table class="w-full text-xs border-collapse">
+        <thead><tr>${['File', 'In this document', 'Main (GitHub)', 'Experimental (GitHub)'].map(h => `<th class="bg-[#dbe7fb] text-[#0a2a6b] font-black text-left px-2 py-1.5 whitespace-nowrap">${h}</th>`).join('')}</tr></thead>
+        <tbody>${rows}</tbody></table></div>
+      <p class="m-0 px-3 py-2 border-t border-gray-200 text-[11.5px] text-gray-600">Dates are the “Last updated” line at the top of each file. Whether a file differs is decided by its content, so a file edited without changing its date still shows up.</p>
+    </div>`;
+}
 const UPDATED = [
   ['BIOL 1010 Blueprint', '2:14:03 PM', '2:14:06 PM', ['Code2.gs', 'Code8.gs', 'Sidebar8.html', 'Code9.gs', 'Sidebar9.html'], 'gregsnow@boisestate.edu', '1Bx7…kQ2'],
   ['HLTH 2200 Blueprint', '2:14:06 PM', '2:14:08 PM', ['Code.gs'], 'gregsnow@boisestate.edu', '1Hc3…pL9'],
@@ -678,6 +755,15 @@ document.getElementById('setupToggle').addEventListener('click', () => setSetup(
 document.getElementById('selAll').addEventListener('change', e => { document.querySelectorAll('.rowcb').forEach(b => b.checked = e.target.checked); updateCount(); });
 document.getElementById('rows').addEventListener('change', updateCount);
 document.getElementById('rows').addEventListener('click', e => {
+  const c = e.target.closest('.cmpbtn');
+  if (c) { const i = +c.dataset.i, open = !OPEN.has(i); open ? OPEN.add(i) : OPEN.delete(i);
+    const panel = c.parentElement.nextElementSibling; panel.hidden = !open;
+    c.setAttribute('aria-expanded', String(open)); c.querySelector('svg').classList.toggle('-rotate-90', !open); return; }
+  const a = e.target.closest('.cmpall');
+  if (a) { const panel = a.closest('.cmppanel'), showAll = a.textContent === 'Show all files';
+    panel.querySelectorAll('.samerow').forEach(r => r.hidden = !showAll);
+    a.textContent = showAll ? 'Show only files that differ' : 'Show all files';
+    panel.querySelector('.cmpcount').textContent = showAll ? `Showing all ${a.dataset.t} files` : `Showing the ${a.dataset.n} files that differ (of ${a.dataset.t})`; return; }
   const b = e.target.closest('.td'); if (!b) return;
   const box = b.nextElementSibling; box.hidden = !box.hidden;
   b.setAttribute('aria-expanded', String(!box.hidden));
