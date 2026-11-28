@@ -51,7 +51,7 @@ const ECAMPUS: DriveItem = {
     { id: 's-msl', name: 'Multi-Semester List', kind: 'sheet' },
     { id: 's-hist', name: 'GAS Updater update history', kind: 'sheet' },
     { id: 'd-tbp', name: 'Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)', kind: 'doc' },
-    { id: 'd-tqz', name: 'Quiz Questions Extraction Template', kind: 'doc' },
+    { id: 'd-tqz', name: 'Template Quiz', kind: 'doc' },
   ],
 }
 const ROOT: DriveItem = { id: 'root', name: 'My Drive', kind: 'folder', children: [ECAMPUS] }

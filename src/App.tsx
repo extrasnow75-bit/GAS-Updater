@@ -37,7 +37,7 @@ const START_SETUP: SetupState = {
   backupFolder: '',
   history: '',
   blueprintTemplate: 'Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)',
-  quizTemplate: '',
+  quizTemplate: 'Template Quiz',
 }
 
 /** Titles for the Drive picker when it is choosing one file for Initial setup. */

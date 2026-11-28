@@ -31323,3 +31323,12 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
 
 - gregsnow@boisestate.edu and extrasnow75@gmail.com stay public in the repo and the app as the
   support contacts, as in the other eCampus apps. Confirmed by the owner.
+
+## Quiz questions template (2026-11-28)
+
+- The quiz questions template is the "Template Quiz" Google Doc,
+  https://docs.google.com/document/d/140akYR1xZSXZq-2mk0zt5LP0uDtKmCth9BX8Hfs73Bo/edit
+  (the same document Canvas Extractor Tools' quiz settings link to). Confirmed by the owner.
+  It is not visible to the extrasnow75 Drive, so it is probably owned by the Boise State account;
+  a TEST COPY in the extrasnow75 Drive is needed before any quiz testing.
+- The test build shows it as the example value in Initial setup and in the example Drive.
