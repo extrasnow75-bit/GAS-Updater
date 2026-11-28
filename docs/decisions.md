@@ -31318,3 +31318,8 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   skipped; the confirm dialog links to it ("Go to …").
 - Facts the warnings need (menu items in Code.gs, permissions in appsscript.json) are now read
   from each file's data instead of example markers, ready for real files.
+
+## Support contacts (2026-11-28)
+
+- gregsnow@boisestate.edu and extrasnow75@gmail.com stay public in the repo and the app as the
+  support contacts, as in the other eCampus apps. Confirmed by the owner.

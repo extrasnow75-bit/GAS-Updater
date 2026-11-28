@@ -100,4 +100,4 @@ Everything under "Fix now" is fixed, with these notes:
 - Copying uses the main process's clipboard, so the window is denied every permission.
 - Sheets, Slides and Forms stay tickable in the Drive picker: scripts can be bound to them, and
   picking any file type was an original requirement. A note explains it.
-- The personal email addresses are unchanged, pending the owner's decision.
+- The two support email addresses stay public: the owner confirmed this on 2026-11-28.
