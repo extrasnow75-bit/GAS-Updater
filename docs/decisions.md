@@ -31332,3 +31332,15 @@ u- **Update Timeline:** copy the Deployment Timeline in `src/components/AnalyzeD
   It is not visible to the extrasnow75 Drive, so it is probably owned by the Boise State account;
   a TEST COPY in the extrasnow75 Drive is needed before any quiz testing.
 - The test build shows it as the example value in Initial setup and in the example Drive.
+
+## Tabs per script set (mockup, 2026-11-28)
+
+- Two tabs under Initial setup: **Blueprint Tools** and **Quiz Formatter** (named as in the
+  Google Docs menus), each with its own documents, choices and results. One run at a time.
+- Initial setup keeps only shared items (Google accounts, GitHub token, multi-semester list,
+  backup folder, update history). Repos and templates move to a folded "Scripts and template"
+  card at the top of each tab.
+- Quiz Formatter tab: one repo (canvas-classic-quiz-question-formatting-GAS), one file, Template
+  Quiz; statuses Up to date / Old version / No script; no tool table. Update stays unavailable
+  until the rewritten Quiz Formatter (modelled on Canvas Quiz Creator's fixes) is in the repo.
+- The "Add documents" card is renamed **Update GAS in Documents** on both tabs.

@@ -72,6 +72,7 @@
     <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s4">4 · Check results</button>
     <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s5">5 · Confirm update</button>
     <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s6">6 · Update results</button>
+    <button class="tab text-xs font-black border-2 border-gray-400 bg-white rounded-lg px-2.5 py-1.5" role="tab" aria-selected="false" data-s="s7">7 · Quiz Formatter tab</button>
   </div>
 
   <!-- ============ APP WINDOW ============ -->
@@ -107,10 +108,8 @@
                   <span class="dot w-2 h-2 rounded-full bg-green-400"></span>
                   <span class="dot w-2 h-2 rounded-full bg-green-400"></span>
                   <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
-                  <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
-                  <span class="dot2 w-2 h-2 rounded-full bg-white/70"></span>
                 </span>
-                <span id="setupStatus" class="text-[11px] font-bold">3 items incomplete</span>
+                <span id="setupStatus" class="text-[11px] font-bold">1 item incomplete</span>
                 <svg id="setupChev" class="ico w-[18px] h-[18px] rotate-180"><use href="#i-chev"/></svg>
               </span>
             </button>
@@ -146,7 +145,7 @@
                 <svg class="ico w-4 h-4 text-red-600"><use href="#i-key"/></svg>
                 <h3 class="font-black text-[15px] m-0">GitHub token</h3>
               </div>
-              <p class="text-[13px] text-gray-600 mb-2.5">Only needed for private repos, such as the Experimental Repo (blueprint-tools-script-private). The Main Repo is public and needs no token.</p>
+              <p class="text-[13px] text-gray-600 mb-2.5">Only needed for private repos, such as the Blueprint Tools Experimental Repo. Public repos need no token. Shared by both tabs.</p>
               <p class="text-[13px] text-gray-600 mb-2.5">Paste a read-only GitHub token here. It's stored encrypted on this computer only.</p>
               <div class="relative mb-2.5">
                 <input type="password" aria-label="GitHub token" placeholder="Paste your GitHub token" class="w-full border-2 border-gray-500 rounded-xl px-3.5 py-2.5 pr-10 text-sm font-mono focus:outline-none focus:border-[#0033a0] focus:ring-2 focus:ring-blue-200">
@@ -184,42 +183,7 @@
               </div>
             </div>
 
-            <!-- Templates -->
-            <div class="rounded-2xl border-2 p-4 border-amber-300">
-              <div class="flex items-center gap-2 mb-2">
-                <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-doc"/></svg>
-                <h3 class="font-black text-[15px] m-0">Templates <span class="text-red-700">*</span></h3>
-              </div>
-              <p class="text-[13px] text-gray-600 mb-3">The templates new projects are copied from. Keeping their scripts up to date means new projects start with the latest version.</p>
-              <div class="space-y-3">
-                <div>
-                  <label class="text-[13px] font-bold block mb-1">Blueprint template (Google Doc)</label>
-                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-doc"/></svg>Choose from Drive</button>
-                  <div class="flex gap-2"><input value="https://docs.google.com/document/d/1KKlxnDc…/edit" aria-label="Blueprint template" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-green-300 bg-green-50 text-green-800 font-black text-sm flex items-center gap-1.5"><svg class="ico w-3.5 h-3.5"><use href="#i-check"/></svg>Found</span></div>
-                  <p class="mt-1.5 flex items-center gap-2 text-sm font-black text-green-700 m-0"><svg class="ico w-4 h-4 text-green-600"><use href="#i-ok"/></svg>Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)</p>
-                </div>
-                <div>
-                  <label class="text-[13px] font-bold block mb-1">Quiz questions template (Google Doc)</label>
-                  <button type="button" onclick="show('s3')" class="w-full mb-2 flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2"><svg class="ico w-4 h-4"><use href="#i-doc"/></svg>Choose from Drive</button>
-                  <div class="flex gap-2"><input placeholder="or paste: https://docs.google.com/document/d/…" aria-label="Quiz questions template" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm"><span class="flex-shrink-0 px-3 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Check</span></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- GitHub repos -->
-            <div class="rounded-2xl border-2 p-4 border-gray-200">
-              <div class="flex items-center gap-2 mb-2">
-                <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
-                <h3 class="font-black text-[15px] m-0">GitHub repos</h3>
-              </div>
-              <p class="text-[13px] text-gray-600 mb-2.5">The GitHub repos the app copies scripts from. Each repo is for one kind of document, so a blueprint script never goes into a quiz.</p>
-              <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px]">
-                <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Main Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Public</span></div>
-                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><span class="flex-1 min-w-0"><b class="block">Experimental Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800 align-middle">Blueprints</span></b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script-private</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900">Needs token</span></div>
-                <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100 bg-gray-50"><span class="flex-1 min-w-0"><b class="block">Quiz Repo <span class="ml-1 text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900 align-middle">Quizzes</span></b><small class="text-xs text-gray-600">Not set up yet. Until it is, quizzes are skipped.</small></span></div>
-              </div>
-              <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add a repo</span>
-            </div>
+            <p class="m-0 flex items-start gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-[12.5px] text-[#0a2a6b]"><svg class="ico w-4 h-4 mt-0.5 flex-shrink-0"><use href="#i-branch"/></svg><span><b>Repos and templates</b> are now set on each tab (<b>Blueprint Tools</b> and <b>Quiz Formatter</b>), in its “Scripts and template” card. Everything on this panel is shared by both tabs.</span></p>
 
             <div class="flex items-start gap-1.5 text-[11px] text-gray-600 px-1">
               <svg class="ico w-[13px] h-[13px] mt-0.5"><use href="#i-shield"/></svg>
@@ -234,22 +198,50 @@
         <p class="text-[13px] text-gray-700 text-center m-0">The documents list appears once Initial setup is complete.</p>
       </section>
 
-      <!-- ===== Screens 2–6 share the working area ===== -->
+      <!-- ===== Tabs: one per script set (screens 2–7) ===== -->
+      <div id="tabsBar" class="max-w-2xl mx-auto pt-5 px-4 sm:px-6" hidden>
+        <div role="tablist" aria-label="Which scripts" class="flex gap-1 border-b-2 border-gray-300">
+          <button id="tabBp" role="tab" aria-selected="true" class="apptab -mb-0.5 flex items-center gap-2 rounded-t-xl border-2 border-b-0 px-4 py-2 text-[13.5px] font-black">
+            <svg class="ico w-4 h-4"><use href="#i-doc"/></svg>Blueprint Tools <span class="tabcount text-[11px] font-black rounded-full px-1.5 py-px">5</span></button>
+          <button id="tabQz" role="tab" aria-selected="false" class="apptab -mb-0.5 flex items-center gap-2 rounded-t-xl border-2 border-b-0 px-4 py-2 text-[13.5px] font-black">
+            <svg class="ico w-4 h-4"><use href="#i-form"/></svg>Quiz Formatter <span class="tabcount text-[11px] font-black rounded-full px-1.5 py-px">3</span></button>
+          <span id="tabBusy" class="ml-auto self-center text-[11.5px] text-gray-600" hidden><svg class="ico w-3.5 h-3.5 inline animate-spin"><use href="#i-spin"/></svg> Blueprint Tools is updating…</span>
+        </div>
+      </div>
+
+      <!-- ===== Screens 2–6: the Blueprint Tools tab ===== -->
       <section id="work" class="screen max-w-2xl mx-auto py-6 px-4 sm:px-6 space-y-3.5" hidden>
+
+        <!-- Per-tab: scripts and template -->
+        <details class="rounded-2xl border-2 border-green-200 shadow-[0_0_0_3px_rgba(240,253,244,1)] bg-white group">
+          <summary class="list-none cursor-pointer p-4 flex items-center gap-2">
+            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
+            <h2 class="font-black text-[15px] m-0">Scripts and template</h2>
+            <span class="text-xs text-gray-700 ml-1">Main Repo · Experimental Repo · Template Blueprint</span>
+            <svg class="ico w-4 h-4 ml-auto text-green-600"><use href="#i-ok"/></svg><svg class="ico w-4 h-4 transition-transform group-open:rotate-180"><use href="#i-chev"/></svg>
+          </summary>
+          <div class="px-4 pb-4 space-y-2.5 text-[13px]">
+            <div class="rounded-xl border-2 border-gray-200 overflow-hidden">
+              <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Main Repo</b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script · 13 files</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Public</span></div>
+              <div class="flex items-center gap-2.5 px-3 py-2 border-t border-gray-100"><span class="flex-1 min-w-0"><b class="block">Experimental Repo</b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/blueprint-tools-script-private · 15 files</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-green-100 text-green-800">Token saved</span></div>
+            </div>
+            <p class="m-0"><b>Template:</b> <span class="text-green-700 font-black">Copy of Template Blueprint 6.0 for GAS Test (Nov 2026)</span> <span class="text-blue-700 underline font-bold">Change</span></p>
+          </div>
+        </details>
 
         <!-- Add documents -->
         <div class="add-card rounded-2xl border-2 p-4 border-gray-200 bg-white">
           <div class="flex items-center gap-2 mb-1">
             <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-doc"/></svg>
-            <h2 class="font-black text-[15px] m-0">Add documents</h2>
+            <h2 class="font-black text-[15px] m-0">Update GAS in Documents</h2>
           </div>
-          <p class="text-[13px] text-gray-600 mb-2.5">Add documents in any of these ways. They all go into the one list below, without duplicates.</p>
+          <p class="text-[13px] text-gray-600 mb-2.5">Choose the blueprints whose Blueprint Tools scripts you want to check and update. Add them in any of these ways; they all go into the one list below, without duplicates.</p>
           <label class="text-[13px] font-bold block mb-1" for="cycle">By design cycle</label>
           <div class="flex gap-2">
             <select id="cycle" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white"><option>Spring 2027 (14 projects)</option><option>Summer 2027</option><option>Fall 2027</option></select>
             <span class="flex-shrink-0 px-4 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm flex items-center">Add</span>
           </div>
-          <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add the blueprint and quiz questions templates</span>
+          <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add the blueprint template</span>
           <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or<span class="flex-1 border-t border-gray-200"></span></div>
           <button type="button" onclick="show('s3')" class="w-full flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] hover:bg-blue-50 font-black text-sm px-4 py-2.5"><svg class="ico w-4 h-4"><use href="#i-folder"/></svg>Choose from Drive</button>
           <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or paste document addresses<span class="flex-1 border-t border-gray-200"></span></div>
@@ -264,7 +256,7 @@
         <!-- Status line (same component as Extractor Tools' Google status line) -->
         <div class="status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900">
           <span class="w-2 h-2 rounded-full bg-green-600"></span>
-          <span class="flex-1 status-text">6 documents added. Tick the ones to check or update.</span>
+          <span class="flex-1 status-text">5 blueprints added. Tick the ones to check or update.</span>
         </div>
 
         <!-- Documents list -->
@@ -273,7 +265,7 @@
             <label class="flex items-center gap-2 text-[13px] font-bold cursor-pointer">
               <input id="selAll" type="checkbox" class="w-3.5 h-3.5 accent-[#0033a0]"> Select all
             </label>
-            <span id="selCount" class="ml-auto text-[11px] text-gray-600 tabular-nums">0 of 6 selected</span>
+            <span id="selCount" class="ml-auto text-[11px] text-gray-600 tabular-nums">0 of 5 selected</span>
           </div>
           <div id="bulkBar" class="flex flex-wrap items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200 text-xs" hidden>
             <span class="font-bold text-gray-800">Update every ticked blueprint from:</span>
@@ -331,6 +323,68 @@
         </div>
       </section>
 
+
+      <!-- ===== Screen 7: the Quiz Formatter tab ===== -->
+      <section id="quizWork" class="screen max-w-2xl mx-auto py-6 px-4 sm:px-6 space-y-3.5" hidden>
+        <div class="flex items-start gap-2.5 rounded-xl border-2 border-amber-300 bg-amber-50 px-3 py-2.5 text-[12.5px] text-amber-900">
+          <svg class="ico w-4 h-4 mt-0.5 flex-shrink-0"><use href="#i-warn"/></svg>
+          <p class="m-0"><b>Not ready for updates yet.</b> The Quiz Formatter script is being rewritten to fix quiz questions the way Canvas Quiz Creator does. Until then you can <b>check</b> which quiz documents have the old version, but not update them.</p>
+        </div>
+
+        <details class="rounded-2xl border-2 border-amber-300 bg-white group">
+          <summary class="list-none cursor-pointer p-4 flex items-center gap-2">
+            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-branch"/></svg>
+            <h2 class="font-black text-[15px] m-0">Scripts and template</h2>
+            <span class="text-xs text-gray-700 ml-1">Quiz Formatter Repo · Template Quiz</span>
+            <svg class="ico w-4 h-4 ml-auto text-amber-600"><use href="#i-warn"/></svg><svg class="ico w-4 h-4 transition-transform group-open:rotate-180"><use href="#i-chev"/></svg>
+          </summary>
+          <div class="px-4 pb-4 space-y-2.5 text-[13px]">
+            <div class="rounded-xl border-2 border-gray-200 overflow-hidden">
+              <div class="flex items-center gap-2.5 px-3 py-2"><span class="flex-1 min-w-0"><b class="block">Quiz Formatter Repo</b><small class="text-xs text-gray-600 break-all">extrasnow75-bit/canvas-classic-quiz-question-formatting-GAS · 1 file (Code.gs)</small></span><span class="text-[11px] font-black rounded-full px-2 py-0.5 bg-amber-100 text-amber-900">Old version</span></div>
+            </div>
+            <p class="m-0 text-gray-700">One repo, one file. There is no Experimental Repo and no tool-by-tool choice on this tab.</p>
+            <p class="m-0"><b>Template:</b> <span class="text-green-700 font-black">Template Quiz</span> <span class="text-blue-700 underline font-bold">Change</span></p>
+          </div>
+        </details>
+
+        <div class="rounded-2xl border-2 p-4 border-gray-200 bg-white">
+          <div class="flex items-center gap-2 mb-1">
+            <svg class="ico w-4 h-4 text-[#0033a0]"><use href="#i-form"/></svg>
+            <h2 class="font-black text-[15px] m-0">Update GAS in Documents</h2>
+          </div>
+          <p class="text-[13px] text-gray-600 mb-2.5">Choose the quiz question documents (made from Template Quiz) whose Quiz Formatter script you want to check and update. They all go into the one list below, without duplicates.</p>
+          <label class="text-[13px] font-bold block mb-1" for="qcycle">By design cycle</label>
+          <div class="flex gap-2">
+            <select id="qcycle" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3 py-2.5 text-sm bg-white"><option>Spring 2027 (quizzes in 14 project folders)</option></select>
+            <span class="flex-shrink-0 px-4 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm flex items-center">Add</span>
+          </div>
+          <span class="inline-flex items-center gap-1 mt-2 text-[12.5px] font-bold text-blue-600 underline"><svg class="ico w-3.5 h-3.5"><use href="#i-plus"/></svg>Add the quiz template</span>
+          <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or<span class="flex-1 border-t border-gray-200"></span></div>
+          <span class="w-full flex items-center justify-center gap-1.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm px-4 py-2.5"><svg class="ico w-4 h-4"><use href="#i-folder"/></svg>Choose quiz documents from Drive</span>
+          <div class="flex items-center gap-3 my-3 text-xs text-gray-600"><span class="flex-1 border-t border-gray-200"></span>or paste document addresses<span class="flex-1 border-t border-gray-200"></span></div>
+          <div class="flex gap-2 items-stretch">
+            <textarea rows="2" aria-label="Quiz document addresses" placeholder="One address per line: https://docs.google.com/document/d/…" class="flex-1 min-w-0 border-2 border-gray-500 rounded-xl px-3.5 py-2 text-sm resize-none"></textarea>
+            <span class="flex-shrink-0 px-4 rounded-xl border-2 border-gray-400 text-gray-600 font-black text-sm flex items-center">Add</span>
+          </div>
+        </div>
+
+        <h2 class="text-[12px] text-gray-700 uppercase tracking-wide font-black px-1 pt-1 m-0">Quiz documents</h2>
+        <div class="flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-amber-50 border-amber-200 text-amber-900">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span class="flex-1">Checked 3 quiz documents: 2 have the old Quiz Formatter, 1 has no script.</span>
+        </div>
+        <div class="rounded-xl border-2 border-gray-200 overflow-hidden bg-white" id="qrows"></div>
+
+        <div class="rounded-2xl border-2 p-4 border-gray-200 bg-white space-y-3">
+          <label class="flex items-start gap-2 text-[13px]"><input type="checkbox" checked class="w-3.5 h-3.5 mt-0.5 accent-[#0033a0]"><span><b>Practice run</b> <span class="text-gray-600">(changes nothing)</span></span></label>
+          <div class="flex flex-wrap gap-2">
+            <span class="flex-1 min-w-[10rem] text-center py-2.5 rounded-xl border-2 border-[#0033a0] text-[#0033a0] font-black text-sm">Check selected</span>
+            <span class="flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-gray-200 text-gray-700">Update selected</span>
+          </div>
+          <p class="text-xs text-gray-600 m-0">Update becomes available when the new Quiz Formatter is in its repo.</p>
+        </div>
+      </section>
+
       <!-- ===== Dialog layer for screens 3 and 5 ===== -->
       <div id="dlgPick" class="dlg absolute inset-0 bg-gray-900/40 flex items-start justify-center p-3 sm:p-6 overflow-auto" hidden>
         <div class="w-full max-w-xl bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -357,22 +411,22 @@
           <!-- Step 2 -->
           <div class="border-t-4 border-slate-200">
             <div class="px-4 pt-3"><p class="text-[11px] font-black uppercase tracking-wider text-gray-600 m-0">After “Next”</p><h3 class="font-black text-[15px] m-0 mt-1">What's inside the folders</h3>
-              <p class="text-[13px] text-gray-600 m-0 mt-1">Ticked: files whose names look like a blueprint or a quiz. Untick anything you don't want.</p></div>
+              <p class="text-[13px] text-gray-600 m-0 mt-1">Ticked: files whose names look like a blueprint. Quizzes are listed but not ticked: they belong on the Quiz Formatter tab.</p></div>
             <div class="p-3">
               <div class="rounded-xl border-2 border-gray-200 overflow-hidden text-[13px]">
                 <div class="sticky top-0 bg-[#dbe7fb] text-[#0a2a6b] text-[12px] font-black uppercase tracking-wider px-3 py-1.5">BIOL 1010 <span class="ml-2 font-normal normal-case tracking-normal">4 files found</span></div>
                 <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">BIOL 1010 Blueprint</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Blueprint</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
-                <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">BIOL 1010 Module 3 Quiz</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
+                <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">BIOL 1010 Module 3 Quiz</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span><span class="flex-shrink-0 mt-0.5 text-[11px] text-gray-600">Quiz Formatter tab</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
                 <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-green-700"><use href="#i-sheet"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">BIOL 1010 Video List</span><span class="flex-shrink-0 mt-0.5 text-[11px] text-gray-600">Other</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
                 <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-amber-600"><use href="#i-slides"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">BIOL 1010 Kickoff Slides</span><span class="flex-shrink-0 mt-0.5 text-[11px] text-gray-600">Other</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
                 <div class="sticky top-0 bg-[#dbe7fb] text-[#0a2a6b] text-[12px] font-black uppercase tracking-wider px-3 py-1.5">HLTH 2200 <span class="ml-2 font-normal normal-case tracking-normal">2 files found</span></div>
                 <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">HLTH 2200 Blueprint</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-gray-100 text-gray-800">Blueprint</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
-                <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" checked class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">HLTH 2200 Introduction to Community and Public Health: Final Exam Quiz Questions (Fall 2026 revision)</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
+                <label class="flex items-start gap-2.5 px-3 py-2 border-t border-gray-100"><input type="checkbox" class="flex-shrink-0 w-3.5 h-3.5 mt-[3px] accent-[#0033a0]"><svg class="ico w-4 h-4 mt-px text-blue-600"><use href="#i-doc"/></svg><span class="flex-1 min-w-0 [overflow-wrap:anywhere]">HLTH 2200 Introduction to Community and Public Health: Final Exam Quiz Questions (Fall 2026 revision)</span><span class="flex-shrink-0 mt-px text-[11px] font-black rounded-full px-2 py-0.5 bg-purple-100 text-purple-900">Quiz</span><span class="flex-shrink-0 mt-0.5 text-[11px] text-gray-600">Quiz Formatter tab</span><a href="#" onclick="event.preventDefault()" class="openlink flex-shrink-0 mt-0.5 text-[11px] font-black text-blue-700 underline inline-flex items-center gap-0.5 rounded px-1 focus-visible:ring-2 focus-visible:ring-blue-300" title="Opens in your web browser. Nothing is ticked or changed.">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></a></label>
               </div>
             </div>
             <div class="flex items-center gap-2 px-3 py-2.5 border-t border-gray-200 bg-gray-50">
-              <span class="text-xs text-gray-700 tabular-nums">4 of 6 ticked</span>
-              <span class="ml-auto text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Add 4 to the list</span>
+              <span class="text-xs text-gray-700 tabular-nums">2 of 6 ticked</span>
+              <span class="ml-auto text-sm font-black text-white bg-[#0033a0] rounded-xl px-4 py-2">Add 2 to the list</span>
             </div>
           </div>
         </div>
@@ -486,12 +540,12 @@ const NOTES = {
     ['Same as Extractor Tools: the blue accordion header with status dots and “N items incomplete”, the bordered cards (green when done, amber when something needs attention), the token field with show/hide, the keychain note at the bottom. It closes itself once everything is set and can be reopened from its header.',
      'Same as Extractor Tools: the Google sign-in, now holding <b>two accounts</b>. One is “In use”; the other has “Use this account”. The account menu at the top right switches between them too.',
      'New card, same style: <b>Google files</b> (multi-semester list, backup folder, update history). Each has a <b>Choose from Drive</b> button (opens the picker, screen 3) or a box to paste the address. The app checks it and shows the file’s name in green, like the Canvas course card. Here the picker accepts just one item: a Sheet or a folder.',
-     'New card, same style: <b>Templates</b> (blueprint template and quiz questions template), each with Choose from Drive or paste. The main screen has a one-click link to add both to the list.',
-     'New card, same style: <b>Script sources</b>, with “Add a source”. Each source is marked with the kind of document it is for (Blueprints or Quizzes), so a blueprint script can never be pushed into a quiz. The quiz script is not set up yet. Private sources are marked “Needs token”.',
+     'Changed: <b>Initial setup</b> holds only what both tabs share. The repos and templates moved to a <b>Scripts and template</b> card at the top of each tab (screens 2 and 7). A blue note at the end of the panel says so.',
      'App icon (top of this page): the Quiz Creator’s blue rounded square, with an upload arrow over “GAS”.']],
-  s2: ['Main screen: choose a source, add documents',
-    ['<i>Initial setup</i> is collapsed and says Complete.',
-     'Add documents uses the Canvas course card’s layout: icon and heading, one grey purpose line, “or” dividers between the ways to add. There is no separate Script source card: which repo each document updates from is chosen in the list, after Check.',
+  s2: ['Main screen: the Blueprint Tools tab',
+    ['<i>Initial setup</i> is collapsed and says Complete. Below it, new <b>tabs</b>: Blueprint Tools and Quiz Formatter (see screen 7).',
+     'New at the top of the tab: <b>Scripts and template</b>, folded away once set (click to open). It holds this tab’s repos and template, which used to be in Initial setup.',
+     'The card is now titled <b>Update GAS in Documents</b> (on both tabs). It uses the Canvas course card’s layout: icon and heading, one grey purpose line, “or” dividers between the ways to add. There is no separate Script source card: which repo each document updates from is chosen in the list, after Check.',
      'New: the documents list. Each row is built like a row in Extractor Tools’ course list: name in bold, a type chip (Blueprint or Quiz), and a small line with the account it came from (GS or EX) and an Open link that opens the document in your browser. The status chip sits on the right.',
      'Practice run is on by default. Update stays greyed out until Check has run.']],
   s3: ['Choose from Drive: files and whole folders, with tick boxes',
@@ -499,7 +553,7 @@ const NOTES = {
      'Any type of file can be ticked (Docs, Sheets, Slides, Forms) as well as folders. “Look inside” goes into a folder; ticking it takes the whole folder.',
      'Long file names wrap onto more lines instead of being cut off, so you can always read the whole name (see the tracking sheet here and the HLTH 2200 quiz in step 2).',
      'New: every file has an <b>Open ↗</b> link, here and in step 2. It opens the file in your web browser so you can make sure it is the right one. It does not tick, untick or change anything, and the picker stays open. If your browser is signed in to a different Google account, Google may ask you to switch accounts.',
-     'Step 2 lists what was found in the ticked folders, grouped by folder. Files that look like a blueprint or quiz start ticked. The quiz name pattern is still to be confirmed.',
+     'Step 2 lists what was found in the ticked folders, grouped by folder. On the Blueprint Tools tab only blueprints start ticked; quizzes are marked “Quiz Formatter tab”. Files that look like a blueprint or quiz start ticked. The quiz name pattern is still to be confirmed.',
      'The header shows which Google account is being browsed.']],
   s4: ['After “Check selected”: choose where each document updates from',
     ['Each row gets a status chip, with one plain line underneath saying what it means.',
@@ -517,6 +571,13 @@ const NOTES = {
      'A document with an unfixed warning is listed as “Needs a choice” and is not counted or updated.',
      'Amber note when Permissions change, because people will be asked by Google to allow the new access.',
      'Practice run is repeated here, so a real update is always a deliberate choice.']],
+  s7: ['New: the Quiz Formatter tab',
+    ['<b>Tabs</b> under Initial setup, one per set of scripts: <b>Blueprint Tools</b> and <b>Quiz Formatter</b>, named as they appear in the Google Docs menus, each with a count of its documents. Click them to switch (the Blueprint Tools tab takes you back to whichever Blueprint screen you were on).',
+     'Each tab keeps its own document list, choices and results, so switching never loses work. Only one Check or Update runs at a time; while Blueprint Tools is updating, the Quiz Formatter tab says so at the right of the tab bar.',
+     '<b>Initial setup</b> now holds only what both tabs share: Google accounts, the GitHub token, the multi-semester list, the backup folder and the update history. Backups and history rows are labelled with the tab’s name.',
+     '<b>Scripts and template</b> (top of each tab, folded away once set) holds that tab’s repos and template. Quiz Formatter: one repo, one file (Code.gs), and Template Quiz.',
+     'Simpler than Blueprint Tools: no Main/Experimental choice and no tool-by-tool table. A document is <b>Up to date</b>, <b>Old version</b> or <b>No script</b>, and Update replaces or adds the one file.',
+     'Until the rewritten Quiz Formatter is in its repo, the amber note says so and Update stays unavailable. Check still works, so you can see how many quiz documents will need the new version.']],
   s6: ['Update results, with the Update Timeline',
     ['Copied from the Rubric Creator app\u2019s Analyze & Deploy screen: a summary card (\u201c3 documents updated successfully\u201d in green, \u201c1 failed\u201d in red, a progress bar, time taken, and \u201cWhat went wrong\u201d grouped by cause), then the dark <b>Update Timeline</b>.',
      'The timeline has one plain line per document: green \u2713 \u201cupdated successfully\u201d, red \u2717 \u201cfailed\u201d with the reason, and an amber line saying what to do. It ends with how many were updated, how long it took, and how many failed. Copy Logs and Clear work as in the Rubric app.',
@@ -787,9 +848,15 @@ function show(s) {
   const setupDone = s !== 's1';
   setSetup(!setupDone);
   document.querySelectorAll('.dot2').forEach(d => d.className = `dot2 w-2 h-2 rounded-full ${setupDone ? 'bg-green-400' : 'bg-white/70'}`);
-  document.getElementById('setupStatus').textContent = setupDone ? 'Complete' : '3 items incomplete';
+  document.getElementById('setupStatus').textContent = setupDone ? 'Complete' : '1 item incomplete';
   document.getElementById('s1').hidden = s !== 's1';
-  document.getElementById('work').hidden = s === 's1';
+  const quiz = s === 's7';
+  if (!quiz && s !== 's1') window.__lastBp = s;
+  document.getElementById('work').hidden = s === 's1' || quiz;
+  document.getElementById('quizWork').hidden = !quiz;
+  document.getElementById('tabsBar').hidden = s === 's1';
+  setAppTab(quiz);
+  document.getElementById('tabBusy').hidden = !quiz;
   document.getElementById('dlgPick').hidden = s !== 's3';
   document.getElementById('dlgConfirm').hidden = s !== 's5';
   document.getElementById('bulkBar').hidden = s !== 's4';
@@ -797,11 +864,11 @@ function show(s) {
     document.getElementById('cfTitle').textContent = `Update ${ready} document${ready === 1 ? '' : 's'}?`;
     document.getElementById('cfGo').textContent = `Start practice run (${ready} document${ready === 1 ? '' : 's'})`; }
   const mode = s === 's2' || s === 's3' ? 'added' : s === 's6' ? 'running' : 'checked';
-  document.getElementById('rows').innerHTML = DOCS.map((d, i) => rowHtml(d, i, mode)).join('');
+  document.getElementById('rows').innerHTML = DOCS.map((d, i) => d.t === 'Quiz' ? '' : rowHtml(d, i, mode)).join('');
   const line = document.querySelector('.status-line'), text = document.querySelector('.status-text');
   const upd = document.querySelector('.act-update'), hint = document.querySelector('.act-hint');
-  if (mode === 'added') { text.textContent = '6 documents added. Tick the ones to check or update.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900'; }
-  if (mode === 'checked') { text.textContent = 'Checked 6 documents: 3 need updating, 2 could not be checked, 1 quiz skipped.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-amber-50 border-amber-200 text-amber-900'; }
+  if (mode === 'added') { text.textContent = '5 blueprints added. Tick the ones to check or update.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-green-50 border-green-200 text-green-900'; }
+  if (mode === 'checked') { text.textContent = 'Checked 5 blueprints: 3 need updating, 2 could not be checked.'; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-amber-50 border-amber-200 text-amber-900'; }
   if (mode === 'running') { const nd = [0, 2, 3].filter(i => docResult(i) === 'done').length, ns = [0, 2, 3].length - nd; text.textContent = `Finished: ${nd} documents updated, ${ns} skipped, 1 not updated.`; line.className = 'status-line flex items-center gap-2.5 rounded-xl border px-3 py-2 text-[12.5px] bg-blue-50 border-blue-200 text-[#0a2a6b]'; }
   upd.className = mode === 'added' ? 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-gray-200 text-gray-700' : 'act-update flex-1 min-w-[10rem] text-center py-2.5 rounded-xl text-sm font-black bg-[#0033a0] text-white';
   upd.textContent = 'Update selected';
@@ -813,8 +880,7 @@ function show(s) {
       wrong: [['You can view this document but not edit it.', 'Ask the document\u2019s owner for edit access, then run Check again.', 'NURS 4100 Blueprint'],
               ['The document\u2019s script could not be found.', 'Open the document once so its script can be found, or paste its script ID.', 'HIST 1120 Blueprint']],
       lines: [
-        ['2:10:41 PM', 'Checking 6 documents against Main and Experimental\u2026', 'info'],
-        ['2:10:42 PM', '"BIOL 1010 Module 3 Quiz" skipped: there is no Quiz Repo yet', 'warning'],
+        ['2:10:41 PM', 'Checking 5 blueprints against the Main Repo and the Experimental Repo\u2026', 'info'],
         ['2:10:43 PM', '"BIOL 1010 Blueprint" is out of date with Main and Experimental', 'warning'],
         ['2:10:44 PM', '"HLTH 2200 Blueprint" is out of date with Main and Experimental', 'warning'],
         ['2:10:45 PM', '"PSYC 3015 Blueprint" is out of date with Main (Main has a newer menu, Code.gs)', 'warning'],
@@ -857,6 +923,32 @@ function show(s) {
   const [title, items] = NOTES[s];
   document.getElementById('notes').innerHTML = `<h2 class="font-black text-[15px] m-0">${title}</h2><ul class="m-0 pl-5 space-y-1.5 text-gray-800">${items.map(x => `<li>${x}</li>`).join('')}</ul>`;
 }
+
+const QDOCS = [
+  ['BIOL 1010 Module 3 Quiz', 'GS', 'old', 'Has the old Quiz Formatter (Code.gs, no date stamp)'],
+  ['HLTH 2200 Introduction to Community and Public Health: Final Exam Quiz Questions (Fall 2026 revision)', 'GS', 'old', 'Has the old Quiz Formatter (Code.gs, no date stamp)'],
+  ['PSYC 3015 Midterm Quiz', 'EX', 'noscript', 'No script yet. Update will add the Quiz Formatter once it is ready.'],
+];
+document.getElementById('qrows').innerHTML = `<div class="flex items-center gap-2 px-3 py-2 bg-gray-50 border-b border-gray-200"><label class="flex items-center gap-2 text-[13px] font-bold"><input type="checkbox" checked class="w-3.5 h-3.5 accent-[#0033a0]"> Select all</label><span class="ml-auto text-[11px] text-gray-600">3 of 3 selected</span></div>` +
+  QDOCS.map(([n, a, st, note]) => `<div class="flex items-start gap-2.5 border-t border-gray-100 first:border-t-0 px-3 py-2">
+    <input type="checkbox" checked class="w-3.5 h-3.5 mt-1 accent-[#0033a0]" aria-label="${n}">
+    <svg class="ico w-4 h-4 mt-0.5 text-blue-600"><use href="#i-doc"/></svg>
+    <span class="flex-1 min-w-0"><b class="text-[13.5px] [overflow-wrap:anywhere]">${n}</b>
+      <span class="flex items-center gap-2 text-xs text-gray-600 mt-0.5"><span class="w-4 h-4 rounded-full ${a === 'GS' ? 'bg-[#0033a0]' : 'bg-gray-600'} text-white text-[7px] font-black inline-flex items-center justify-center">${a}</span><span class="text-blue-700 underline inline-flex items-center gap-1">Open<svg class="ico w-3 h-3"><use href="#i-ext"/></svg></span></span>
+      <p class="text-xs text-gray-700 m-0 mt-0.5">${note}</p></span>
+    <span class="flex-shrink-0"><span class="text-[11px] font-black rounded-full px-2 py-0.5 ${st === 'old' ? 'bg-amber-100 text-amber-900' : 'bg-gray-100 text-gray-800'}">${st === 'old' ? 'Old version' : 'No script'}</span></span>
+  </div>`).join('');
+function setAppTab(quiz) {
+  for (const [id, on] of [['tabBp', !quiz], ['tabQz', quiz]]) {
+    const t = document.getElementById(id);
+    t.setAttribute('aria-selected', String(on));
+    t.className = `apptab -mb-0.5 flex items-center gap-2 rounded-t-xl border-2 px-4 py-2 text-[13.5px] font-black ${on ? 'bg-white border-gray-300 border-b-white text-[#0033a0]' : 'bg-gray-100 border-transparent text-gray-700 hover:bg-gray-200'}`;
+    t.querySelector('.tabcount').className = `tabcount text-[11px] font-black rounded-full px-1.5 py-px ${on ? 'bg-[#0033a0] text-white' : 'bg-gray-300 text-gray-800'}`;
+  }
+}
+document.getElementById('tabBp').addEventListener('click', () => show(window.__lastBp || 's2'));
+document.getElementById('tabQz').addEventListener('click', () => show('s7'));
+
 function setSetup(open) {
   document.getElementById('setupPanel').hidden = !open;
   document.getElementById('setupToggle').setAttribute('aria-expanded', String(open));
